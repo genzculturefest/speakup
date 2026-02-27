@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <style>
+    .bg-navy { background-color: #1e3a8a; }
+    .text-orange-custom { color: #f97316; }
+    .border-orange-custom { border-color: #f97316; }
+    .btn-navy:hover { background-color: #172554; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <div class="flex justify-center items-center gap-6 p-6 bg-white shadow-md">
+    <img src="https://genzculturefest.github.io/speakup/assets%20genz/culture%20z.png" alt="Culture Z Logo" class="h-10 md:h-14">
+    <img src="https://genzculturefest.github.io/speakup/assets%20genz/20260227_195719.png" alt="Speak Up Logo" class="h-14 md:h-20">
+  </div>
+
+  <div class="max-w-2xl mx-auto my-10 bg-white rounded-2xl shadow-xl overflow-hidden p-8 border-t-8 border-navy mx-4 md:mx-auto">
+    <h1 class="text-3xl font-extrabold text-navy mb-2 tracking-tight">Seminar Nasional: Speak Up</h1>
+    <p class="text-lg text-gray-600 mb-6">Bersama  <span class="font-bold text-orange-custom text-xl italic">Anies Rasyid Baswedan, S.E., M.P.P., Ph.D.</span></p>
+    
+    <div class="bg-orange-50 p-5 rounded-xl mb-8 border-l-4 border-orange-custom shadow-sm">
+      <p class="text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Informasi Pembayaran (HTM):</p>
+      <p class="font-bold text-xl text-navy">DANA: 085143744692 (a.n ZAZKYA SHELOMITA ANJANI)</p>
+      <div class="flex flex-wrap gap-3 mt-3">
+        <span class="bg-white px-4 py-2 rounded-lg shadow-sm text-sm border border-orange-200 text-navy"><b>Online:</b> Rp 15.000</span>
+        <span class="bg-white px-4 py-2 rounded-lg shadow-sm text-sm border border-orange-200 text-navy"><b>Offline:</b> Rp 35.000</span>
+      </div>
+    </div>
+
+    <form id="regForm" class="space-y-5">
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-1">Nama Lengkap</label>
+        <input type="text" id="nama" class="w-full p-3 border-2 border-gray-200 rounded-xl outline-none" required>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1">No. Telp (WhatsApp)</label>
+          <input type="tel" id="telp" class="w-full p-3 border-2 border-gray-200 rounded-xl outline-none" required>
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1">Email Aktif</label>
+          <input type="email" id="email" class="w-full p-3 border-2 border-gray-200 rounded-xl outline-none" required>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-1">Asal Instansi</label>
+        <input type="text" id="instansi" class="w-full p-3 border-2 border-gray-200 rounded-xl outline-none" required>
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-1">Kategori Kehadiran</label>
+        <select id="opsi" class="w-full p-3 border-2 border-gray-200 rounded-xl bg-white outline-none">
+          <option value="online">Online (Rp 15.000)</option>
+          <option value="offline">Offline (Rp 35.000)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-1">Upload Bukti Pembayaran</label>
+        <div class="relative border-2 border-dashed border-gray-300 p-4 rounded-xl text-center bg-gray-50">
+          <input type="file" id="fotoFile" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFileName()" required>
+          <div id="fileStatus" class="text-sm text-gray-500 font-medium">Klik untuk Pilih Foto Bukti Transfer</div>
+        </div>
+      </div>
+      <button type="button" onclick="handleFormSubmission()" id="btnSubmit" class="w-full bg-navy text-white font-black py-4 rounded-xl shadow-lg transition-all btn-navy">
+        DAFTAR SEKARANG
+      </button>
+    </form>
+  </div>
+
+  <div id="modal" class="hidden fixed inset-0 bg-navy bg-opacity-80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-10 max-w-sm w-full text-center shadow-2xl animate__animated animate__zoomIn">
+      <div class="text-4xl mb-4">✅</div>
+      <h2 class="text-2xl font-black text-navy mb-3">Berhasil!</h2>
+      <p class="text-gray-600 mb-8 leading-relaxed" id="modalMsg"></p>
+      <a id="waLink" href="#" target="_blank" class="block w-full bg-green-500 text-white font-bold py-4 rounded-2xl">Gabung Grup WhatsApp</a>
+    </div>
+  </div>
+
+  <script>
+    // MASUKKAN URL WEB APP ANDA DI SINI
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcLIRFi3nbCfWUp1J7dCnz07ANXRf5ZKu5SYfZYhhODgQjQPlMC9lbe8PXzc708AiRMQ/exec";
+
+    function previewFileName() {
+      const fileInput = document.getElementById('fotoFile');
+      const fileStatus = document.getElementById('fileStatus');
+      if (fileInput.files.length > 0) fileStatus.innerText = "Terpilih: " + fileInput.files[0].name;
+    }
+
+    function handleFormSubmission() {
+      const btn = document.getElementById('btnSubmit');
+      const fileInput = document.getElementById('fotoFile').files[0];
+      
+      if (!fileInput) return alert("Upload bukti transfer!");
+
+      btn.disabled = true;
+      btn.innerHTML = "Sedang Mengirim...";
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const payload = {
+          nama: document.getElementById('nama').value,
+          telp: document.getElementById('telp').value,
+          email: document.getElementById('email').value,
+          instansi: document.getElementById('instansi').value,
+          opsi: document.getElementById('opsi').value,
+          bukti: e.target.result
+        };
+
+        // Menggunakan fetch untuk domain luar (GitHub)
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors", // Penting untuk bypass CORS Apps Script
+          cache: "no-cache",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        })
+        .then(() => {
+          // Karena mode no-cors, kita anggap sukses jika tidak ada error network
+          showModal(payload.opsi);
+        })
+        .catch(err => {
+          alert("Gagal mengirim: " + err);
+          btn.disabled = false;
+          btn.innerHTML = "DAFTAR SEKARANG";
+        });
+      };
+      reader.readAsDataURL(fileInput);
+    }
+
+    function showModal(opsi) {
+      document.getElementById('modal').classList.remove('hidden');
+      const waLink = document.getElementById('waLink');
+      const msg = document.getElementById('modalMsg');
+      
+      if(opsi === 'offline') {
+        waLink.href = "https://chat.whatsapp.com/IHIOO96OLW3HSGQwu3Tscd";
+        msg.innerText = "Cek email Anda untuk QR Code Tiket Offline.";
+      } else {
+        waLink.href = "https://chat.whatsapp.com/KBVZcaXrhgl1aDchDvd58c";
+        msg.innerText = "Terima kasih. Gabung grup untuk link seminar online.";
+      }
+    }
+  </script>
+</body>
+</html>
