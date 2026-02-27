@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <title>Scanner Panitia - Speak Up</title>
+</head>
+<body class="bg-slate-900 text-white font-sans min-h-screen">
+  <div class="max-w-md mx-auto p-6">
+    <h1 class="text-2xl font-bold text-center mb-6 text-blue-400">Panitia Scanner: Speak Up</h1>
+    
+    <div id="reader" class="overflow-hidden rounded-2xl border-4 border-blue-500 bg-black shadow-2xl"></div>
+
+    <div id="result" class="mt-6 p-6 rounded-2xl hidden animate__animated animate__fadeIn">
+      <div id="statusIcon" class="text-5xl mb-2 text-center"></div>
+      <h2 id="attendeeName" class="text-2xl font-black text-center mb-1"></h2>
+      <p id="attendeeInfo" class="text-center opacity-80 mb-4"></p>
+      <button onclick="resetScanner()" class="w-full bg-white text-slate-900 py-4 rounded-xl font-bold shadow-lg hover:bg-gray-200 transition-all">
+        SCAN BERIKUTNYA
+      </button>
+    </div>
+
+    <div id="placeholder" class="mt-6 text-center text-slate-400">
+      <div class="animate-pulse mb-2 text-3xl">📷</div>
+      <p>Arahkan kamera ke QR Code Tiket Peserta</p>
+    </div>
+  </div>
+
+ <script>
+  // PASTIKAN URL INI SESUAI DENGAN DEPLOYMENT TERBARU
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcLIRFi3nbCfWUp1J7dCnz07ANXRf5ZKu5SYfZYhhODgQjQPlMC9lbe8PXzc708AiRMQ/exec";
+
+  const html5QrCode = new Html5Qrcode("reader");
+  const config = { fps: 15, qrbox: { width: 250, height: 250 } };
+
+  function onScanSuccess(decodedText) {
+    // 1. Ekstrak ID (SPK-xxxxxxxx)
+    const idMatch = decodedText.match(/SPK-\d+/);
+    const scannedId = idMatch ? idMatch[0] : decodedText.trim();
+
+    html5QrCode.pause();
+    
+    // 2. Tampilkan Loading
+    showResult({status: "loading", nama: "Memvalidasi..."});
+
+    // 3. KIRIM VIA GET (Bukan POST) agar tembus CORS
+    const finalUrl = `${SCRIPT_URL}?action=scan&id=${encodeURIComponent(scannedId)}`;
+
+    fetch(finalUrl)
+      .then(response => response.json())
+      .then(res => {
+        showResult(res);
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        showResult({status: "error", message: "Gagal terhubung ke server."});
+      });
+  }
+
+  function showResult(res) {
+    const resDiv = document.getElementById('result');
+    const placeholder = document.getElementById('placeholder');
+    const nameEl = document.getElementById('attendeeName');
+    const infoEl = document.getElementById('attendeeInfo');
+    const iconEl = document.getElementById('statusIcon');
+
+    resDiv.classList.remove('hidden');
+    placeholder.classList.add('hidden');
+
+    if (res.status === "success") {
+      iconEl.innerText = "✅";
+      nameEl.innerText = res.nama;
+      infoEl.innerText = "BERHASIL ABSEN! Silakan masuk.";
+      resDiv.className = "mt-6 p-6 rounded-2xl bg-green-600 border-2 border-green-400 text-center text-white";
+    } else if (res.status === "already") {
+      iconEl.innerText = "⚠️";
+      nameEl.innerText = res.nama;
+      infoEl.innerText = "SUDAH HADIR sebelumnya.";
+      resDiv.className = "mt-6 p-6 rounded-2xl bg-yellow-500 border-2 border-yellow-300 text-center text-slate-900";
+    } else if (res.status === "loading") {
+      iconEl.innerText = "⏳";
+      nameEl.innerText = "Memproses...";
+      infoEl.innerText = "Harap tunggu sebentar";
+      resDiv.className = "mt-6 p-6 rounded-2xl bg-blue-600 border-2 border-blue-400 text-center text-white";
+    } else {
+      iconEl.innerText = "❌";
+      nameEl.innerText = "TIDAK VALID";
+      infoEl.innerText = "ID tidak ditemukan di database.";
+      resDiv.className = "mt-6 p-6 rounded-2xl bg-red-600 border-2 border-red-400 text-center text-white";
+    }
+  }
+
+  function resetScanner() {
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('placeholder').classList.remove('hidden');
+    html5QrCode.resume();
+  }
+
+  html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
+</script>
+</body>
+</html>
