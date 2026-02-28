@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polling Karya - Speak Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ffffff; }
+        .bg-biru-tua { background-color: #1e3a8a; }
+        .text-biru-tua { color: #1e3a8a; }
+        .accent-oren { accent-color: #f97316; }
+        .modal-blur { backdrop-filter: blur(8px); }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="py-6 px-4 bg-white shadow-sm sticky top-0 z-40 border-b-4 border-orange-500">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <img src="https://genzculturefest.github.io/speakup/assets%20genz/20260227_195719.png" class="h-12 md:h-16">
+            <div class="text-right">
+                <h1 class="text-biru-tua font-black text-xl leading-tight">POLLING KARYA</h1>
+                <p class="text-orange-500 font-bold text-xs tracking-widest uppercase">Speak Up x Culturz</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 md:p-8">
+        <form id="pollingForm" class="space-y-12 pb-20">
+            
+            <div class="bg-slate-50 p-6 rounded-3xl border-2 border-slate-100 shadow-inner grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-extrabold text-biru-tua uppercase text-xs mb-2">Email Aktif</label>
+                    <input type="email" name="voterEmail" id="voterEmail" required placeholder="email@gmail.com" 
+                    class="w-full p-4 rounded-xl border-2 border-white focus:border-orange-500 outline-none transition-all font-bold">
+                </div>
+                <div>
+                    <label class="block font-extrabold text-biru-tua uppercase text-xs mb-2">Nama Lengkap</label>
+                    <input type="text" name="voterName" required placeholder="Nama Anda..." 
+                    class="w-full p-4 rounded-xl border-2 border-white focus:border-orange-500 outline-none transition-all font-bold">
+                </div>
+            </div>
+
+            <div id="pollingContainer"></div>
+
+            <button type="submit" id="submitBtn" 
+            class="w-full bg-biru-tua hover:bg-blue-800 text-white font-black py-6 rounded-2xl text-xl shadow-2xl transition-all transform active:scale-95">
+                KIRIM PENILAIAN
+            </button>
+        </form>
+    </main>
+
+    <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-biru-tua/60 modal-blur hidden">
+        <div class="bg-white rounded-[40px] max-w-sm w-full p-8 text-center shadow-2xl border-4 border-orange-500 transform scale-90 transition-transform duration-300">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-black text-biru-tua mb-2 uppercase">Berhasil!</h2>
+            <p class="text-slate-500 mb-8 font-medium">Penilaian Anda telah kami simpan dengan aman.</p>
+            <a href="index.html" class="block w-full bg-biru-tua text-white font-bold py-4 rounded-2xl hover:bg-orange-500 transition-colors shadow-lg">
+                KEMBALI KE BERANDA
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdkDL9-TULVObSpcxq00iAIfYcJjkuuFdZGFzDFWddMmah3no4oRnOJfsYEDqZCt6o/exec";
+
+        // Konfigurasi 12 Foto (2 per kelompok)
+        const dataKarya = [
+            { id: 1, f1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLByyXPcvjpmde_BG8kzi-tyjmY8LYYcY2EA&s", f2: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOosQANNIMpfO9kXxUjAAIOCFnbx5ubAZuRQ&s" },
+            { id: 2, f1: "https://inforadar.disway.id/upload/8ca5bd3757b246442d0351c046372791.jpeg", f2: "https://cdn.antaranews.com/cache/1200x800/2024/12/11/1000183784.jpg" },
+            { id: 3, f1: "https://walan.id/wp-content/uploads/2024/12/8b1885add3733fd0748bf02681d3639b.jpg", f2: "https://www.kontraktorkubahmasjid.com/wp-content/uploads/2021/03/Masjid-Agung-Banten10.png" },
+            { id: 4, f1: "https://cnc-magazine.oramiland.com/parenting/images/rumah-adat-banten_V82juev.width-800.format-webp.webp", f2: "https://indonesiakaya.com/wp-content/uploads/2020/10/6__IMG_2465_edit_Tiang-tiang_pada_rumah_adat_Suku_Baduy_tidak_memiliki_ketinggian_yang_sama.jpg" },
+            { id: 5, f1: "https://sekilasinfo.net/wp-content/uploads/2024/07/3-Warisan-Budaya-Istimewa-dari-Banten.jpg", f2: "https://lh3.googleusercontent.com/proxy/60bqKJo631n8mVXRXOEkj2yyos4EX0XQp8jeGlIKjOgXZttHl_B1gAVuU_FNkGntafjDrw1kP3MjlRpy9KtR6o1BrGRwekPbpSSIjKrHhZL5nGDQkhHDlVsdO1aEnn3zHpM9tzk839ZgN2so5nLo5AG7Spxj0vfqotLhPqJtxe2GLrt8YxwEMe4UD9lkzPq25YZX0F_mZFqzbLVlYg1d" },
+            { id: 6, f1: "https://bantenlife.com/wp-content/uploads/2025/10/Kerajinan-Tradisional-Banten.webp", f2: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8efzJRNJuaHWFXrkqG5oWz7ffhR-fkb9Lsw&s" }
+        ];
+
+        // Render Kartu Kelompok
+        const container = document.getElementById('pollingContainer');
+        dataKarya.forEach(item => {
+            container.innerHTML += `
+            <div class="bg-white rounded-[32px] overflow-hidden shadow-xl border border-slate-100 mb-10">
+                <div class="bg-biru-tua text-white px-8 py-4 flex justify-between items-center">
+                    <span class="font-black italic text-lg uppercase tracking-widest">Kelompok ${item.id}</span>
+                    <div class="h-2 w-8 bg-orange-500 rounded-full"></div>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <img src="${item.f1}" class="aspect-square w-full object-cover rounded-2xl bg-slate-100">
+                        <img src="${item.f2}" class="aspect-square w-full object-cover rounded-2xl bg-slate-100">
+                    </div>
+                    <div class="mb-4 flex justify-between items-center">
+                        <span class="font-bold text-biru-tua text-xs uppercase">Skor Nilai</span>
+                        <span id="sv_${item.id}" class="text-3xl font-black text-orange-500">5</span>
+                    </div>
+                    <input type="range" name="k${item.id}_score" min="1" max="10" value="5" 
+                    oninput="document.getElementById('sv_${item.id}').innerText = this.value"
+                    class="w-full h-3 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-oren mb-6">
+                    <textarea name="k${item.id}_note" placeholder="Komentar tambahan..." 
+                    class="w-full p-4 rounded-2xl bg-slate-50 text-sm border-2 border-transparent focus:border-biru-tua focus:bg-white outline-none transition-all italic"></textarea>
+                </div>
+            </div>`;
+        });
+
+        // Validasi & Pengiriman
+        document.getElementById('pollingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // CEK APAKAH SUDAH PERNAH POLLING (Berdasarkan Local Storage)
+            if(localStorage.getItem('hasPolled')) {
+                alert("❌ Maaf, Anda sudah pernah mengirimkan polling sebelumnya.");
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "MENGIRIM...";
+
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(data)
+            })
+            .finally(() => {
+                // Simpan status di browser agar tidak bisa kirim lagi
+                localStorage.setItem('hasPolled', 'true');
+                
+                // TAMPILKAN MODAL CUSTOM
+                const modal = document.getElementById('successModal');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.children[0].classList.remove('scale-90');
+                }, 10);
+            });
+        });
+
+        // Proteksi awal saat halaman dimuat
+        window.onload = () => {
+            if(localStorage.getItem('hasPolled')) {
+                document.body.innerHTML = `
+                <div class="flex flex-col items-center justify-center min-h-screen p-8 text-center">
+                    <img src="https://genzculturefest.github.io/speakup/assets%20genz/20260227_195719.png" class="h-20 mb-6">
+                    <h1 class="text-2xl font-black text-biru-tua uppercase">Akses Terbatas</h1>
+                    <p class="text-slate-500 mt-2 mb-6 font-medium">Anda sudah berpartisipasi dalam polling ini. Terima kasih!</p>
+                    <a href="index.html" class="bg-biru-tua text-white px-8 py-3 rounded-xl font-bold">KEMBALI</a>
+                </div>`;
+            }
+        };
+    </script>
+</body>
+</html>
