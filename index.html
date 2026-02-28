@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speak Up - GenZ Culture Fest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ffffff; }
+        .tab-content { display: none; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Nav Link Desktop */
+        .nav-link.active { color: #f97316; border-bottom: 3px solid #f97316; }
+        
+        /* Nav Link Mobile */
+        .mobile-nav-link.active { color: #f97316; background-color: #fff7ed; border-left: 4px solid #f97316; }
+
+        .bg-biru-tua { background-color: #1e3a8a; }
+        .text-biru-tua { color: #1e3a8a; }
+        .border-oren { border-color: #f97316; }
+
+        /* Smooth Transition for Mobile Menu */
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.open {
+            max-height: 500px; /* Sesuaikan dengan panjang menu */
+        }
+    </style>
+    <link rel="icon" type="image/png" href="https://genzculturefest.github.io/speakup/assets%20genz/20260227_195719.png">
+</head>
+<body class="text-slate-800">
+
+    <nav class="fixed top-0 w-full bg-white shadow-md z-50 border-b-4 border-oren">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-20">
+            <div class="flex items-center gap-2">
+                <img src="https://genzculturefest.github.io/speakup/assets%20genz/20260227_195719.png" class="h-10 md:h-12">
+                <span class="font-black text-biru-tua text-xl tracking-tighter">SPEAK UP</span>
+            </div>
+            
+            <div class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-widest text-biru-tua">
+                <button onclick="showTab('home')" class="nav-link py-2 transition-all active" id="btn-home">Home</button>
+                <button onclick="showTab('about')" class="nav-link py-2 transition-all" id="btn-about">About</button>
+                <button onclick="showTab('schedule')" class="nav-link py-2 transition-all" id="btn-schedule">Schedule</button>
+                <button onclick="showTab('gallery')" class="nav-link py-2 transition-all" id="btn-gallery">Gallery</button>
+                <button onclick="showTab('contact')" class="nav-link py-2 transition-all" id="btn-contact">Contact</button>
+                <a href="daftar.html" class="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-biru-tua transition-colors">Daftar</a>
+            </div>
+
+            <button onclick="toggleMenu()" class="md:hidden flex flex-col gap-1.5 focus:outline-none">
+                <div class="w-6 h-1 bg-orange-500 rounded"></div>
+                <div class="w-6 h-1 bg-orange-500 rounded"></div>
+                <div class="w-6 h-1 bg-orange-500 rounded"></div>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden bg-white border-t border-slate-100 flex flex-col font-bold text-biru-tua">
+            <button onclick="showTab('home')" class="mobile-nav-link p-4 text-left border-b border-slate-50 active" id="m-btn-home">HOME</button>
+            <button onclick="showTab('about')" class="mobile-nav-link p-4 text-left border-b border-slate-50" id="m-btn-about">ABOUT</button>
+            <button onclick="showTab('schedule')" class="mobile-nav-link p-4 text-left border-b border-slate-50" id="m-btn-schedule">SCHEDULE</button>
+            <button onclick="showTab('gallery')" class="mobile-nav-link p-4 text-left border-b border-slate-50" id="m-btn-gallery">GALLERY</button>
+            <button onclick="showTab('contact')" class="mobile-nav-link p-4 text-left border-b border-slate-50" id="m-btn-contact">CONTACT</button>
+            <a href="daftar.html" class="p-4 bg-orange-500 text-white text-center">DAFTAR SEKARANG</a>
+        </div>
+    </nav>
+
+    <div class="mt-28 p-4 md:p-8 max-w-7xl mx-auto">
+
+        <section id="home" class="tab-content active text-center py-10 md:py-20">
+            <h2 class="text-orange-500 font-black text-sm md:text-lg uppercase tracking-[0.3em] mb-4">Welcome to Speak Up</h2>
+            <h1 class="text-4xl md:text-7xl font-black text-biru-tua leading-tight mb-8">YANG MUDA <br class="hidden md:block"> BERANI BICARA.</h1>
+            <p class="text-slate-500 max-w-2xl mx-auto mb-10 text-base md:text-lg">Platform kolaborasi Gen-Z untuk berkarya, berdiskusi, dan membangun budaya positif di era digital.</p>
+            <button onclick="showTab('about')" class="bg-biru-tua text-white px-10 py-4 rounded-full font-bold shadow-xl hover:scale-105 transition-transform">Pelajari Lebih Lanjut</button>
+        </section>
+
+        <section id="about" class="tab-content py-12">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="bg-slate-100 aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                    <img src="https://lh3.googleusercontent.com/d/1HfhJsDR1kEZpPBjIi7scMOfVsAZW_EKZ" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h3 class="text-orange-500 font-black mb-2">TENTANG KAMI</h3>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-biru-tua mb-6 leading-tight">Membangun Ekosistem Kreatif Gen-Z</h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed text-sm md:text-base">Speak Up adalah bagian dari GenZ Culture Fest yang mewadahi aspirasi anak muda melalui dialog interaktif, pameran karya, dan workshop pengembangan diri.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 bg-orange-50 rounded-2xl border-l-4 border-orange-500">
+                            <h4 class="font-black text-biru-tua italic">MISSION</h4>
+                            <p class="text-xs text-slate-500">Empowering creative minds.</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-2xl border-l-4 border-blue-900">
+                            <h4 class="font-black text-biru-tua italic">VISION</h4>
+                            <p class="text-xs text-slate-500">Leading cultural shift.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="schedule" class="tab-content py-12">
+            <h2 class="text-center text-3xl md:text-4xl font-black text-biru-tua mb-12 uppercase">Speaker & Schedule</h2>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-white border-2 border-slate-100 p-6 rounded-[32px] flex flex-col md:flex-row items-center gap-6 hover:shadow-2xl transition-all border-l-8 border-l-orange-500">
+                    <div class="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-orange-500 shrink-0">
+                        <img src="https://suaranasional.com/wp-content/uploads/2022/02/anies-baswedan-jas-tirto-mico.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center md:text-left">
+                        <span class="bg-biru-tua text-white text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest">Keynote Speaker</span>
+                        <h3 class="text-xl md:text-2xl font-black text-biru-tua mt-2 uppercase">Anies Rasyid Baswedan</h3>
+                        <p class="text-orange-500 font-bold mb-4 text-sm md:text-base">Pejabat Publik / Tokoh Nasional</p>
+                        <div class="bg-slate-50 p-3 rounded-xl inline-block">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Topik: Peran Gen Z di Ruang Publik</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-biru-tua text-white p-6 md:p-8 rounded-[32px] mt-10">
+                    <h4 class="font-black mb-4 border-b border-white/20 pb-2 uppercase italic tracking-widest">Rundown Acara</h4>
+                    <div class="space-y-4 text-xs md:text-sm font-medium">
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span>08:00 - 09:00</span><span class="text-right">Registrasi & QR Scan</span></div>
+                        <div class="flex justify-between border-b border-white/10 pb-2"><span>09:00 - 10:30</span><span class="text-right">Opening & Keynote Speech</span></div>
+                        <div class="flex justify-between"><span>10:30 - 12:00</span><span class="text-right">Workshop & Exhibition</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="tab-content py-12">
+            <h2 class="text-center text-3xl md:text-4xl font-black text-biru-tua mb-4 uppercase">Gallery</h2>
+            <p class="text-center text-orange-500 font-bold mb-10">Culturz Vol 1. Flashback</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="aspect-square bg-slate-200 rounded-2xl overflow-hidden hover:scale-95 transition-transform">
+                    <img src="https://lh3.googleusercontent.com/d/1HfhJsDR1kEZpPBjIi7scMOfVsAZW_EKZ" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-square bg-slate-200 rounded-2xl overflow-hidden hover:scale-95 transition-transform">
+                    <img src="https://lh3.googleusercontent.com/d/1pGKV7gYjldJIt4r7W1bDbgV7lzw4AwyW" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-square bg-slate-200 rounded-2xl overflow-hidden hover:scale-95 transition-transform">
+                    <img src="https://lh3.googleusercontent.com/d/1cQiff-QD1VO3awiHgaG2oWJZUTLJxhMk" class="w-full h-full object-cover">
+                </div>
+                <div class="aspect-square bg-slate-200 rounded-2xl overflow-hidden hover:scale-95 transition-transform">
+                    <img src="https://lh3.googleusercontent.com/d/1JWzec5ym7N6wXOkNzTRUZNvnEeIKHqyh" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="tab-content py-12 text-center">
+            <div class="max-w-xl mx-auto bg-slate-50 p-6 md:p-10 rounded-[40px] border-4 border-white shadow-xl">
+                <h2 class="text-2xl md:text-3xl font-black text-biru-tua mb-4 uppercase">Hubungi Kami</h2>
+                <p class="text-slate-500 mb-8 font-medium text-sm md:text-base">Ada pertanyaan seputar acara? Tim kami siap membantu Anda 24/7.</p>
+                <div class="space-y-4">
+                    <a href="#" class="flex items-center justify-center gap-3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:border-orange-500 transition-all text-sm md:text-base">
+                        <span class="text-orange-500 font-bold">WhatsApp:</span> 0812-3456-789
+                    </a>
+                    <a href="#" class="flex items-center justify-center gap-3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:border-orange-500 transition-all text-sm md:text-base">
+                        <span class="text-orange-500 font-bold">Instagram:</span> @genzculturefest
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="py-10 text-center text-slate-400 text-[10px] font-bold uppercase tracking-widest px-4">
+        © 2026 Speak Up - Built for Gen-Z Culture Fest
+    </footer>
+
+    <script>
+        // Fungsi Toggle Menu Mobile
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        // Fungsi Ganti Tab
+        function showTab(tabId) {
+            // Sembunyikan semua tab
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Hapus status aktif dari semua tombol nav desktop & mobile
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            // Tampilkan tab yang dipilih
+            document.getElementById(tabId).classList.add('active');
+
+            // Aktifkan tombol nav yang sesuai (Desktop & Mobile)
+            if(document.getElementById('btn-' + tabId)) document.getElementById('btn-' + tabId).classList.add('active');
+            if(document.getElementById('m-btn-' + tabId)) document.getElementById('m-btn-' + tabId).classList.add('active');
+
+            // Tutup menu mobile setelah klik (jika sedang terbuka)
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.remove('open');
+
+            // Scroll ke atas otomatis
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
