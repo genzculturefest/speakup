@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner Konsumsi - Speak Up</title>
+    <link rel="icon" type="image/png" href="https://genzculturefest.github.io/speakup/assets%20genz/20260227_195719.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        #reader { border: none !important; }
+        #reader__dashboard_section_csr button {
+            background-color: #f97316 !important;
+            color: white !important;
+            padding: 8px 16px !important;
+            border-radius: 8px !important;
+            font-weight: bold;
+        }
+        .scanner-box {
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center p-4">
+
+    <div class="flex flex-col items-center mb-6 mt-4">
+        <img src="https://genzculturefest.github.io/speakup/assets%20genz/20260227_195719.png" class="h-20 mb-3">
+        <h1 class="text-2xl font-black text-orange-500 tracking-widest">SCAN KONSUMSI</h1>
+        <div class="h-1 w-20 bg-orange-500 rounded-full mt-1"></div>
+    </div>
+
+    <div class="w-full max-w-md bg-slate-800 p-4 rounded-3xl scanner-box border border-slate-700">
+        <div id="reader" class="overflow-hidden rounded-2xl"></div>
+        
+        <div id="result-box" class="mt-4 p-5 rounded-2xl hidden text-center transition-all duration-300 border-2">
+            <h2 id="result-status" class="font-black text-xl mb-1"></h2>
+            <p id="result-name" class="text-sm font-medium opacity-80"></p>
+            <button onclick="resetScanner()" class="mt-4 bg-white/10 hover:bg-white/20 px-6 py-2 rounded-full text-xs font-bold tracking-tighter uppercase transition-all">
+                Klik untuk Scan Baru
+            </button>
+        </div>
+    </div>
+
+    <div class="mt-8 grid grid-cols-2 gap-4 w-full max-w-md text-center">
+        <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+            <p class="text-[10px] text-slate-500 uppercase">Lokasi</p>
+            <p class="text-sm font-bold text-orange-400">Tenda Konsumsi</p>
+        </div>
+        <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+            <p class="text-[10px] text-slate-500 uppercase">Syarat</p>
+            <p class="text-sm font-bold text-orange-400">Wajib Absen Masuk</p>
+        </div>
+    </div>
+
+    <script>
+        // MASUKKAN URL WEB APP (EXEC) ANDA DI SINI
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxj9ijsPjh34gGlV_i_Lptf0MFzZ-gX_ZR8z6iJoqWNO5BbyrB8ztYGe9645DQDBSIL/exec"; 
+        
+        let html5QrCode = new Html5Qrcode("reader");
+        const config = { fps: 15, qrbox: { width: 250, height: 250 } };
+
+        function onScanSuccess(decodedText) {
+            // Regex untuk menangkap ID SPK-
+            const idMatch = decodedText.match(/SPK-\d+/);
+            const scannedId = idMatch ? idMatch[0] : decodedText.trim();
+
+            // Berhenti scan sebentar
+            html5QrCode.pause();
+            
+            showLoading();
+
+            // Jalankan Fetch ke Apps Script
+            fetch(`${SCRIPT_URL}?action=konsumsi&id=${scannedId}`)
+                .then(response => response.json())
+                .then(data => {
+                    handleResponse(data);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Koneksi Error! Pastikan internet stabil.");
+                    resetScanner();
+                });
+        }
+
+        function showLoading() {
+            const box = document.getElementById('result-box');
+            box.classList.remove('hidden');
+            box.className = "mt-4 p-5 rounded-2xl text-center border-slate-500 bg-slate-700 animate-pulse";
+            document.getElementById('result-status').innerText = "⏳ MEMVERIFIKASI...";
+            document.getElementById('result-name').innerText = "Mengecek database...";
+        }
+
+        function handleResponse(data) {
+            const box = document.getElementById('result-box');
+            const statusH = document.getElementById('result-status');
+            const nameP = document.getElementById('result-name');
+
+            box.classList.remove('animate-pulse');
+
+            if (data.status === "success") {
+                // HIJAU - BERHASIL
+                box.className = "mt-4 p-5 rounded-2xl text-center border-green-500 bg-green-950/50 text-green-400";
+                statusH.innerText = "✅ SILAKAN AMBIL";
+                nameP.innerText = `Peserta: ${data.nama}`;
+                playAudio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+            } 
+            else if (data.status === "already_taken") {
+                // KUNING - SUDAH PERNAH
+                box.className = "mt-4 p-5 rounded-2xl text-center border-yellow-500 bg-yellow-950/50 text-yellow-400";
+                statusH.innerText = "⚠️ SUDAH DIAMBIL";
+                nameP.innerText = `${data.nama} sudah menukarkan kupon.`;
+            } 
+            else if (data.status === "not_checked_in") {
+                // MERAH - BELUM ABSEN PINTU MASUK
+                box.className = "mt-4 p-5 rounded-2xl text-center border-red-500 bg-red-950/50 text-red-400";
+                statusH.innerText = "❌ BELUM ABSEN";
+                nameP.innerText = `${data.nama} wajib scan di pintu masuk dulu!`;
+            } 
+            else {
+                // ABU-ABU - TIDAK ADA
+                box.className = "mt-4 p-5 rounded-2xl text-center border-slate-400 bg-slate-700 text-slate-300";
+                statusH.innerText = "❓ TIDAK TERDAFTAR";
+                nameP.innerText = "ID QR tidak ditemukan di sistem.";
+            }
+        }
+
+        function resetScanner() {
+            document.getElementById('result-box').classList.add('hidden');
+            html5QrCode.resume();
+        }
+
+        function playAudio(url) {
+            new Audio(url).play().catch(e => console.log("Audio play blocked"));
+        }
+
+        // Mulai Kamera
+        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
+    </script>
+</body>
+</html>
