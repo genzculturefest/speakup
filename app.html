@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speak Up - Professional Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .bg-biru-tua { background-color: #1e3a8a; }
+        .text-biru-tua { color: #1e3a8a; }
+        .bg-oren { background-color: #f97316; }
+        .text-oren { color: #f97316; }
+        
+        .page-content { display: none; }
+        .page-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-item.active { background-color: white; color: #f97316; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transform: scale(1.05); }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        #reader-in, #reader-makan { border-radius: 1.5rem; overflow: hidden; border: 4px solid #1e3a8a !important; }
+    </style>
+</head>
+<body class="text-slate-800 pb-24">
+
+    <header class="bg-biru-tua pt-12 pb-28 px-6 rounded-b-[50px] shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20"></div>
+        <div class="max-w-6xl mx-auto flex justify-between items-center relative z-10">
+            <div>
+                <p class="text-white/70 font-medium mb-1">Selamat Datang di</p>
+                <h1 class="text-white text-3xl font-black tracking-tighter italic">SPEAK UP DASHBOARD</h1>
+            </div>
+            <div class="flex gap-2">
+                <img src="https://culturz.my.id/assets%20genz/culture%20z.png" class="h-10 md:h-14 brightness-0 invert opacity-80">
+                <img src="https://culturz.my.id/assets%20genz/20260227_195719.png" class="h-10 md:h-14">
+            </div>
+        </div>
+    </header>
+
+    <nav class="max-w-5xl mx-auto px-4 -mt-16 relative z-20">
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-item active glass-card p-4 rounded-3xl flex flex-col items-center gap-2 transition-all">
+                <span>🏠</span><span class="text-[10px] font-extrabold uppercase">Home</span>
+            </button>
+            <button onclick="switchTab('daftar')" id="nav-daftar" class="nav-item glass-card p-4 rounded-3xl flex flex-col items-center gap-2 transition-all">
+                <span>📝</span><span class="text-[10px] font-extrabold uppercase">Daftar</span>
+            </button>
+            <button onclick="switchTab('polling')" id="nav-polling" class="nav-item glass-card p-4 rounded-3xl flex flex-col items-center gap-2 transition-all">
+                <span>📊</span><span class="text-[10px] font-extrabold uppercase">Polling</span>
+            </button>
+            <button onclick="switchTab('scan-in')" id="nav-scan-in" class="nav-item glass-card p-4 rounded-3xl flex flex-col items-center gap-2 transition-all">
+                <span>🛡️</span><span class="text-[10px] font-extrabold uppercase">Absen</span>
+            </button>
+            <button onclick="switchTab('scan-makan')" id="nav-scan-makan" class="nav-item glass-card p-4 rounded-3xl flex flex-col items-center gap-2 transition-all">
+                <span>🍱</span><span class="text-[10px] font-extrabold uppercase">Konsumsi</span>
+            </button>
+            <button onclick="switchTab('about')" id="nav-about" class="nav-item glass-card p-4 rounded-3xl flex flex-col items-center gap-2 transition-all">
+                <span>ℹ️</span><span class="text-[10px] font-extrabold uppercase">About</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto mt-12 p-4">
+        <section id="home" class="page-content active">
+            <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100 text-center">
+                <h1 class="text-3xl md:text-5xl font-black text-biru-tua mb-6 uppercase">Yang Muda Berani Bicara</h1>
+                <p class="text-slate-500">Gunakan menu di atas untuk akses pendaftaran, polling, dan absensi.</p>
+            </div>
+        </section>
+
+        <section id="daftar" class="page-content">
+            <div class="bg-white p-8 rounded-[40px] shadow-xl border-t-8 border-biru-tua">
+                <h2 class="text-2xl font-black text-biru-tua mb-6">Pendaftaran Seminar</h2>
+                <form id="regForm" class="space-y-4">
+                    <input type="text" id="regNama" placeholder="Nama Lengkap" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-oren" required>
+                    <input type="email" id="regEmail" placeholder="Email Aktif" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-oren" required>
+                    <input type="tel" id="regTelp" placeholder="No. WhatsApp" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-oren" required>
+                    <input type="text" id="regInstansi" placeholder="Asal Instansi" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-oren" required>
+                    <select id="regOpsi" class="w-full p-4 bg-slate-50 rounded-2xl font-bold">
+                        <option value="online">Online (Rp 15.000)</option>
+                        <option value="offline">Offline (Rp 35.000)</option>
+                    </select>
+                    <div class="relative border-2 border-dashed border-slate-300 p-8 rounded-2xl text-center">
+                        <input type="file" id="regFoto" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewFile(this)">
+                        <div id="regStatus" class="text-slate-400 font-bold text-xs uppercase">Klik Upload Bukti Transfer</div>
+                    </div>
+                    <button type="button" onclick="submitPendaftaran()" id="btnReg" class="w-full bg-biru-tua text-white py-5 rounded-2xl font-black hover:bg-oren transition-all">DAFTAR SEKARANG</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="polling" class="page-content">
+            <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+                <h2 class="text-2xl font-black text-biru-tua mb-6 text-center italic">VOTE KARYA GEN-Z</h2>
+                <div class="bg-slate-50 p-6 rounded-3xl mb-8 space-y-4">
+                    <input type="text" id="pollVoter" placeholder="Nama Anda" class="w-full p-4 rounded-xl border-none ring-2 ring-white focus:ring-oren outline-none font-bold">
+                    <input type="email" id="pollEmail" placeholder="Email Anda" class="w-full p-4 rounded-xl border-none ring-2 ring-white focus:ring-oren outline-none font-bold">
+                </div>
+                <div id="pollItems" class="space-y-10"></div>
+                <button onclick="submitPolling()" id="btnPoll" class="w-full bg-oren text-white py-5 rounded-3xl font-black text-xl shadow-xl mt-10 hover:scale-[1.02] transition-transform">KIRIM PENILAIAN</button>
+            </div>
+        </section>
+
+        <section id="scan-in" class="page-content">
+            <div class="bg-slate-900 p-8 rounded-[40px] shadow-2xl text-white text-center">
+                <h2 class="text-xl font-black mb-6 text-blue-400 uppercase">Scanner Absensi</h2>
+                <div id="reader-in" class="bg-black"></div>
+                <div id="res-in" class="mt-6 p-6 rounded-2xl hidden animate__animated animate__zoomIn"></div>
+                <button onclick="resetIn()" class="w-full mt-4 py-3 bg-white/10 rounded-xl text-xs font-bold opacity-50">Reset Scanner</button>
+            </div>
+        </section>
+
+        <section id="scan-makan" class="page-content">
+            <div class="bg-slate-900 p-8 rounded-[40px] shadow-2xl text-white text-center">
+                <h2 class="text-xl font-black mb-6 text-orange-500 uppercase">Scanner Konsumsi</h2>
+                <div id="reader-makan" class="bg-black"></div>
+                <div id="res-makan" class="mt-6 p-6 rounded-2xl hidden animate__animated animate__zoomIn"></div>
+                <button onclick="resetMakan()" class="w-full mt-4 py-3 bg-white/10 rounded-xl text-xs font-bold opacity-50">Reset Scanner</button>
+            </div>
+        </section>
+
+        <section id="about" class="page-content">
+            <div class="bg-white p-8 rounded-[40px] shadow-sm text-center">
+                <h2 class="text-2xl font-black text-biru-tua">Speak Up - GenZ Culture Fest</h2>
+                <p class="text-slate-500 mt-4">Platform kolaborasi untuk menyalurkan bakat dan kreativitas anak muda Indonesia.</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal" class="fixed inset-0 bg-biru-tua/90 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+        <div class="bg-white p-10 rounded-[40px] max-w-sm w-full text-center shadow-2xl animate__animated animate__bounceIn">
+            <div class="text-5xl mb-4">✅</div>
+            <h2 class="text-2xl font-black text-biru-tua mb-2">Berhasil!</h2>
+            <p id="modalMsg" class="text-slate-500 mb-8 font-medium"></p>
+            <button onclick="closeModal()" class="w-full bg-biru-tua text-white py-4 rounded-2xl font-bold">TUTUP</button>
+        </div>
+    </div>
+
+    <script>
+        const ENDPOINT_REG = "https://script.google.com/macros/s/AKfycbz3DaZJOHff5oxxLr44dh0LIhs0SoindqnJFigh5dKfZfoklW4AKbsxceBLTyTqJ6FcQw/exec";
+        const ENDPOINT_POLL = "https://script.google.com/macros/s/AKfycbxdkDL9-TULVObSpcxq00iAIfYcJjkuuFdZGFzDFWddMmah3no4oRnOJfsYEDqZCt6o/exec";
+        const ENDPOINT_SCAN = "https://script.google.com/macros/s/AKfycbxj9ijsPjh34gGlV_i_Lptf0MFzZ-gX_ZR8z6iJoqWNO5BbyrB8ztYGe9645DQDBSIL/exec";
+
+        let scanner = null;
+
+        function switchTab(id) {
+            if(scanner) scanner.stop().catch(() => {});
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('nav-' + id).classList.add('active');
+
+            if(id === 'polling') renderPollItems();
+            if(id === 'scan-in') startScanner('reader-in', 'res-in', 'scan');
+            if(id === 'scan-makan') startScanner('reader-makan', 'res-makan', 'konsumsi');
+        }
+
+        function previewFile(input) {
+            if(input.files.length > 0) document.getElementById('regStatus').innerText = "📂 " + input.files[0].name;
+        }
+
+        function submitPendaftaran() {
+            const btn = document.getElementById('btnReg');
+            const file = document.getElementById('regFoto').files[0];
+            if(!file) return alert("Wajib upload bukti transfer!");
+
+            btn.disabled = true; btn.innerText = "Mengirim...";
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const payload = {
+                    nama: document.getElementById('regNama').value,
+                    telp: document.getElementById('regTelp').value,
+                    email: document.getElementById('regEmail').value,
+                    instansi: document.getElementById('regInstansi').value,
+                    opsi: document.getElementById('regOpsi').value,
+                    bukti: e.target.result
+                };
+                fetch(ENDPOINT_REG, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
+                .then(() => {
+                    openModal("Data pendaftaran berhasil terkirim!");
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderPollItems() {
+            const container = document.getElementById('pollItems');
+            if(localStorage.getItem('hasPolled')) {
+                container.innerHTML = "<div class='p-8 bg-orange-50 rounded-3xl text-center text-oren font-bold uppercase'>Anda sudah melakukan polling.</div>";
+                document.getElementById('btnPoll').style.display = 'none';
+                return;
+            }
+
+            // Database Gambar 6 Kelompok
+            const groups = [
+                {id: 1, img1: "https://pict.sindonews.net/dyn/620/pena/news/2020/10/31/174/214888/mengintip-ragam-wisata-banten-di-masa-adaptasi-kebiasaan-baru-cbf.jpg", img2: "https://th.bing.com/th/id/R.c9d8c36d00f435ac12cbbf29a632ee4d?rik=W3eD88d5Rndb9w&riu=http%3a%2f%2fanekatempatwisata.com%2fwp-content%2fuploads%2f2014%2f02%2fPantai-Sawarna.jpg&ehk=36Ncof7KCg05YNrnKDMZYnqNua07T4zCiK%2fuUClTjgo%3d&risl=&pid=ImgRaw&r=0"},
+                {id: 2, img1: "https://pict.sindonews.net/dyn/620/pena/news/2020/10/31/174/214888/mengintip-ragam-wisata-banten-di-masa-adaptasi-kebiasaan-baru-cbf.jpg", img2: "https://th.bing.com/th/id/R.c9d8c36d00f435ac12cbbf29a632ee4d?rik=W3eD88d5Rndb9w&riu=http%3a%2f%2fanekatempatwisata.com%2fwp-content%2fuploads%2f2014%2f02%2fPantai-Sawarna.jpg&ehk=36Ncof7KCg05YNrnKDMZYnqNua07T4zCiK%2fuUClTjgo%3d&risl=&pid=ImgRaw&r=0"},
+                {id: 3, img1: "https://pict.sindonews.net/dyn/620/pena/news/2020/10/31/174/214888/mengintip-ragam-wisata-banten-di-masa-adaptasi-kebiasaan-baru-cbf.jpg", img2: "https://th.bing.com/th/id/R.c9d8c36d00f435ac12cbbf29a632ee4d?rik=W3eD88d5Rndb9w&riu=http%3a%2f%2fanekatempatwisata.com%2fwp-content%2fuploads%2f2014%2f02%2fPantai-Sawarna.jpg&ehk=36Ncof7KCg05YNrnKDMZYnqNua07T4zCiK%2fuUClTjgo%3d&risl=&pid=ImgRaw&r=0"},
+                {id: 4, img1: "https://pict.sindonews.net/dyn/620/pena/news/2020/10/31/174/214888/mengintip-ragam-wisata-banten-di-masa-adaptasi-kebiasaan-baru-cbf.jpg", img2: "https://th.bing.com/th/id/R.c9d8c36d00f435ac12cbbf29a632ee4d?rik=W3eD88d5Rndb9w&riu=http%3a%2f%2fanekatempatwisata.com%2fwp-content%2fuploads%2f2014%2f02%2fPantai-Sawarna.jpg&ehk=36Ncof7KCg05YNrnKDMZYnqNua07T4zCiK%2fuUClTjgo%3d&risl=&pid=ImgRaw&r=0"},
+                {id: 5, img1: "https://pict.sindonews.net/dyn/620/pena/news/2020/10/31/174/214888/mengintip-ragam-wisata-banten-di-masa-adaptasi-kebiasaan-baru-cbf.jpg", img2: "https://th.bing.com/th/id/R.c9d8c36d00f435ac12cbbf29a632ee4d?rik=W3eD88d5Rndb9w&riu=http%3a%2f%2fanekatempatwisata.com%2fwp-content%2fuploads%2f2014%2f02%2fPantai-Sawarna.jpg&ehk=36Ncof7KCg05YNrnKDMZYnqNua07T4zCiK%2fuUClTjgo%3d&risl=&pid=ImgRaw&r=0"},
+                {id: 6, img1: "https://pict.sindonews.net/dyn/620/pena/news/2020/10/31/174/214888/mengintip-ragam-wisata-banten-di-masa-adaptasi-kebiasaan-baru-cbf.jpg", img2: "https://th.bing.com/th/id/R.c9d8c36d00f435ac12cbbf29a632ee4d?rik=W3eD88d5Rndb9w&riu=http%3a%2f%2fanekatempatwisata.com%2fwp-content%2fuploads%2f2014%2f02%2fPantai-Sawarna.jpg&ehk=36Ncof7KCg05YNrnKDMZYnqNua07T4zCiK%2fuUClTjgo%3d&risl=&pid=ImgRaw&r=0"}
+            ];
+
+            container.innerHTML = groups.map(g => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
+                    <div class="bg-biru-tua p-4 text-white font-black italic">KELOMPOK ${g.id}</div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <img src="${g.img1}" class="aspect-square rounded-xl object-cover">
+                            <img src="${g.img2}" class="aspect-square rounded-xl object-cover">
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase">Nilai (1-10)</span>
+                            <span id="sv_${g.id}" class="text-3xl font-black text-oren">5</span>
+                        </div>
+                        <input type="range" id="score_${g.id}" min="1" max="10" value="5" oninput="document.getElementById('sv_${g.id}').innerText=this.value" class="w-full h-3 accent-oren appearance-none bg-slate-100 rounded-full mb-4">
+                        <input type="text" id="note_${g.id}" placeholder="Catatan singkat..." class="w-full p-3 bg-slate-50 rounded-xl outline-none focus:ring-1 ring-oren text-sm">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function submitPolling() {
+            const voterName = document.getElementById('pollVoter').value;
+            const voterEmail = document.getElementById('pollEmail').value;
+            if(!voterName || !voterEmail) return alert("Isi nama dan email Anda!");
+
+            document.getElementById('btnPoll').innerText = "Mengirim...";
+            
+            // Format payload disesuaikan dengan Apps Script (k1_score, k1_note, dst)
+            const payload = {
+                voterName: voterName,
+                voterEmail: voterEmail,
+                k1_score: document.getElementById('score_1').value, k1_note: document.getElementById('note_1').value,
+                k2_score: document.getElementById('score_2').value, k2_note: document.getElementById('note_2').value,
+                k3_score: document.getElementById('score_3').value, k3_note: document.getElementById('note_3').value,
+                k4_score: document.getElementById('score_4').value, k4_note: document.getElementById('note_4').value,
+                k5_score: document.getElementById('score_5').value, k5_note: document.getElementById('note_5').value,
+                k6_score: document.getElementById('score_6').value, k6_note: document.getElementById('note_6').value
+            };
+
+            fetch(ENDPOINT_POLL, { 
+                method: "POST", 
+                mode: "no-cors", // Apps Script biasanya butuh no-cors jika pakai doPost
+                body: JSON.stringify(payload) 
+            })
+            .then(() => {
+                localStorage.setItem('hasPolled', 'true');
+                openModal("Polling berhasil dikirim!");
+            })
+            .catch(err => alert("Gagal mengirim polling"));
+        }
+
+        function startScanner(renderId, resId, action) {
+            scanner = new Html5Qrcode(renderId);
+            const resBox = document.getElementById(resId);
+            
+            scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
+                scanner.pause();
+                resBox.classList.remove('hidden'); 
+                resBox.className = "mt-6 p-6 rounded-2xl bg-blue-600 text-white animate-pulse text-center";
+                resBox.innerHTML = "⏳ MEMVERIFIKASI...";
+
+                fetch(`${ENDPOINT_SCAN}?action=${action}&id=${text}`)
+                .then(r => r.json())
+                .then(data => {
+                    if(data.status === "success") {
+                        resBox.className = "mt-6 p-6 rounded-2xl bg-green-600 text-white text-center";
+                        resBox.innerHTML = `<h3 class="text-2xl font-black italic">BERHASIL!</h3><p>${data.nama}</p>`;
+                    } else {
+                        resBox.className = "mt-6 p-6 rounded-2xl bg-red-600 text-white text-center";
+                        resBox.innerHTML = `<h3 class="text-2xl font-black italic">GAGAL!</h3><p>${data.message}</p>`;
+                    }
+                })
+                .catch(() => {
+                    resBox.innerHTML = "❌ ERROR JARINGAN";
+                });
+            });
+        }
+
+        function resetIn() { document.getElementById('res-in').classList.add('hidden'); if(scanner) scanner.resume(); }
+        function resetMakan() { document.getElementById('res-makan').classList.add('hidden'); if(scanner) scanner.resume(); }
+        function openModal(msg) { document.getElementById('modalMsg').innerText = msg; document.getElementById('modal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); switchTab('home'); }
+    </script>
+</body>
+</html>
