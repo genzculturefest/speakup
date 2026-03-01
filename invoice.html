@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - E-Invoice Speak Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; } </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-2xl w-full bg-white p-8 md:p-12 rounded-[40px] shadow-2xl border-t-[12px] border-[#1e3a8a] relative overflow-hidden">
+        <header class="mb-10 text-center md:text-left">
+            <h2 class="text-3xl font-black text-[#1e3a8a] uppercase tracking-tighter">Admin E-Invoice</h2>
+            <p class="text-slate-400 font-bold text-xs tracking-[0.2em] uppercase mt-1">SPEAKUP X CULTURZ</p>
+        </header>
+        
+        <div class="space-y-6">
+            <div>
+                <label class="block text-[10px] font-black text-[#1e3a8a] uppercase tracking-widest mb-2 ml-1">Pilih Nama Pendaftar</label>
+                <select id="userSelect" onchange="autoFill()" class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-orange-500 font-bold text-slate-700 outline-none appearance-none transition-all">
+                    <option value="">🔄 Memuat data...</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1">ID Pendaftaran</label>
+                    <input type="text" id="dispID" placeholder="ID otomatis..." readonly class="w-full p-4 bg-slate-100 border-none rounded-2xl text-sm font-semibold text-slate-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1">Opsi (Online/Offline)</label>
+                    <input type="text" id="dispOpsi" placeholder="Opsi otomatis..." readonly class="w-full p-4 bg-slate-100 border-none rounded-2xl text-sm font-semibold text-slate-500">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1">Harga Tiket</label>
+                <input type="text" id="dispHarga" placeholder="Rp 0" readonly class="w-full p-4 bg-orange-50 border-none rounded-2xl text-lg font-black text-orange-600">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black text-[#1e3a8a] uppercase tracking-widest mb-2 ml-1">Metode Pembayaran</label>
+                <select id="metodeBayar" class="w-full p-4 bg-white border-2 border-orange-500 rounded-2xl font-black text-[#1e3a8a] outline-none">
+                    <option value="Cash / Tunai">💵 Cash / Tunai</option>
+                    <option value="Transfer BCA - 3433101118">🏛️ Transfer BCA (PUTRI AINIYAH FAJARINAH)</option>
+                    <option value="QRIS / E-Wallet">📱 QRIS / DANA</option>
+                </select>
+            </div>
+
+            <button onclick="prosesInvoice()" id="btnKirim" class="w-full bg-[#1e3a8a] hover:bg-[#f97316] text-white py-5 rounded-[24px] font-black text-lg transition-all transform active:scale-95 shadow-xl">
+                GENERATE & KIRIM PDF
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzbJr7UyIA4KEI2gssdwm2XCgcknuVgjYM_W0SwRRKp70Gj5dhkyOt72bCnxJ0M_gAL/exec"; // GANTI DENGAN URL DEPLOYMENT ANDA
+        let dataList = [];
+
+        async function loadData() {
+            try {
+                const res = await fetch(API_URL);
+                dataList = await res.json();
+                const select = document.getElementById('userSelect');
+                select.innerHTML = '<option value="">-- Cari Nama Pendaftar --</option>';
+                dataList.forEach((item, i) => {
+                    select.innerHTML += `<option value="${i}">${item.nama}</option>`;
+                });
+            } catch (err) { alert("Gagal mengambil data!"); }
+        }
+
+        function autoFill() {
+            const idx = document.getElementById('userSelect').value;
+            if(idx !== "") {
+                const s = dataList[idx];
+                document.getElementById('dispID').value = s.id_daftar;
+                document.getElementById('dispOpsi').value = s.opsi.toUpperCase();
+                document.getElementById('dispHarga').value = "Rp " + s.harga.toLocaleString('id-ID');
+            } else {
+                document.getElementById('dispID').value = "";
+                document.getElementById('dispOpsi').value = "";
+                document.getElementById('dispHarga').value = "";
+            }
+        }
+
+        async function prosesInvoice() {
+            const idx = document.getElementById('userSelect').value;
+            if(!idx) return alert("Pilih nama dulu!");
+            
+            const btn = document.getElementById('btnKirim');
+            btn.disabled = true;
+            btn.innerText = "SEDANG MENGIRIM...";
+
+            const payload = { ...dataList[idx], metode: document.getElementById('metodeBayar').value };
+
+            await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+            alert("✅ Invoice Berhasil Dikirim ke Email!");
+            location.reload();
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
