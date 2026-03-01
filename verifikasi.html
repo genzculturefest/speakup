@@ -12,7 +12,7 @@
             background-color: #f1f5f9; 
         }
         .table-container {
-            max-height: calc(100vh - 250px);
+            max-height: calc(100vh - 300px); /* Disesuaikan sedikit untuk search bar */
             overflow-y: auto;
         }
         /* Custom Scrollbar */
@@ -29,6 +29,7 @@
             z-index: 10;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="p-4 md:p-8">
 
@@ -53,6 +54,15 @@
             <div class="bg-white p-4 rounded-2xl shadow-sm border-l-4 border-green-500">
                 <p class="text-xs font-bold text-slate-400 uppercase">Sudah Bayar</p>
                 <p id="statPaid" class="text-2xl font-black text-slate-800">0</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">🔍</span>
+                <input type="text" id="searchInput" onkeyup="filterTable()" 
+                    placeholder="Cari nama, email, atau instansi..." 
+                    class="w-full p-4 pl-12 rounded-2xl border border-white bg-white shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none transition-all font-medium text-slate-600">
             </div>
         </div>
 
@@ -149,27 +159,80 @@
     }
 
     async function updateCell(row, col, value) {
-        toggleLoader(true);
-        const url = `${WEB_APP_URL}?action=update&row=${row}&col=${col}&val=${encodeURIComponent(value)}`;
+    toggleLoader(true);
+    const url = `${WEB_APP_URL}?action=update&row=${row}&col=${col}&val=${encodeURIComponent(value)}`;
+    
+    try {
+        await fetch(url, { mode: 'no-cors' });
+        console.log("Update Berhasil");
         
-        try {
-            await fetch(url, { mode: 'no-cors' });
-            console.log("Update Berhasil");
-            
-            // Logika Notifikasi khusus Status Bayar
-            if (col === 9) {
-                if (value === "SUKSES") {
-                    alert("Status diubah ke SUKSES! Sistem akan otomatis mengirim email tiket QR ke peserta.");
-                }
-                // Refresh stats tanpa reload seluruh tabel
-                fetchData(); 
+        if (col === 9) {
+            if (value === "SUKSES") {
+                // POP-UP CUSTOM GANTINYA ALERT
+                Swal.fire({
+                    title: 'Status Diperbarui!',
+                    text: 'Status berhasil diubah ke SUKSES. Tiket QR akan segera dikirim ke email peserta.',
+                    icon: 'success',
+                    borderRadius: '25px',
+                    confirmButtonColor: '#1e3a8a', // Warna biru Speak Up
+                    confirmButtonText: 'Kembali',
+                    background: '#ffffff',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInUp'
+                    }
+                });
             }
-        } catch (err) {
-            alert("Gagal mengupdate data ke Spreadsheet.");
-        } finally {
-            toggleLoader(false);
+            fetchData(); 
         }
+    } catch (err) {
+        Swal.fire({
+            title: 'Waduh!',
+            text: 'Gagal mengupdate data ke Spreadsheet.',
+            icon: 'error',
+            confirmButtonColor: '#ef4444'
+        });
+    } finally {
+        toggleLoader(false);
     }
+}
+
+    // FUNGSI PENCARIAN
+    function filterTable() {
+    const input = document.getElementById("searchInput");
+    const filter = input.value.toUpperCase();
+    const table = document.getElementById("tBody");
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < tr.length; i++) {
+        let rowVisible = false;
+        const tds = tr[i].getElementsByTagName("td");
+        
+        // Loop setiap kolom untuk mencari teks
+        for (let j = 0; j < tds.length; j++) {
+            const td = tds[j];
+            if (td) {
+                // Ambil teks dari teks langsung ATAU dari nilai input/select di dalamnya
+                const inputChild = td.querySelector('input');
+                const selectChild = td.querySelector('select');
+                
+                let textValue = "";
+                if (inputChild) {
+                    textValue = inputChild.value;
+                } else if (selectChild) {
+                    textValue = selectChild.value;
+                } else {
+                    textValue = td.textContent || td.innerText;
+                }
+
+                if (textValue.toUpperCase().indexOf(filter) > -1) {
+                    rowVisible = true;
+                    break; 
+                }
+            }
+        }
+        tr[i].style.display = rowVisible ? "" : "none";
+    }
+}
 
     function updateStats(data) {
         const total = data.length - 1;
