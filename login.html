@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Speak Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+
+    <div class="max-w-md w-full bg-white p-10 rounded-[40px] shadow-2xl border-t-[12px] border-blue-900">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black text-blue-900 tracking-tighter uppercase italic">Speak Up Admin</h1>
+            <p class="text-slate-400 text-sm font-bold uppercase tracking-widest mt-2">Verification System</p>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                <input type="email" id="email" required class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-900 outline-none transition-all font-bold text-slate-700">
+            </div>
+            <div>
+                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Password</label>
+                <input type="password" id="password" required class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-900 outline-none transition-all font-bold text-slate-700">
+            </div>
+            <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white py-5 rounded-2xl font-black text-lg transition-all transform active:scale-95 shadow-xl shadow-blue-200">
+                MASUK SEKARANG
+            </button>
+        </form>
+        <p id="errorMsg" class="text-red-500 text-center text-xs font-bold mt-4 hidden">❌ Email atau Password Salah!</p>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+
+            // Logika Cek Login
+            if (email === "speakup@culturz.my.id" && pass === "SatukanKarya25") {
+                // Simpan status login di session (hilang jika tab ditutup)
+                sessionStorage.setItem('admin_logged_in', 'true');
+                window.location.href = "verifikasi.html";
+            } else {
+                document.getElementById('errorMsg').classList.remove('hidden');
+                // Shake effect sederhana
+                loginForm.classList.add('animate-bounce');
+                setTimeout(() => loginForm.classList.remove('animate-bounce'), 500);
+            }
+        });
+    </script>
+</body>
+</html>
