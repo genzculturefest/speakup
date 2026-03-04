@@ -86,6 +86,9 @@
     </div>
 
     <script>
+        if (sessionStorage.getItem('admin_logged_in') !== 'true') {
+        window.location.replace("login.html");
+    }
     // === KONFIGURASI: TEMPEL URL WEB APP ANDA DI SINI ===
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzT6xgcxtC516CfJaVvhxRwDhFTub-FsDLTlBtzUJiS_TTjpHyvqss5_qY_3-5Wumzv5g/exec";
 
