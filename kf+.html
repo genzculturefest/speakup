@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KF+ | Super-App Agregator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary-red: #ed1c24;
+            --primary-blue: #00aeef;
+            --bg-dark: #0f0f0f;
+            --card-bg: #1e1e1e;
+            --text-gray: #b0b0b0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 5%;
+            background: rgba(0, 0, 0, 0.95);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+
+        .brand { font-size: 26px; font-weight: 900; letter-spacing: -1px; cursor: pointer; }
+        .brand span { color: var(--primary-red); }
+        .brand i { color: var(--primary-blue); font-style: normal; }
+
+        .menu { display: flex; gap: 20px; }
+        .menu a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.3s;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .menu a:hover, .menu a.active { color: white; border-bottom: 2px solid var(--primary-red); }
+
+        /* --- MAIN CONTAINER --- */
+        .container { padding: 30px 5%; min-height: 100vh; }
+        .page { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 24px; border-left: 5px solid var(--primary-red); padding-left: 15px; margin-bottom: 25px; }
+
+        /* --- CARDS & GRID --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+            cursor: pointer;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary-blue); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .card img { width: 100%; height: 160px; object-fit: cover; background-color: #222; }
+        .card-body { padding: 15px; flex-grow: 1; }
+        .card-body h3 { font-size: 15px; margin: 0 0 10px 0; line-height: 1.4; color: #fff; }
+        .badge { background: var(--primary-red); font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
+
+        /* --- SHOP SEARCH --- */
+        .search-area { background: #222; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px; }
+        .search-area input {
+            width: 60%; padding: 15px; border-radius: 30px 0 0 30px; border: none; outline: none; font-size: 16px;
+        }
+        .search-area button {
+            padding: 15px 30px; border-radius: 0 30px 30px 0; border: none; background: #ee4d2d; color: white;
+            font-weight: bold; cursor: pointer; transition: 0.3s; margin-left: -5px;
+        }
+        .search-area button:hover { background: #ff5722; }
+
+        /* --- VIDEO & GAME PLAYER --- */
+        #viewer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 2000; display: none;
+        }
+        #viewer iframe { width: 100%; height: 100%; border: none; }
+        .close-viewer {
+            position: absolute; top: 20px; right: 20px; background: var(--primary-red);
+            color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; z-index: 2001;
+        }
+
+        footer { padding: 40px 5%; text-align: center; border-top: 1px solid #333; margin-top: 50px; color: #666; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="brand" onclick="showPage('home')">KF<span>+</span><i>!</i></div>
+        <div class="menu">
+            <a onclick="showPage('home')" id="btn-home">Home</a>
+            <a onclick="showPage('news')" id="btn-news">News+</a>
+            <a onclick="showPage('games')" id="btn-games">Games+</a>
+            <a onclick="showPage('shop')" id="btn-shop">Shop+</a>
+            <a onclick="showPage('film')" id="btn-film">Film+</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <section id="home" class="page active">
+            <div style="background: linear-gradient(135deg, #ed1c24, #00aeef); padding: 80px 40px; border-radius: 20px; margin-bottom: 40px; text-align: center;">
+                <h1 style="font-size: clamp(24px, 5vw, 48px); margin: 0;">Super-App Hiburan Terlengkap</h1>
+                <p style="font-size: 18px; opacity: 0.9; margin-top: 10px;">Semua konten favoritmu dalam satu genggaman di KF+.</p>
+            </div>
+            
+            <h2>Ulasan Fitur</h2>
+            <div class="grid">
+                <div class="card" onclick="showPage('news')">
+                    <div class="card-body"><h3><i class="fa fa-newspaper" style="color:var(--primary-blue)"></i> News+</h3><p style="color:var(--text-gray); font-size:13px;">Berita terpopuler dari Antara News secara real-time.</p></div>
+                </div>
+                <div class="card" onclick="showPage('games')">
+                    <div class="card-body"><h3><i class="fa fa-gamepad" style="color:var(--primary-red)"></i> Games+</h3><p style="color:var(--text-gray); font-size:13px;">Mainkan game arkade instan tanpa perlu download.</p></div>
+                </div>
+                <div class="card" onclick="showPage('shop')">
+                    <div class="card-body"><h3><i class="fa fa-shopping-cart" style="color:#ee4d2d"></i> Shop+</h3><p style="color:var(--text-gray); font-size:13px;">Cari perlengkapan teknologi & fotografi di Shopee.</p></div>
+                </div>
+                <div class="card" onclick="showPage('film')">
+                    <div class="card-body"><h3><i class="fa fa-film" style="color:white"></i> Film+</h3><p style="color:var(--text-gray); font-size:13px;">Katalog sinema pilihan dengan kualitas streaming HD.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="news" class="page">
+            <h2>Berita Terkini</h2>
+            <div id="news-feed" class="grid">
+                </div>
+        </section>
+
+        <section id="games" class="page">
+            <h2>Pilih Game</h2>
+            <div class="grid">
+                <div class="card" onclick="openViewer('https://www.gamepix.com/play/classic-bowling')">
+                    <img src="https://standard.gamepix.com/101/images/banner/classic-bowling-low.png">
+                    <div class="card-body"><h3>Bowling Classic</h3><span class="badge">FREE PLAY</span></div>
+                </div>
+                <div class="card" onclick="openViewer('https://www.gamepix.com/play/retro-speed')">
+                    <img src="https://standard.gamepix.com/184/images/banner/retro-speed-low.png">
+                    <div class="card-body"><h3>Retro Speed</h3><span class="badge">FREE PLAY</span></div>
+                </div>
+                <div class="card" onclick="openViewer('https://www.gamepix.com/play/tower-crash-3d')">
+                    <img src="https://standard.gamepix.com/images/tower-crash-3d.png">
+                    <div class="card-body"><h3>Tower Crash 3D</h3><span class="badge">FREE PLAY</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="shop" class="page">
+            <h2>Cari Produk Shopee</h2>
+            <div class="search-area">
+                <input type="text" id="shopeeInput" placeholder="Ketik nama gadget atau kamera...">
+                <button onclick="goShopee()"><i class="fa fa-search"></i> CARI DI SHOPEE</button>
+            </div>
+            <div class="grid">
+                <div class="card" onclick="goShopee('Drone GPS XT808')">
+                    <img src="https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?w=400">
+                    <div class="card-body"><h3>Drone XT808 & Parts</h3><p style="font-size:12px; color:var(--text-gray);">Cari suku cadang kamera drone.</p></div>
+                </div>
+                <div class="card" onclick="goShopee('Lensa Fujifilm X-A5')">
+                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400">
+                    <div class="card-body"><h3>Aksesoris Fujifilm</h3><p style="font-size:12px; color:var(--text-gray);">Lensa, baterai, dan filter.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="film" class="page">
+            <h2>Katalog Film+</h2>
+            <div class="grid">
+                <div class="card" onclick="openViewer('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400">
+                    <div class="card-body"><h3>Trailer Action Terbaru</h3><span class="badge">HD QUALITY</span></div>
+                </div>
+                <div class="card" onclick="openViewer('https://www.youtube.com/embed/jfKfPfyJRdk')">
+                    <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400">
+                    <div class="card-body"><h3>Documentary Showcase</h3><span class="badge">FULL MOVIE</span></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="viewer">
+        <button class="close-viewer" onclick="closeViewer()">TUTUP</button>
+        <iframe id="main-frame"></iframe>
+    </div>
+
+    <footer>
+        &copy; 2026 KF+ Super-App Agregator. Developed for Web Development Education.
+    </footer>
+
+    <script>
+        // NAVIGATION LOGIC
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
+            
+            const targetPage = document.getElementById(pageId);
+            if(targetPage) targetPage.classList.add('active');
+            
+            const targetBtn = document.getElementById('btn-' + pageId);
+            if(targetBtn) targetBtn.classList.add('active');
+
+            if(pageId === 'news') fetchRssNews();
+            window.scrollTo(0, 0);
+        }
+
+        // --- FETCH NEWS FIX (TANPA API KEY, MENGGUNAKAN ALLORIGINS PROXY) ---
+        async function fetchRssNews() {
+            const feed = document.getElementById('news-feed');
+            feed.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding:50px;'>Menghubungkan ke server Antara News...</div>"; 
+            
+            try {
+                const rssUrl = 'https://www.antaranews.com/rss/terpopuler.xml';
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
+                
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error("Gagal mengambil data");
+                
+                const data = await response.json();
+                
+                // Parse XML
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+                const items = xmlDoc.querySelectorAll("item");
+                
+                let html = '';
+                
+                if (items.length > 0) {
+                    items.forEach((item, index) => {
+                        if (index < 12) {
+                            const title = item.querySelector("title").textContent;
+                            const link = item.querySelector("link").textContent;
+                            const pubDate = item.querySelector("pubDate").textContent.split(' ').slice(0, 4).join(' ');
+                            
+                            // Image extraction
+                            let image = 'https://via.placeholder.com/300x180/1e1e1e/00aeef?text=KF+News';
+                            const enclosure = item.querySelector("enclosure");
+                            if (enclosure) {
+                                image = enclosure.getAttribute("url");
+                            } else {
+                                const desc = item.querySelector("description").textContent;
+                                const imgMatch = desc.match(/<img[^>]+src="([^">]+)"/);
+                                if (imgMatch) image = imgMatch[1];
+                            }
+                            
+                            html += `
+                                <div class="card" onclick="window.open('${link}', '_blank')">
+                                    <img src="${image}" onerror="this.src='https://via.placeholder.com/300x180/1e1e1e/ed1c24?text=News+Photo'">
+                                    <div class="card-body">
+                                        <span style="color:var(--primary-blue); font-size:11px; font-weight:bold;">ANTARA NEWS</span>
+                                        <h3>${title}</h3>
+                                        <p style="font-size:10px; color:#666; margin-bottom:0;">${pubDate}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    feed.innerHTML = html;
+                } else {
+                    feed.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Berita sedang tidak tersedia.</p>";
+                }
+            } catch (e) { 
+                console.error(e);
+                feed.innerHTML = `
+                    <div style='grid-column: 1/-1; text-align:center; padding:50px;'>
+                        <p>Browser memblokir permintaan data (CORS). Coba refresh atau jalankan dari server.</p>
+                        <button onclick="fetchRssNews()" style="padding:10px 20px; background:var(--primary-red); color:white; border:none; border-radius:5px; cursor:pointer;">MUAT ULANG</button>
+                    </div>`; 
+            }
+        }
+
+        // SHOP LOGIC
+        function goShopee(keyword) {
+            const val = keyword || document.getElementById('shopeeInput').value;
+            if(val) {
+                window.open(`https://shopee.co.id/search?keyword=${encodeURIComponent(val)}`, '_blank');
+            }
+        }
+
+        // VIEWER LOGIC
+        function openViewer(url) {
+            document.getElementById('main-frame').src = url;
+            document.getElementById('viewer').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewer() {
+            document.getElementById('main-frame').src = '';
+            document.getElementById('viewer').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // INIT
+        showPage('home');
+    </script>
+</body>
+</html>
