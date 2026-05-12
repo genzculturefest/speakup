@@ -5,59 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KF+ | Super-App Agregator</title>
     <style>
-        :root {
-            --red: #ed1c24;
-            --blue: #00aeef;
-            --bg: #0f0f0f;
-            --card: #1e1e1e;
-            --gray: #b0b0b0;
-        }
-
-        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
-
-        /* --- NAVIGATION --- */
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%; background: #000; border-bottom: 1px solid #333;
-            position: sticky; top: 0; z-index: 1000;
-        }
+        :root { --red: #ed1c24; --blue: #00aeef; --bg: #0f0f0f; --card: #1e1e1e; --gray: #b0b0b0; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; }
+        
+        /* NAVIGATION */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #000; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; font-weight: 900; cursor: pointer; }
         .logo span { color: var(--red); }
-        .logo i { color: var(--blue); font-style: normal; }
+        .menu { display: flex; gap: 15px; }
+        .menu a { color: var(--gray); text-decoration: none; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .menu a:hover, .menu a.active { color: white; border-bottom: 2px solid var(--red); }
 
-        .menu { display: flex; gap: 20px; }
-        .menu a {
-            color: var(--gray); text-decoration: none; font-size: 13px; font-weight: 700;
-            cursor: pointer; transition: 0.3s;
-        }
-        .menu a.active { color: white; border-bottom: 2px solid var(--red); padding-bottom: 5px; }
-
-        /* --- LAYOUT --- */
+        /* LAYOUT */
         .container { padding: 30px 5%; min-height: 100vh; }
-        .page { display: none; }
+        .page { display: none; animation: fadeIn 0.5s; }
         .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         h2 { font-size: 22px; border-left: 5px solid var(--red); padding-left: 15px; margin-bottom: 25px; }
-
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card {
-            background: var(--card); border-radius: 12px; padding: 20px;
-            border: 1px solid #333; transition: 0.3s; cursor: pointer;
-        }
+        
+        /* CARD STYLE */
+        .card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #333; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
         .card:hover { transform: translateY(-5px); border-color: var(--blue); }
-        .card h3 { font-size: 15px; margin: 0; line-height: 1.4; color: #fff; }
+        .card h3 { font-size: 15px; margin: 10px 0 0 0; line-height: 1.4; }
+        .badge { background: var(--blue); color: black; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 4px; display: inline-block; }
 
         .status { grid-column: 1/-1; text-align: center; padding: 50px; color: var(--gray); }
-        .btn { 
-            background: var(--red); color: white; border: none; padding: 12px 25px; 
-            border-radius: 6px; cursor: pointer; margin-top: 15px; font-weight: bold;
-        }
+        .btn { background: var(--red); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo" onclick="showPage('home')">KF<span>+</span><i>!</i></div>
+        <div class="logo" onclick="showPage('home')">KF<span>+</span></div>
         <div class="menu">
             <a onclick="showPage('home')" id="m-home" class="active">HOME</a>
             <a onclick="showPage('news')" id="m-news">NEWS+</a>
@@ -70,38 +51,50 @@
     <div class="container">
         <section id="home" class="page active">
             <div style="background: linear-gradient(135deg, var(--red), var(--blue)); padding: 60px; border-radius: 20px; text-align: center;">
-                <h1 style="margin: 0;">KF+ Super-App</h1>
-                <p>Selamat datang di portal agregator mahasiswa Global Institute.</p>
+                <h1>Selamat Datang di KF+</h1>
+                <p>Portal Agregator Gen-Z Global Institute</p>
             </div>
         </section>
 
         <section id="news" class="page">
             <h2>Berita Terkini (Antara News)</h2>
             <div id="news-feed" class="grid">
-                <div class="status">Menghubungkan ke Google Proxy pribadi...</div>
+                <div class="status">Memuat berita via Jalur Pribadi...</div>
             </div>
         </section>
 
         <section id="games" class="page">
             <h2>Games+</h2>
             <div class="grid">
-                <div class="card"><h3>Classic Bowling</h3><p style="color:var(--gray)">Free to Play</p></div>
-                <div class="card"><h3>Retro Speed</h3><p style="color:var(--gray)">Arcade Mode</p></div>
+                <div class="card" onclick="alert('Game segera hadir!')">
+                    <div class="badge">ARCADE</div>
+                    <h3>Classic Bowling</h3>
+                    <p style="color:var(--gray); font-size:12px;">Mainkan game klasik favorit.</p>
+                </div>
+                <div class="card" onclick="alert('Game segera hadir!')">
+                    <div class="badge">RACING</div>
+                    <h3>Retro Speed</h3>
+                    <p style="color:var(--gray); font-size:12px;">Balapan dengan gaya pixel art.</p>
+                </div>
             </div>
         </section>
 
         <section id="shop" class="page">
             <h2>Shop+</h2>
-            <div style="background:#222; padding:30px; border-radius:15px; text-align:center;">
-                <input type="text" id="srch" placeholder="Cari barang..." style="padding:12px; width:50%; border-radius:5px; border:none;">
-                <button class="btn" style="margin-left:10px;" onclick="window.open('https://shopee.co.id/search?keyword='+document.getElementById('srch').value)">CARI</button>
+            <div style="background:var(--card); padding:30px; border-radius:15px; text-align:center;">
+                <input type="text" id="shopSearch" placeholder="Cari barang di Shopee..." style="padding:12px; width:60%; border-radius:5px; border:none;">
+                <button class="btn" onclick="window.open('https://shopee.co.id/search?keyword='+document.getElementById('shopSearch').value)">CARI</button>
             </div>
         </section>
 
         <section id="film" class="page">
             <h2>Film+</h2>
             <div class="grid">
-                <div class="card"><h3>Dokumenter Baduy</h3><p>Tugas Komunikasi Massa</p></div>
+                <div class="card">
+                    <div class="badge">DOCUMENTARY</div>
+                    <h3>Baduy: Sebuah Perjalanan</h3>
+                    <p style="color:var(--gray); font-size:12px;">Tugas Dokumenter Komunikasi Massa.</p>
+                </div>
             </div>
         </section>
     </div>
@@ -120,15 +113,16 @@
 
         async function fetchNews() {
             const feed = document.getElementById('news-feed');
-            feed.innerHTML = '<div class="status">Memuat berita via Google Apps Script...</div>';
+            feed.innerHTML = '<div class="status">Menghubungkan ke jalur aman...</div>';
 
             try {
-                // Menggunakan URL Google Script yang kamu berikan
-                const proxyUrl = "https://script.google.com/macros/s/AKfycbw7AoiotrdwJLTqMFIV-LteKJFNiNyBrmhs88OZjpYIfwK88t539FH4DzyXasDVDJ5NWA/exec";
+                // MASUKKAN URL GOOGLE SCRIPT KAMU DI SINI
+                const proxyUrl = "https://script.google.com/macros/s/AKfycbzP7eWRXPhuETJDf9Rdvc--8bja99zzAeQkn9qJdJmVUEXvxgO48TxbE_piNehD8LUUwA/exec";
 
-                const response = await fetch(proxyUrl);
+                const response = await fetch(proxyUrl, { redirect: 'follow' });
+                if (!response.ok) throw new Error("Akses ditolak (403). Cek setelan 'Anyone' di Script.");
+
                 const xmlText = await response.text();
-
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlText, "text/xml");
                 const items = xmlDoc.querySelectorAll("item");
@@ -141,19 +135,18 @@
                             const link = item.querySelector("link").textContent;
                             feed.innerHTML += `
                                 <div class="card" onclick="window.open('${link}', '_blank')">
-                                    <small style="color:var(--blue); font-weight:bold;">ANTARA NEWS</small>
+                                    <div class="badge">ANTARA NEWS</div>
                                     <h3>${title}</h3>
                                 </div>`;
                         }
                     });
                 } else {
-                    throw new Error("XML Kosong");
+                    throw new Error("Data berita kosong.");
                 }
             } catch (err) {
-                console.error(err);
                 feed.innerHTML = `
                     <div class="status">
-                        <p>Koneksi gagal. Pastikan Web App Google Script sudah dideploy ke 'Anyone'.</p>
+                        <p>Gagal Memuat: ${err.message}</p>
                         <button class="btn" onclick="fetchNews()">MUAT ULANG</button>
                     </div>`;
             }
