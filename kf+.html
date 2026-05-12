@@ -4,162 +4,257 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KF+ | Super-App Agregator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <style>
         :root {
-            --red: #ed1c24;
-            --blue: #00aeef;
-            --bg: #0f0f0f;
-            --card: #1e1e1e;
-            --gray: #b0b0b0;
+            --primary-red: #ed1c24;
+            --primary-blue: #00aeef;
+            --bg-dark: #0f0f0f;
+            --card-bg: #1e1e1e;
+            --text-gray: #b0b0b0;
         }
 
-        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
 
-        /* --- NAVIGATION --- */
+        /* --- NAVBAR --- */
         nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%; background: #000; border-bottom: 1px solid #333;
-            position: sticky; top: 0; z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 5%;
+            background: #000;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
         }
-        .logo { font-size: 24px; font-weight: 900; cursor: pointer; }
-        .logo span { color: var(--red); }
-        .logo i { color: var(--blue); font-style: normal; }
 
-        .menu { display: flex; gap: 20px; }
+        .brand { font-size: 24px; font-weight: 900; cursor: pointer; }
+        .brand span { color: var(--primary-red); }
+        .brand i { color: var(--primary-blue); font-style: normal; }
+
+        .menu { display: flex; gap: 15px; }
         .menu a {
-            color: var(--gray); text-decoration: none; font-size: 13px; font-weight: 700;
-            cursor: pointer; transition: 0.3s;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .menu a.active { color: white; border-bottom: 2px solid var(--red); }
+        .menu a.active { 
+            color: white; 
+            border-bottom: 2px solid var(--primary-red); 
+            padding-bottom: 5px;
+        }
 
-        /* --- LAYOUT --- */
+        /* --- CONTAINER --- */
         .container { padding: 30px 5%; min-height: 100vh; }
-        .page { display: none; }
+        .page { display: none; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
 
-        h2 { font-size: 22px; border-left: 5px solid var(--red); padding-left: 15px; margin-bottom: 25px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        h2 { font-size: 22px; border-left: 5px solid var(--primary-red); padding-left: 15px; margin-bottom: 25px; }
+
+        /* --- GRID & CARDS --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card {
-            background: var(--card); border-radius: 12px; padding: 20px;
-            border: 1px solid #333; transition: 0.3s; cursor: pointer;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #333;
+            transition: 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--blue); }
-        .card h3 { font-size: 15px; margin: 0; line-height: 1.4; color: #fff; }
+        .card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--primary-blue); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+        }
+        .card h3 { font-size: 15px; margin: 0 0 15px 0; line-height: 1.4; color: #fff; }
+        
+        .loader-box { grid-column: 1/-1; text-align: center; padding: 60px; color: var(--text-gray); }
+        .btn-retry { 
+            background: var(--primary-red); 
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold;
+            margin-top: 15px;
+        }
 
-        .status { grid-column: 1/-1; text-align: center; padding: 50px; color: var(--gray); }
-        .btn { 
-            background: var(--red); color: white; border: none; padding: 10px 20px; 
-            border-radius: 5px; cursor: pointer; margin-top: 15px; font-weight: bold;
+        /* --- SHOP SEARCH --- */
+        .search-area { background: #1a1a1a; padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 30px; border: 1px solid #333; }
+        .search-area input {
+            width: 50%; padding: 12px; border-radius: 5px; border: 1px solid #444; background: #000; color: white; outline: none;
+        }
+        .search-area button {
+            padding: 12px 25px; border-radius: 5px; border: none; background: #ee4d2d; color: white; font-weight: bold; cursor: pointer; margin-left: 10px;
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo" onclick="showPage('home')">KF<span>+</span><i>!</i></div>
+        <div class="brand" onclick="showPage('home')">KF<span>+</span><i>!</i></div>
         <div class="menu">
-            <a onclick="showPage('home')" id="m-home" class="active">HOME</a>
-            <a onclick="showPage('news')" id="m-news">NEWS+</a>
-            <a onclick="showPage('games')" id="m-games">GAMES+</a>
-            <a onclick="showPage('shop')" id="m-shop">SHOP+</a>
-            <a onclick="showPage('film')" id="m-film">FILM+</a>
+            <a onclick="showPage('home')" id="btn-home" class="active">HOME</a>
+            <a onclick="showPage('news')" id="btn-news">NEWS+</a>
+            <a onclick="showPage('games')" id="btn-games">GAMES+</a>
+            <a onclick="showPage('shop')" id="btn-shop">SHOP+</a>
+            <a onclick="showPage('film')" id="btn-film">FILM+</a>
         </div>
     </nav>
 
     <div class="container">
+        
         <section id="home" class="page active">
-            <div style="background: linear-gradient(135deg, var(--red), var(--blue)); padding: 60px; border-radius: 20px; text-align: center;">
-                <h1>Selamat Datang di KF+</h1>
-                <p>Portal Agregator Mahasiswa Global Institute</p>
+            <div style="background: linear-gradient(135deg, #ed1c24, #00aeef); padding: 60px 40px; border-radius: 20px; text-align: center; margin-bottom: 40px;">
+                <h1 style="font-size: 32px; margin: 0;">KF+ Super-App</h1>
+                <p style="opacity: 0.9; margin-top: 10px;">Portal Agregator Mahasiswa Global Institute</p>
+            </div>
+            <h2>Fitur Utama</h2>
+            <div class="grid">
+                <div class="card" onclick="showPage('news')"><h3><i class="fas fa-newspaper"></i> Baca Berita</h3></div>
+                <div class="card" onclick="showPage('games')"><h3><i class="fas fa-gamepad"></i> Main Game</h3></div>
+                <div class="card" onclick="showPage('shop')"><h3><i class="fas fa-shopping-bag"></i> Cari Barang</h3></div>
             </div>
         </section>
 
         <section id="news" class="page">
             <h2>Berita Terkini (Antara News)</h2>
             <div id="news-feed" class="grid">
-                <div class="status">Menghubungkan ke AllOrigins...</div>
+                <div class="loader-box"><i class="fas fa-circle-notch fa-spin"></i> Mencoba menghubungkan ke server berita...</div>
             </div>
         </section>
 
         <section id="games" class="page">
-            <h2>Games+</h2>
+            <h2>Koleksi Game</h2>
             <div class="grid">
-                <div class="card"><h3>Classic Bowling</h3><p style="color:var(--gray)">Mainkan Gratis</p></div>
-                <div class="card"><h3>Retro Speed</h3><p style="color:var(--gray)">Balapan Klasik</p></div>
+                <div class="card"><h3>Arcade Klasik</h3><p style="color:var(--text-gray); font-size:12px;">Coming Soon</p></div>
+                <div class="card"><h3>Retro Speed</h3><p style="color:var(--text-gray); font-size:12px;">Coming Soon</p></div>
             </div>
         </section>
 
         <section id="shop" class="page">
-            <h2>Shop+</h2>
-            <div style="background:#222; padding:30px; border-radius:15px; text-align:center;">
-                <input type="text" id="sch" placeholder="Cari gadget..." style="padding:12px; width:50%; border-radius:5px; border:none;">
-                <button class="btn" style="margin-left:10px;" onclick="window.open('https://shopee.co.id/search?keyword='+document.getElementById('sch').value)">CARI</button>
+            <h2>Shop+ Search</h2>
+            <div class="search-area">
+                <input type="text" id="shopeeIn" placeholder="Cari drone, kamera, atau gadget...">
+                <button onclick="searchShopee()">CARI DI SHOPEE</button>
             </div>
         </section>
 
         <section id="film" class="page">
-            <h2>Film+</h2>
+            <h2>Katalog Film & Dokumenter</h2>
             <div class="grid">
-                <div class="card"><h3>Dokumenter Baduy</h3><p>Tugas Komunikasi Massa</p></div>
+                <div class="card"><h3>Dokumenter Baduy</h3><p style="color:var(--text-gray); font-size:12px;">Proyek Komunikasi Massa</p></div>
             </div>
         </section>
+
     </div>
 
     <script>
-        function showPage(id) {
+        // FUNGSI NAVIGASI (AGAR MENU LAIN TIDAK HILANG)
+        function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
             
-            document.getElementById(id).classList.add('active');
-            document.getElementById('m-' + id).classList.add('active');
+            document.getElementById(pageId).classList.add('active');
+            const btn = document.getElementById('btn-' + pageId);
+            if(btn) btn.classList.add('active');
 
-            if(id === 'news') fetchNews();
+            if(pageId === 'news') smartFetchNews();
+            window.scrollTo(0, 0);
         }
 
-        async function fetchNews() {
+        // LOGIKA MULTI-PROXY (DARI IDE KAMU & ANALISIS ERROR)
+        async function smartFetchNews() {
             const feed = document.getElementById('news-feed');
-            feed.innerHTML = '<div class="status">Sedang memproses XML lewat AllOrigins...</div>';
-
-            try {
-                const targetUrl = 'https://www.antaranews.com/rss/terpopuler.xml';
-                // Implementasi solusi AllOrigins kamu
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-
-                const response = await fetch(proxyUrl);
-                if (!response.ok) throw new Error(`Proxy bermasalah: ${response.status}`);
-
-                const json = await response.json();
-                const xmlText = json.contents; // Sesuai logika ekstraksi AllOrigins
-
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-                const items = xmlDoc.querySelectorAll("item");
-
-                if(items.length > 0) {
-                    feed.innerHTML = "";
-                    items.forEach((item, i) => {
-                        if(i < 9) {
-                            const title = item.querySelector("title").textContent;
-                            const link = item.querySelector("link").textContent;
-                            feed.innerHTML += `
-                                <div class="card" onclick="window.open('${link}', '_blank')">
-                                    <small style="color:var(--blue); font-weight:bold;">ANTARA</small>
-                                    <h3>${title}</h3>
-                                </div>`;
-                        }
-                    });
-                } else {
-                    throw new Error("Data berita kosong");
+            const targetUrl = 'https://www.antaranews.com/rss/terpopuler.xml';
+            
+            // Urutan strategi: 1. RSS2JSON (Cepat) -> 2. AllOrigins (Handal) -> 3. CorsProxy (Backup)
+            const strategies = [
+                { 
+                    name: 'RSS2JSON',
+                    url: `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(targetUrl)}`,
+                    type: 'json_direct'
+                },
+                { 
+                    name: 'AllOrigins',
+                    url: `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+                    type: 'json_wrapped' 
                 }
-            } catch (err) {
-                console.error(err);
-                feed.innerHTML = `
-                    <div class="status">
-                        <p>Gagal memuat berita. Jalur Proxy diblokir atau limit tercapai.</p>
-                        <button class="btn" onclick="fetchNews()">MUAT ULANG</button>
-                    </div>`;
+            ];
+
+            for (const s of strategies) {
+                try {
+                    console.log(`Mencoba jalur: ${s.name}`);
+                    const response = await fetch(s.url);
+                    if (!response.ok) throw new Error();
+
+                    const data = await response.json();
+                    let items = [];
+
+                    if (s.type === 'json_direct') {
+                        items = data.items;
+                    } else if (s.type === 'json_wrapped') { // Logika .contents milikmu
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+                        items = Array.from(xmlDoc.querySelectorAll("item")).map(i => ({
+                            title: i.querySelector("title").textContent,
+                            link: i.querySelector("link").textContent,
+                            pubDate: i.querySelector("pubDate") ? i.querySelector("pubDate").textContent : ""
+                        }));
+                    }
+
+                    if (items && items.length > 0) {
+                        renderNews(items);
+                        return; // BERHASIL! Berhenti mencoba proxy lain.
+                    }
+                } catch (e) {
+                    console.warn(`Jalur ${s.name} gagal (Error 422/522/CORS). Mencoba jalur lain...`);
+                }
             }
+
+            // JIKA SEMUA GAGAL
+            feed.innerHTML = `
+                <div class="loader-box">
+                    <p>Waduh, semua jalur berita sedang macet atau diblokir.</p>
+                    <button class="btn-retry" onclick="smartFetchNews()">MUAT ULANG SEKARANG</button>
+                </div>`;
+        }
+
+        function renderNews(items) {
+            const feed = document.getElementById('news-feed');
+            feed.innerHTML = "";
+            items.slice(0, 9).forEach(item => {
+                feed.innerHTML += `
+                    <div class="card" onclick="window.open('${item.link}', '_blank')">
+                        <div>
+                            <small style="color:var(--primary-blue); font-weight:bold;">ANTARA NEWS</small>
+                            <h3>${item.title}</h3>
+                        </div>
+                        <p style="font-size:11px; color:#666;">${item.pubDate || 'Tersedia'}</p>
+                    </div>`;
+            });
+        }
+
+        function searchShopee() {
+            const val = document.getElementById('shopeeIn').value;
+            if(val) window.open(`https://shopee.co.id/search?keyword=${encodeURIComponent(val)}`, '_blank');
         }
     </script>
 </body>
