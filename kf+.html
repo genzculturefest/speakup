@@ -69,18 +69,13 @@
         }
         .card:hover { transform: translateY(-5px); border-color: var(--primary-blue); }
         .card-body { padding: 15px; }
-        .card-body h3 { font-size: 15px; margin: 0 0 10px 0; line-height: 1.4; }
+        .card-body h3 { font-size: 15px; margin: 0 0 10px 0; line-height: 1.4; color: #fff; }
 
         .status-box { grid-column: 1/-1; text-align: center; padding: 50px; color: var(--text-gray); }
         .btn-retry { 
             background: var(--primary-red); color: white; border: none; 
             padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
-
-        /* --- SEARCH SHOP --- */
-        .search-area { background: #222; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-        input { padding: 10px; width: 60%; border-radius: 5px 0 0 5px; border: none; }
-        .btn-search { padding: 10px 20px; background: #ee4d2d; color: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -108,36 +103,27 @@
         <section id="news" class="page">
             <h2>Berita Terkini (Antara News)</h2>
             <div id="news-feed" class="grid">
-                <div class="status-box">Memuat berita menggunakan jalur aman...</div>
+                <div class="status-box">Memuat berita...</div>
             </div>
         </section>
 
         <section id="games" class="page">
             <h2>Games+</h2>
             <div class="grid">
-                <div class="card">
-                    <div class="card-body"><h3>Classic Bowling</h3><p style="color:var(--text-gray)">Mainkan sekarang</p></div>
-                </div>
-                <div class="card">
-                    <div class="card-body"><h3>Retro Speed</h3><p style="color:var(--text-gray)">Balapan klasik</p></div>
-                </div>
+                <div class="card"><div class="card-body"><h3>Classic Bowling</h3></div></div>
+                <div class="card"><div class="card-body"><h3>Retro Speed</h3></div></div>
             </div>
         </section>
 
         <section id="shop" class="page">
             <h2>Shop+</h2>
-            <div class="search-area">
-                <input type="text" id="shopSearch" placeholder="Cari barang hobi atau tech...">
-                <button class="btn-search" onclick="doSearch()">CARI</button>
-            </div>
+            <p>Cari produk gadget dan hobi favoritmu.</p>
         </section>
 
         <section id="film" class="page">
             <h2>Film+</h2>
             <div class="grid">
-                <div class="card">
-                    <div class="card-body"><h3>Pameran Budaya Baduy</h3><p>Dokumenter Mahasiswa</p></div>
-                </div>
+                <div class="card"><div class="card-body"><h3>Dokumenter Baduy</h3></div></div>
             </div>
         </section>
 
@@ -152,50 +138,40 @@
             document.getElementById(pageId).classList.add('active');
             document.getElementById('btn-' + pageId).classList.add('active');
 
-            if(pageId === 'news') runNewsProcess();
+            if(pageId === 'news') fetchNews();
         }
 
-        // LOGIKA MULTI-PROXY (DARI IDE KAMU)
-        async function runNewsProcess() {
+        // LOGIKA FETCH BERITA (MENGGUNAKAN KODE KAMU)
+        async function fetchNews() {
             const feed = document.getElementById('news-feed');
-            feed.innerHTML = '<div class="status-box">Mencoba beberapa jalur koneksi...</div>';
+            feed.innerHTML = '<div class="status-box">Sedang mengambil data...</div>';
 
-            const targetUrl = 'https://www.antaranews.com/rss/terpopuler.xml';
-            const proxies = [
-                { url: u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`, wrap: true },
-                { url: u => `https://corsproxy.io/?${encodeURIComponent(u)}`, wrap: false }
-            ];
+            try {
+                const targetUrl = 'https://www.antaranews.com/rss/terpopuler.xml';
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
-            for (const proxy of proxies) {
-                try {
-                    const response = await fetch(proxy.url(targetUrl));
-                    if (!response.ok) throw new Error();
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error(`Proxy error: ${response.status}`);
 
-                    let xmlText;
-                    if (proxy.wrap) {
-                        const json = await response.json();
-                        xmlText = json.contents;
-                    } else {
-                        xmlText = await response.text();
-                    }
+                const json = await response.json();
+                const xmlText = json.contents; // Mengambil data dari property .contents
 
-                    const xmlDoc = new DOMParser().parseFromString(xmlText, "text/xml");
-                    const items = xmlDoc.querySelectorAll("item");
+                const xmlDoc = new DOMParser().parseFromString(xmlText, "text/xml");
+                const items = xmlDoc.querySelectorAll("item");
 
-                    if(items.length > 0) {
-                        renderNews(items);
-                        return; // Berhenti jika sudah berhasil
-                    }
-                } catch (e) {
-                    console.warn("Satu jalur gagal, mencoba jalur cadangan...");
+                if(items.length > 0) {
+                    renderNews(items);
+                } else {
+                    throw new Error("Berita tidak ditemukan");
                 }
+            } catch (err) {
+                console.error(err);
+                feed.innerHTML = `
+                    <div class="status-box">
+                        <p>Gagal memproses berita secara real-time.</p>
+                        <button class="btn-retry" onclick="fetchNews()">MUAT ULANG</button>
+                    </div>`;
             }
-
-            feed.innerHTML = `
-                <div class="status-box">
-                    <p>Semua jalur (CORS) diblokir atau server down.</p>
-                    <button class="btn-retry" onclick="runNewsProcess()">COBA LAGI</button>
-                </div>`;
         }
 
         function renderNews(items) {
@@ -214,11 +190,6 @@
                         </div>`;
                 }
             });
-        }
-
-        function doSearch() {
-            const q = document.getElementById('shopSearch').value;
-            if(q) window.open(`https://shopee.co.id/search?keyword=${encodeURIComponent(q)}`, '_blank');
         }
     </script>
 </body>
