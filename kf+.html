@@ -121,7 +121,7 @@
     <nav>
         <div class="brand" onclick="showPage('home')">KF<span>+</span><i>!</i></div>
         <div class="menu">
-            <a onclick="showPage('home')" id="btn-home">Home</a>
+            <a onclick="showPage('home')" id="btn-home" class="active">Home</a>
             <a onclick="showPage('news')" id="btn-news">News+</a>
             <a onclick="showPage('games')" id="btn-games">Games+</a>
             <a onclick="showPage('shop')" id="btn-shop">Shop+</a>
@@ -221,33 +221,36 @@
     </footer>
 
     <script>
-        // NAVIGATION
+        // NAVIGATION LOGIC
         function showPage(pageId) {
+            // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Remove active class from menu
             document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
             
+            // Show target page
             const target = document.getElementById(pageId);
             if(target) target.classList.add('active');
             
+            // Set active menu button
             const btn = document.getElementById('btn-' + pageId);
             if(btn) btn.classList.add('active');
 
+            // Jika buka halaman news, panggil fetcher
             if(pageId === 'news') fetchNews();
             window.scrollTo(0, 0);
         }
 
-        // FETCH NEWS (DENGAN ALLORIGINS - STABIL & ANTI CORS)
+        // NEWS FETCH LOGIC (ALLORIGINS BYPASS)
         async function fetchNews() {
             const feed = document.getElementById('news-feed');
-            const rssUrl = 'https://www.antaranews.com/rss/terpopuler.xml';
-            // Menggunakan proxy AllOrigins untuk mengambil data mentah
-            const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}&_=${new Date().getTime()}`;
+            const rssUrl = "https://www.antaranews.com/rss/terpopuler.xml";
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
 
             try {
-                const response = await fetch(apiUrl);
+                const response = await fetch(proxyUrl);
                 const data = await response.json();
                 
-                // Parsing XML mentah menggunakan DOMParser
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data.contents, "text/xml");
                 const items = xmlDoc.querySelectorAll("item");
@@ -258,16 +261,10 @@
                         if(index < 9) {
                             const title = item.querySelector("title").textContent;
                             const link = item.querySelector("link").textContent;
-                            const pubDate = item.querySelector("pubDate").textContent;
-                            
-                            // Mengambil gambar dari tag description Antara News
-                            const description = item.querySelector("description").textContent;
-                            const imgMatch = description.match(/src="([^"]+)"/);
-                            const img = imgMatch ? imgMatch[1] : "https://via.placeholder.com/300x160/1e1e1e/00aeef?text=News";
+                            const pubDate = item.querySelector("pubDate") ? item.querySelector("pubDate").textContent : "";
                             
                             html += `
                                 <div class="card" onclick="window.open('${link}', '_blank')">
-                                    <img src="${img}" onerror="this.src='https://via.placeholder.com/300x160/1e1e1e/ed1c24?text=News'">
                                     <div class="card-body">
                                         <span style="color:var(--primary-blue); font-size:11px; font-weight:bold;">ANTARA NEWS</span>
                                         <h3>${title}</h3>
@@ -284,17 +281,19 @@
             } catch (err) {
                 feed.innerHTML = `
                     <div class="loader-box">
-                        <p>Gagal memproses berita secara real-time. Coba lagi nanti.</p>
-                        <button onclick="fetchNews()" style="padding:8px 15px; background:var(--primary-red); color:white; border:none; border-radius:4px; cursor:pointer;">MUAT ULANG</button>
+                        <p>Gagal memproses berita. Coba refresh atau klik tombol di bawah.</p>
+                        <button onclick="fetchNews()" style="padding:10px 20px; background:var(--primary-red); color:white; border:none; border-radius:5px; cursor:pointer;">MUAT ULANG</button>
                     </div>`;
             }
         }
 
+        // SHOP LOGIC
         function goShopee(keyword) {
             const val = keyword || document.getElementById('shopeeInput').value;
             if(val) window.open(`https://shopee.co.id/search?keyword=${encodeURIComponent(val)}`, '_blank');
         }
 
+        // VIEWER LOGIC
         function openViewer(url) {
             document.getElementById('main-frame').src = url;
             document.getElementById('viewer').style.display = 'block';
