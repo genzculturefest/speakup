@@ -12,7 +12,6 @@
             --bg-dark: #0f0f0f;
             --card-bg: #1e1e1e;
             --text-gray: #b0b0b0;
-            --shopee-orange: #ee4d2d;
         }
 
         body {
@@ -21,7 +20,6 @@
             background-color: var(--bg-dark);
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
         }
 
         /* --- NAVBAR --- */
@@ -30,14 +28,14 @@
             align-items: center;
             justify-content: space-between;
             padding: 15px 5%;
-            background: rgba(0, 0, 0, 0.95);
+            background: #000;
             position: sticky;
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid #333;
         }
 
-        .brand { font-size: 26px; font-weight: 900; letter-spacing: -1px; cursor: pointer; }
+        .brand { font-size: 26px; font-weight: 900; cursor: pointer; }
         .brand span { color: var(--primary-red); }
         .brand i { color: var(--primary-blue); font-style: normal; }
 
@@ -47,24 +45,15 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 700;
-            transition: 0.3s;
             cursor: pointer;
-            padding-bottom: 5px;
+            transition: 0.3s;
         }
-        .menu a:hover, .menu a.active { 
-            color: white; 
-            border-bottom: 2px solid var(--primary-red); 
-        }
+        .menu a:hover, .menu a.active { color: white; border-bottom: 2px solid var(--primary-red); }
 
         /* --- CONTAINER --- */
         .container { padding: 30px 5%; min-height: 100vh; }
-        .page { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .page { display: none; }
         .page.active { display: block; }
-
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
 
         h2 { font-size: 24px; border-left: 5px solid var(--primary-red); padding-left: 15px; margin-bottom: 25px; }
 
@@ -74,46 +63,24 @@
             background: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
+            border: 1px solid #333;
             transition: 0.3s;
             cursor: pointer;
-            border: 1px solid #333;
-            display: flex;
-            flex-direction: column;
         }
-        .card:hover { 
-            transform: translateY(-5px); 
-            border-color: var(--primary-blue); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
-        }
-        .card img { width: 100%; height: 160px; object-fit: cover; background-color: #222; }
-        .card-body { padding: 15px; flex-grow: 1; }
-        .card-body h3 { font-size: 15px; margin: 0 0 10px 0; line-height: 1.4; color: #fff; }
-        .badge { background: var(--primary-red); font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary-blue); }
+        .card-body { padding: 15px; }
+        .card-body h3 { font-size: 15px; margin: 0 0 10px 0; line-height: 1.4; }
 
-        /* --- SHOP SEARCH --- */
-        .search-area { background: #222; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px; }
-        .search-area input {
-            width: 60%; padding: 15px; border-radius: 30px 0 0 30px; border: none; outline: none; font-size: 16px;
-        }
-        .search-area button {
-            padding: 15px 30px; border-radius: 0 30px 30px 0; border: none; background: var(--shopee-orange); color: white;
-            font-weight: bold; cursor: pointer; transition: 0.3s; margin-left: -5px;
+        .status-box { grid-column: 1/-1; text-align: center; padding: 50px; color: var(--text-gray); }
+        .btn-retry { 
+            background: var(--primary-red); color: white; border: none; 
+            padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
 
-        /* --- VIEWER --- */
-        #viewer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: black; z-index: 2000; display: none;
-        }
-        #viewer iframe { width: 100%; height: 100%; border: none; }
-        .close-viewer {
-            position: absolute; top: 20px; right: 20px; background: var(--primary-red);
-            color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; z-index: 2001;
-        }
-
-        .loader-box { grid-column: 1/-1; text-align: center; padding: 50px; color: var(--text-gray); }
-
-        footer { padding: 40px 5%; text-align: center; border-top: 1px solid #333; margin-top: 50px; color: #666; font-size: 12px; }
+        /* --- SEARCH SHOP --- */
+        .search-area { background: #222; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        input { padding: 10px; width: 60%; border-radius: 5px 0 0 5px; border: none; }
+        .btn-search { padding: 10px 20px; background: #ee4d2d; color: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -121,189 +88,137 @@
     <nav>
         <div class="brand" onclick="showPage('home')">KF<span>+</span><i>!</i></div>
         <div class="menu">
-            <a onclick="showPage('home')" id="btn-home" class="active">Home</a>
-            <a onclick="showPage('news')" id="btn-news">News+</a>
-            <a onclick="showPage('games')" id="btn-games">Games+</a>
-            <a onclick="showPage('shop')" id="btn-shop">Shop+</a>
-            <a onclick="showPage('film')" id="btn-film">Film+</a>
+            <a onclick="showPage('home')" id="btn-home" class="active">HOME</a>
+            <a onclick="showPage('news')" id="btn-news">NEWS+</a>
+            <a onclick="showPage('games')" id="btn-games">GAMES+</a>
+            <a onclick="showPage('shop')" id="btn-shop">SHOP+</a>
+            <a onclick="showPage('film')" id="btn-film">FILM+</a>
         </div>
     </nav>
 
     <div class="container">
         
         <section id="home" class="page active">
-            <div style="background: linear-gradient(135deg, #ed1c24, #00aeef); padding: 60px 40px; border-radius: 20px; margin-bottom: 40px; text-align: center;">
-                <h1 style="font-size: clamp(24px, 5vw, 40px); margin: 0;">KF+ Super-App Agregator</h1>
-                <p style="font-size: 16px; opacity: 0.9; margin-top: 10px;">Akses berita, game, dan belanja dalam satu dashboard.</p>
-            </div>
-            
-            <h2>Eksplorasi Fitur</h2>
-            <div class="grid">
-                <div class="card" onclick="showPage('news')">
-                    <div class="card-body">
-                        <h3><i class="fa fa-newspaper" style="color:var(--primary-blue)"></i> News+</h3>
-                        <p style="color:var(--text-gray); font-size:13px;">Berita terpopuler secara real-time.</p>
-                    </div>
-                </div>
-                <div class="card" onclick="showPage('games')">
-                    <div class="card-body">
-                        <h3><i class="fa fa-gamepad" style="color:var(--primary-red)"></i> Games+</h3>
-                        <p style="color:var(--text-gray); font-size:13px;">Koleksi game arkade instan.</p>
-                    </div>
-                </div>
-                <div class="card" onclick="showPage('shop')">
-                    <div class="card-body">
-                        <h3><i class="fa fa-shopping-cart" style="color:var(--shopee-orange)"></i> Shop+</h3>
-                        <p style="color:var(--text-gray); font-size:13px;">Cari produk gadget dan hobi.</p>
-                    </div>
-                </div>
+            <div style="background: linear-gradient(135deg, #ed1c24, #00aeef); padding: 50px; border-radius: 15px; text-align: center;">
+                <h1>Selamat Datang di KF+</h1>
+                <p>Portal Agregator Mahasiswa Global Institute</p>
             </div>
         </section>
 
         <section id="news" class="page">
             <h2>Berita Terkini (Antara News)</h2>
             <div id="news-feed" class="grid">
-                <div class="loader-box">Menghubungkan ke server berita...</div>
+                <div class="status-box">Memuat berita menggunakan jalur aman...</div>
             </div>
         </section>
 
         <section id="games" class="page">
-            <h2>Pilih Game Arkade</h2>
+            <h2>Games+</h2>
             <div class="grid">
-                <div class="card" onclick="openViewer('https://www.gamepix.com/play/classic-bowling')">
-                    <img src="https://standard.gamepix.com/101/images/banner/classic-bowling-low.png">
-                    <div class="card-body"><h3>Bowling Classic</h3><span class="badge">FREE PLAY</span></div>
+                <div class="card">
+                    <div class="card-body"><h3>Classic Bowling</h3><p style="color:var(--text-gray)">Mainkan sekarang</p></div>
                 </div>
-                <div class="card" onclick="openViewer('https://www.gamepix.com/play/retro-speed')">
-                    <img src="https://standard.gamepix.com/184/images/banner/retro-speed-low.png">
-                    <div class="card-body"><h3>Retro Speed</h3><span class="badge">FREE PLAY</span></div>
+                <div class="card">
+                    <div class="card-body"><h3>Retro Speed</h3><p style="color:var(--text-gray)">Balapan klasik</p></div>
                 </div>
             </div>
         </section>
 
         <section id="shop" class="page">
-            <h2>Cari Produk</h2>
+            <h2>Shop+</h2>
             <div class="search-area">
-                <input type="text" id="shopeeInput" placeholder="Ketik nama produk...">
-                <button onclick="goShopee()"><i class="fa fa-search"></i> CARI DI SHOPEE</button>
-            </div>
-            <div class="grid">
-                <div class="card" onclick="goShopee('Drone GPS XT808')">
-                    <img src="https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?w=400">
-                    <div class="card-body"><h3>Drone & Suku Cadang</h3><p style="font-size:12px; color:var(--text-gray);">Part drone XT808.</p></div>
-                </div>
-                <div class="card" onclick="goShopee('Lensa Fujifilm X-A5')">
-                    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400">
-                    <div class="card-body"><h3>Aksesoris Kamera</h3><p style="font-size:12px; color:var(--text-gray);">Lensa & filter Fujifilm.</p></div>
-                </div>
+                <input type="text" id="shopSearch" placeholder="Cari barang hobi atau tech...">
+                <button class="btn-search" onclick="doSearch()">CARI</button>
             </div>
         </section>
 
         <section id="film" class="page">
-            <h2>Katalog Film+</h2>
+            <h2>Film+</h2>
             <div class="grid">
-                <div class="card" onclick="openViewer('https://www.youtube.com/embed/dQw4w9WgXcQ')">
-                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400">
-                    <div class="card-body"><h3>Trailer Pilihan</h3><span class="badge">HD</span></div>
+                <div class="card">
+                    <div class="card-body"><h3>Pameran Budaya Baduy</h3><p>Dokumenter Mahasiswa</p></div>
                 </div>
             </div>
         </section>
 
     </div>
 
-    <div id="viewer">
-        <button class="close-viewer" onclick="closeViewer()">TUTUP</button>
-        <iframe id="main-frame" allowfullscreen></iframe>
-    </div>
-
-    <footer>
-        &copy; 2026 KF+ Super-App Agregator. Developed for Web Development Education.
-    </footer>
-
     <script>
-        // NAVIGATION LOGIC
+        // FUNGSI NAVIGASI
         function showPage(pageId) {
-            // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Remove active class from menu
             document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
             
-            // Show target page
-            const target = document.getElementById(pageId);
-            if(target) target.classList.add('active');
-            
-            // Set active menu button
-            const btn = document.getElementById('btn-' + pageId);
-            if(btn) btn.classList.add('active');
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById('btn-' + pageId).classList.add('active');
 
-            // Jika buka halaman news, panggil fetcher
-            if(pageId === 'news') fetchNews();
-            window.scrollTo(0, 0);
+            if(pageId === 'news') runNewsProcess();
         }
 
-        // NEWS FETCH LOGIC (ALLORIGINS BYPASS)
-        async function fetchNews() {
+        // LOGIKA MULTI-PROXY (DARI IDE KAMU)
+        async function runNewsProcess() {
             const feed = document.getElementById('news-feed');
-            const rssUrl = "https://www.antaranews.com/rss/terpopuler.xml";
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
+            feed.innerHTML = '<div class="status-box">Mencoba beberapa jalur koneksi...</div>';
 
-            try {
-                const response = await fetch(proxyUrl);
-                const data = await response.json();
-                
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(data.contents, "text/xml");
-                const items = xmlDoc.querySelectorAll("item");
+            const targetUrl = 'https://www.antaranews.com/rss/terpopuler.xml';
+            const proxies = [
+                { url: u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`, wrap: true },
+                { url: u => `https://corsproxy.io/?${encodeURIComponent(u)}`, wrap: false }
+            ];
 
-                if (items.length > 0) {
-                    let html = '';
-                    items.forEach((item, index) => {
-                        if(index < 9) {
-                            const title = item.querySelector("title").textContent;
-                            const link = item.querySelector("link").textContent;
-                            const pubDate = item.querySelector("pubDate") ? item.querySelector("pubDate").textContent : "";
-                            
-                            html += `
-                                <div class="card" onclick="window.open('${link}', '_blank')">
-                                    <div class="card-body">
-                                        <span style="color:var(--primary-blue); font-size:11px; font-weight:bold;">ANTARA NEWS</span>
-                                        <h3>${title}</h3>
-                                        <p style="font-size:10px; color:#666;">${pubDate}</p>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                    });
-                    feed.innerHTML = html;
-                } else {
-                    throw new Error();
+            for (const proxy of proxies) {
+                try {
+                    const response = await fetch(proxy.url(targetUrl));
+                    if (!response.ok) throw new Error();
+
+                    let xmlText;
+                    if (proxy.wrap) {
+                        const json = await response.json();
+                        xmlText = json.contents;
+                    } else {
+                        xmlText = await response.text();
+                    }
+
+                    const xmlDoc = new DOMParser().parseFromString(xmlText, "text/xml");
+                    const items = xmlDoc.querySelectorAll("item");
+
+                    if(items.length > 0) {
+                        renderNews(items);
+                        return; // Berhenti jika sudah berhasil
+                    }
+                } catch (e) {
+                    console.warn("Satu jalur gagal, mencoba jalur cadangan...");
                 }
-            } catch (err) {
-                feed.innerHTML = `
-                    <div class="loader-box">
-                        <p>Gagal memproses berita. Coba refresh atau klik tombol di bawah.</p>
-                        <button onclick="fetchNews()" style="padding:10px 20px; background:var(--primary-red); color:white; border:none; border-radius:5px; cursor:pointer;">MUAT ULANG</button>
-                    </div>`;
             }
+
+            feed.innerHTML = `
+                <div class="status-box">
+                    <p>Semua jalur (CORS) diblokir atau server down.</p>
+                    <button class="btn-retry" onclick="runNewsProcess()">COBA LAGI</button>
+                </div>`;
         }
 
-        // SHOP LOGIC
-        function goShopee(keyword) {
-            const val = keyword || document.getElementById('shopeeInput').value;
-            if(val) window.open(`https://shopee.co.id/search?keyword=${encodeURIComponent(val)}`, '_blank');
+        function renderNews(items) {
+            const feed = document.getElementById('news-feed');
+            feed.innerHTML = "";
+            items.forEach((item, i) => {
+                if(i < 9) {
+                    const title = item.querySelector("title").textContent;
+                    const link = item.querySelector("link").textContent;
+                    feed.innerHTML += `
+                        <div class="card" onclick="window.open('${link}', '_blank')">
+                            <div class="card-body">
+                                <small style="color:var(--primary-blue)">ANTARA NEWS</small>
+                                <h3>${title}</h3>
+                            </div>
+                        </div>`;
+                }
+            });
         }
 
-        // VIEWER LOGIC
-        function openViewer(url) {
-            document.getElementById('main-frame').src = url;
-            document.getElementById('viewer').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeViewer() {
-            document.getElementById('main-frame').src = '';
-            document.getElementById('viewer').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        function doSearch() {
+            const q = document.getElementById('shopSearch').value;
+            if(q) window.open(`https://shopee.co.id/search?keyword=${encodeURIComponent(q)}`, '_blank');
         }
     </script>
 </body>
