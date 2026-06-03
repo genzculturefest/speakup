@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Calista Sifa Aulia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --gold: linear-gradient(135deg, #b38728, #fbf5b7, #daa520, #fbf5b7, #aa771c);
+            --rose: linear-gradient(135deg, #e5a9a9, #fff0f0, #d48a8a, #f7d6d6, #b56c6c);
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(circle at center, #14070c 0%, #050203 100%);
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- HALAMAN DEPAN / TOMBOL PEMBUKA --- */
+        #cover-page {
+            position: absolute;
+            text-align: center;
+            z-index: 20;
+            transition: all 1s ease;
+        }
+
+        .envelope-btn {
+            background: transparent;
+            border: 1px solid rgba(212, 138, 138, 0.4);
+            padding: 20px 40px;
+            color: #e5a9a9;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(212, 138, 138, 0.1);
+            transition: Ball 0.5s ease;
+        }
+
+        .envelope-btn:hover {
+            border-color: #e5a9a9;
+            box-shadow: 0 0 25px rgba(212, 138, 138, 0.3);
+            letter-spacing: 4px;
+        }
+
+        /* --- HALAMAN KONTEN UTAMA (DISEMBUNYIKAN AWALNYA) --- */
+        #main-content {
+            text-align: center;
+            max-width: 700px;
+            padding: 20px;
+            z-index: 10;
+            display: none; /* Sembunyi di awal */
+            opacity: 0;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 7px;
+            color: #d48a8a;
+            margin-bottom: 15px;
+        }
+
+        .main-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-style: italic;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            background: var(--rose);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .name-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+        }
+
+        /* Efek Mengetik Otomatis */
+        .typing-container {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            line-height: 1.8;
+            color: #f3e8eb;
+            font-style: italic;
+            min-height: 120px; /* Menjaga layout agar tidak melompat saat teks mengetik */
+            margin-bottom: 30px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            background-color: #e5a9a9;
+            animation: blink 0.8s infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* Kelopak Bunga */
+        .petal {
+            position: absolute;
+            border-radius: 150% 0 150% 150%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 2.8rem; }
+            .name-title { font-size: 2rem; }
+            .typing-container { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cover-page">
+        <button class="envelope-btn" onclick="bukaKado()">Buka pesan untuk Calista...</button>
+    </div>
+
+    <div id="main-content">
+        <div class="subtitle" id="sub">A Special Day</div>
+        <h1 class="main-title" id="title1">Happy Birthday,</h1>
+        <h2 class="name-title" id="title2">Calista Sifa Aulia</h2>
+        
+        <div class="typing-container">
+            <span id="text-space"></span><span class="cursor" id="cursor">|</span>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="https://youtu.be/so6ExplQlaY?si=Hptire4KaSLe1KH0" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Pesan romantis yang akan diketik satu per satu hurufnya
+        const pesanRomantis = "Di hari yang indah ini, aku hanya ingin mengucapkan terima kasih karena kamu telah lahir ke dunia dan mewarnai hidupku. Selamat ulang tahun, Sayang. Semoga kebahagiaan, kedamaian, dan senyuman manismu selalu menyertaimu hari ini dan selamanya... ❤️";
+        
+        let indexHuruf = 0;
+
+        function bukaKado() {
+            // 1. Putar Musik
+            const music = document.getElementById('bg-music');
+            music.play().catch(e => console.log("Audio dimainkan"));
+
+            // 2. Hilangkan tombol cover dengan efek memudar & mengecil
+            gsap.to("#cover-page", {
+                opacity: 0,
+                scale: 0.8,
+                duration: 0.8,
+                onComplete: () => {
+                    document.getElementById('cover-page').style.display = 'none';
+                    mulaiTampilkanKonten();
+                }
+            });
+        }
+
+        function mulaiTampilkanKonten() {
+            // 3. Munculkan container utama
+            const mainContent = document.getElementById('main-content');
+            mainContent.style.display = 'block';
+            
+            // 4. Animasi Fade-In berurutan untuk judul menggunakan GSAP
+            const tl = gsap.timeline();
+            tl.to("#main-content", { opacity: 1, duration: 0.5 })
+              .from("#sub", { opacity: 0, y: -20, duration: 0.8 })
+              .from("#title1", { opacity: 0, scale: 0.9, duration: 1 }, "-=0.4")
+              .from("#title2", { opacity: 0, y: 20, duration: 1, onComplete: jalankanEfekKetik }, "-=0.6");
+
+            // 5. Mulai aktifkan efek kelopak bunga gugur
+            setInterval(buatKelopakMawar, 400);
+        }
+
+        // 6. Efek Mengetik (Typing Effect) untuk surat cintanya
+        function jalankanEfekKetik() {
+            if (indexHuruf < pesanRomantis.length) {
+                document.getElementById("text-space").innerHTML += pesanRomantis.charAt(indexHuruf);
+                indexHuruf++;
+                // Kecepatan mengetik (70ms per huruf)
+                setTimeout(jalankanEfekKetik, 70); 
+            } else {
+                // Jika ketikan selesai, hilangkan kursor berkedipnya
+                document.getElementById("cursor").style.display = 'none';
+            }
+        }
+
+        // 7. Animasi Kelopak Mawar Gugur secara Elegan
+        function buatKelopakMawar() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            
+            const size = Math.random() * 12 + 8;
+            petal.style.width = size + 'px';
+            petal.style.height = size + 'px';
+            petal.style.left = Math.random() * window.innerWidth + 'px';
+            petal.style.top = '-20px';
+            
+            const hue = Math.random() * 20 + 340; 
+            petal.style.background = `linear-gradient(135deg, hsl(${hue}, 100%, 85%), hsl(${hue}, 80%, 65%))`;
+            
+            document.body.appendChild(petal);
+
+            gsap.to(petal, {
+                y: window.innerHeight + 20,
+                x: `+=${Math.random() * 80 - 40}`,
+                rotationX: Math.random() * 360,
+                rotationY: Math.random() * 360,
+                rotationZ: Math.random() * 360,
+                duration: Math.random() * 5 + 4,
+                ease: "none",
+                onComplete: () => petal.remove()
+            });
+        }
+    </script>
+</body>
+</html>
