@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Film: 1 Dompet 2 Kepala (2026) - Sinefilia</title>
+    <!-- Google Fonts: Playfair Display & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --surface-color: #131a2c;
+            --surface-accent: #1a243d;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent: #d97706; /* Elegant Amber/Gold */
+            --accent-light: #f59e0b;
+            --border-color: #1e293b;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            letter-spacing: -0.01em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAVIGATION BAR */
+        nav {
+            background-color: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.25rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-light);
+        }
+
+        .search-bar {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem 0.5rem 2.25rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--accent);
+            width: 220px;
+            background-color: var(--surface-accent);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 0.85rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+
+        /* HERO HEADER BLOCK */
+        .hero-section {
+            max-width: 900px;
+            margin: 3.5rem auto 2.5rem auto;
+            padding: 0 1.5rem;
+            text-align: center;
+        }
+
+        .category-badge {
+            font-size: 0.725rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-light);
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.25;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.825rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .meta-info span strong {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* MAIN CONTENT LAYOUT */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem 5rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3.5rem;
+        }
+
+        /* MOVIE SHOWCASE CARD */
+        .movie-card {
+            background-color: var(--surface-color);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 2.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (min-width: 640px) {
+            .movie-card {
+                flex-direction: row;
+            }
+        }
+
+        .poster-image {
+            width: 160px;
+            height: 230px;
+            border-radius: 6px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 0 auto;
+        }
+
+        .movie-details {
+            flex-grow: 1;
+        }
+
+        .movie-details h2 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .details-table td {
+            padding: 0.4rem 0;
+            vertical-align: top;
+        }
+
+        .details-table td.label {
+            color: var(--text-muted);
+            width: 120px;
+            font-weight: 500;
+        }
+
+        .details-table td.value {
+            color: var(--text-secondary);
+        }
+
+        .rating-box {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .rating-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stars {
+            color: var(--accent);
+            font-size: 0.85rem;
+            display: flex;
+            gap: 0.15rem;
+        }
+
+        .rating-number {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* ARTICLE BODY */
+        article {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+        }
+
+        article p {
+            margin-bottom: 1.75rem;
+        }
+
+        article strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        article h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: #ffffff;
+            margin: 2.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        article ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        article ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        article ul li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* ELEGANT BLOCKQUOTE */
+        blockquote {
+            margin: 3rem 0;
+            padding: 0 0 0 2rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        blockquote p {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 1.35rem;
+            line-height: 1.5;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        blockquote cite {
+            font-family: var(--font-sans);
+            font-style: normal;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-light);
+            font-weight: 600;
+            display: block;
+        }
+
+        /* DISCUSSION / COMMENTS SECTION */
+        .discussion-section {
+            max-width: 750px;
+        }
+
+        .discussion-section h3 {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comment-form {
+            margin-bottom: 3rem;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .comment-form .submit-btn {
+            background-color: transparent;
+            color: var(--accent-light);
+            border: 1px solid var(--accent);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.825rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .comment-form .submit-btn:hover {
+            background-color: var(--accent);
+            color: var(--bg-color);
+        }
+
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 1.25rem;
+            padding-bottom: 1.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--surface-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            flex-shrink: 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .comment-content h4 {
+            font-size: 0.875rem;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comment-content h4 span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .comment-content p {
+            font-size: 0.925rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border-color);
+            background-color: #070a10;
+            padding: 4rem 1.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .footer-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .footer-desc {
+            max-width: 450px;
+            line-height: 1.6;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .social-icons a {
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-light);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION BAR -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">SINE<span>FILIA</span></a>
+            <ul class="nav-links">
+                <li><a href="#">Beranda</a></li>
+                <li><a href="#" class="active">Ulasan</a></li>
+                <li><a href="#">Arsip</a></li>
+                <li><a href="#">Kolektif</a></li>
+            </ul>
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Cari esai atau film...">
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO HEADER BLOCK -->
+    <section class="hero-section">
+        <span class="category-badge">Esai & Antisipasi</span>
+        <h1>[PREVIEW] "1 Dompet 2 Kepala": Potret Sisi Kelam Kelas Pekerja, Siap Tayang Akhir Juni Ini!</h1>
+        <div class="meta-info">
+            <span>Oleh <strong>Redaksi Sinefilia</strong></span>
+            <span>•</span>
+            <span>12 Juni 2026</span>
+            <span>•</span>
+            <span>Waktu Baca 3 Menit</span>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="main-container">
+        
+        <!-- MOVIE INFO INFOGRAPHIC CARD -->
+        <div class="movie-card">
+            <!-- Link direct user content dari Google Drive -->
+            <img src="https://lh3.googleusercontent.com/d/17ydWhjkU4oQJ1Jks3H_iYeyVktSOc2rT" alt="Poster 1 Dompet 2 Kepala" class="poster-image">
+            
+            <div class="movie-details">
+                <h2>Informasi Produksi</h2>
+                <table class="details-table">
+                    <tr>
+                        <td class="label">Judul Karya</td>
+                        <td class="value">1 Dompet 2 Kepala</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Produksi</td>
+                        <td class="value">Lensa Mahasiswa (Global Institute)</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Genre</td>
+                        <td class="value">Drama Realisme Sosial / Slice of Life</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Sutradara</td>
+                        <td class="value">Hafidz Sazili</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Pemeran</td>
+                        <td class="value">Afriza Sumarno (Azzam), Faqih Habibi (Surya)</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Rencana Rilis</td>
+                        <td class="value">26 Juni 2026</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Durasi Estimasi</td>
+                        <td class="value">&plusmn; 15 Menit</td>
+                    </tr>
+                </table>
+                
+                <div class="rating-box">
+                    <span class="rating-title">Prediksi Ekspektasi</span>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                    <span class="rating-number">4.5 / 5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARTICLE CONTENT -->
+        <article>
+            <p>
+                Dunia perfilman mahasiswa kembali melahirkan karya yang segar dan membumi. Kolektif film <strong>Lensa Mahasiswa</strong> dari <strong>Global Institute</strong> baru saja merilis materi promosi resmi untuk proyek film pendek terbaru mereka yang bertajuk <strong>"1 Dompet 2 Kepala"</strong>. 
+            </p>
+            <p>
+                Mengangkat isu finansial urban yang mencekik dan dilema kelanjutan pendidikan, film ini dijadwalkan akan menyapa penonton pada <strong>26 Juni 2026</strong>. Berdasarkan bedah naskah awal yang kami terima, mari kita ulas mengapa film pendek berdurasi sekitar 15 menit ini wajib masuk daftar tontonan Anda!
+            </p>
+
+            <h3>Sinopsis & Konflik Utama</h3>
+            <p>
+                Cerita berjalan secara intim di dalam sebuah kamar kontrakan sempit berukuran 3x3 meter. Fokusnya tertuju pada dinamika hubungan kakak-beradik yang terjepit oleh kerasnya himpitan ekonomi.
+            </p>
+            <p>
+                <strong>Azzam</strong> (Afriza Sumarno), sang kakak, harus memeras keringat di jalanan malam sebagai kurir logistik dan ojek daring demi menyambung hidup. Di sudut lain, adiknya, <strong>Surya</strong> (Faqih Habibi), merupakan seorang mahasiswa semester 2 yang tengah menghadapi situasi kritis: batas akhir pembayaran UKT kampus yang jatuh tempo tepat di tengah malam pada tanggal 24 Mei 2026.
+            </p>
+            <p>
+                Dengan isi dompet yang kian menipis dan aset motor utama yang terancam disita pihak bengkel, malam itu bertransformasi menjadi medan pertempuran emosional yang sengit. Ini adalah benturan murni antara idealisme masa depan sang adik melawan realitas konkret bertahan hidup sang kakak.
+            </p>
+
+            <h3>Mengapa Film Ini Sangat Dinantikan?</h3>
+            <ul>
+                <li>
+                    <strong>Realisme Sosial yang "Menampar":</strong> Isu lonjakan biaya kuliah (UKT) dan fenomena <em>sandwich generation</em> di kalangan anak muda kelas pekerja adalah isu yang nyata. Film ini berani menyuarakan keputusasaan tersebut secara jujur dan apa adanya melalui dialog pengetatan ikat pinggang.
+                </li>
+                <li>
+                    <strong>Akting Intim Dua Kepala:</strong> Karakter Azzam yang selalu kelihatan lelah namun memikul tanggung jawab besar akan dihidupkan oleh Afriza Sumarno. Sementara karakter Surya yang gengsian namun memendam rasa bersalah yang mendalam diperankan oleh Faqih Habibi. Hubungan interpersonal dua aktor ini diprediksi akan menjadi motor utama penguras emosi penonton.
+                </li>
+                <li>
+                    <strong>Simbolisme Visual yang Kuat:</strong> Melalui naskahnya, sutradara Hafidz Sazili menaruh banyak petunjuk visual yang kuat (<em>show, don't tell</em>). Dompet kulit usang yang hanya berisi kertas bon utang, kedipan layar monitor tagihan bank, hingga benda warisan terakhir milik almarhumah ibu menjadi jangkar emosional yang sangat kokoh dalam menggerakkan narasi film.
+                </li>
+            </ul>
+
+            <blockquote>
+                <p>"Dunia emang gak adil dari awal, Dan. Orang kayak kita gak punya kemewahan buat bikin kesalahan. Salah langkah dikit, langsung ambruk semuanya."</p>
+                <cite>— Azzam, '1 Dompet 2 Kepala'</cite>
+            </blockquote>
+
+            <h3>Ekspektasi Penonton</h3>
+            <p>
+                Melihat materi penulisan dari Ahnaf Rafif yang begitu padat, tantangan terbesar dari film pendek ini nanti berada pada aspek <em>pacing</em> dan kedalaman akting di ruang yang sempit. Mengingat setting tempat mayoritas hanya berada di dalam kontrakan, sinematografi dari M. Refan Andriyansyah dituntut mampu menjaga agar atmosfer visual tidak terasa membosankan.
+            </p>
+            <p>
+                Jika penyutradaraan dan proses editing yang dipegang sendiri oleh Faqih Habibi mampu mengawinkan ketegangan waktu (<em>time-bomb</em> sebelum jam 12 malam) dengan keheningan emosional pasca-konflik, <strong>"1 Dompet 2 Kepala"</strong> berpotensi besar untuk melenggang jauh di berbagai festival film pendek nasional tahun ini.
+            </p>
+        </article>
+
+        <!-- DISCUSSION AREA -->
+        <section class="discussion-section">
+            <h3><i class="fa-regular fa-comments"></i> Ruang Diskusi (2)</h3>
+            
+            <div class="comment-form">
+                <textarea rows="3" placeholder="Tuliskan impresi atau ekspektasimu terhadap film ini..."></textarea>
+                <button class="submit-btn">Kirim Tanggapan</button>
+            </div>
+
+            <div class="comment-list">
+                <div class="comment-item">
+                    <div class="comment-avatar">R</div>
+                    <div class="comment-content">
+                        <h4>Rian_AnakDKV <span>• 2 jam yang lalu</span></h4>
+                        <p>Aduh kutipan dialognya kerasa nembus ke dada banget. Sebagai anak kuliahan yang megap-megap bayar UKT tiap semester, ini relate parah sih. Gak sabar nunggu rilis tanggal 26 Juni nanti!</p>
+                    </div>
+                </div>
+                <div class="comment-item">
+                    <div class="comment-avatar">M</div>
+                    <div class="comment-content">
+                        <h4>Maya_Cinephile <span>• 5 jam yang lalu</span></h4>
+                        <p>Konsep ceritanya kuat bgt walaupun cuma berlatar di satu lokasi kontrakan kecil. Malah bikin tensi konfliknya makin padat dan sesak. Semoga eksekusi akting pemainnya bisa dapet banget feel-nya.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <a href="#" class="footer-logo">SINEFILIA</a>
+            <p class="footer-desc">Wadah independen penulisan esai, kritik sinema, dan apresiasi karya film pendek mahasiswa serta industri film independen lokal.</p>
+            <p>&copy; 2026 Sinefilia. Hak Cipta Dilindungi.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-threads"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
