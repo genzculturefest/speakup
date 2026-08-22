@@ -1,0 +1,241 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+}
+
+/* Container Viewfinder Responsif */
+.viewfinders-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  gap: 12px;
+  min-height: 0; /* Mencegah toolbar terdorong keluar layar */
+}
+
+.frame-box {
+  position: relative;
+  background-color: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.frame-916 {
+  max-height: 42vh;
+  aspect-ratio: 9 / 16;
+}
+
+.frame-169 {
+  max-height: 32vh;
+  aspect-ratio: 16 / 9;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.badge {
+  position: absolute;
+  z-index: 10;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.badge-ratio {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.top-left { top: 8px; left: 8px; }
+.bottom-left { bottom: 8px; left: 8px; }
+
+/* Toolbar Bawah Presisi (Terlihat Selalu) */
+.bottom-toolbar {
+  height: 90px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 10px 10px 10px;
+  background-color: #000;
+}
+
+.tool-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn {
+  width: 46px;
+  height: 46px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+}
+
+.icon-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.pill-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: #f1c40f;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 10px 16px;
+  border-radius: 20px;
+}
+
+/* Shutter Tombol Rekam */
+.shutter-btn {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  background: transparent;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.shutter-inner {
+  width: 100%;
+  height: 100%;
+  background-color: #ff3b30;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.shutter-btn.recording .shutter-inner {
+  transform: scale(0.45);
+  border-radius: 6px;
+}
+
+/* Modal Pengaturan Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: #000;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active { transform: translateY(0); }
+
+.modal-box {
+  width: 100%;
+  max-width: 480px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  border-bottom: 1px solid #222;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-body {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-title {
+  color: #888;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.card-group {
+  background: #1c1c1e;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.col-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.text-muted { color: #8e8e93; }
+
+.segmented-control {
+  display: flex;
+  background: #2c2c2e;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.segmented-control button {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #888;
+  padding: 6px 0;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.segmented-control button.active {
+  background: #3a3a3c;
+  color: #fff;
+  font-weight: 600;
+}
