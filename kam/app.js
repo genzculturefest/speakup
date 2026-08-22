@@ -13,8 +13,8 @@ const btnRecord = document.getElementById('btnRecord');
 const btnFlip = document.getElementById('btnFlip');
 const labelDefaultCam = document.getElementById('labelDefaultCam');
 
-let currentQuality = '4k';
-let currentFPS = 60;
+let currentQuality = '1080p';
+let currentFPS = 30;
 let facingMode = 'environment';
 let mediaStream = null;
 let videoTrack = null;
@@ -25,13 +25,25 @@ let recorder169 = null, recorder916 = null;
 let chunks169 = [], chunks916 = [];
 let zoomLevel = 1;
 
-const resolutions = {
-  '720p': { w: 1280, h: 720 },
-  '1080p': { w: 1920, h: 1080 },
-  '4k': { w: 3840, h: 2160 }
-};
+// Deteksi Codec Terbaik (Prioritas HEVC / MP4)
+function getBestMimeType() {
+  const candidateTypes = [
+    'video/mp4;codecs=hevc',
+    'video/mp4;codecs=h265',
+    'video/mp4;codecs=avc1',
+    'video/mp4',
+    'video/webm;codecs=vp9',
+    'video/webm'
+  ];
+  for (const type of candidateTypes) {
+    if (MediaRecorder.isTypeSupported(type)) {
+      return type;
+    }
+  }
+  return '';
+}
 
-// Math Crop Anti-Gepeng
+// Math Crop Anti-Gepeng & Anti-Pecah
 function drawCover(ctx, video, targetW, targetH) {
   const vW = video.videoWidth;
   const vH = video.videoHeight;
@@ -54,6 +66,8 @@ function drawCover(ctx, video, targetW, targetH) {
     sy = (vH - sH) / 2;
   }
 
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(video, sx, sy, sW, sH, 0, 0, targetW, targetH);
 }
 
@@ -63,19 +77,19 @@ async function initCamera() {
     mediaStream.getTracks().forEach(t => t.stop());
   }
 
-  const res = resolutions[currentQuality];
+  // Paksa kamera mengambil input resolusi tinggi agar hasil crop portrait tetap tajam
+  const constraints = {
+    video: {
+      width: { ideal: 3840 },
+      height: { ideal: 2160 },
+      frameRate: { ideal: currentFPS },
+      facingMode: facingMode
+    },
+    audio: true
+  };
 
   try {
-    mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        width: { ideal: res.w },
-        height: { ideal: res.h },
-        frameRate: { ideal: currentFPS },
-        facingMode: facingMode
-      },
-      audio: true
-    });
-
+    mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
     rawVideo.srcObject = mediaStream;
     videoTrack = mediaStream.getVideoTracks()[0];
 
@@ -92,13 +106,18 @@ async function initCamera() {
   }
 }
 
+// Kunci Resolusi Eksak (Bukan Pembagian Bulat Saja)
 function setupCanvasDimensions() {
-  const res = resolutions[currentQuality];
-  canvas169.width = res.w;
-  canvas169.height = Math.round(res.w * (9 / 16));
-
-  canvas916.height = res.h;
-  canvas916.width = Math.round(res.h * (9 / 16));
+  if (currentQuality === '4k') {
+    canvas169.width = 3840; canvas169.height = 2160;
+    canvas916.width = 2160; canvas916.height = 3840;
+  } else if (currentQuality === '1080p') {
+    canvas169.width = 1920; canvas169.height = 1080; // 16:9 Landscape
+    canvas916.width = 1080; canvas916.height = 1920; // 9:16 Portrait Eksak 2MP
+  } else {
+    canvas169.width = 1280; canvas169.height = 720;
+    canvas916.width = 720; canvas916.height = 1280;
+  }
 }
 
 function renderLoop() {
@@ -107,7 +126,7 @@ function renderLoop() {
   requestAnimationFrame(renderLoop);
 }
 
-// Handler Flash / Torch
+// Handler Flash / Senter
 btnFlash.onclick = async () => {
   if (!videoTrack) return;
   const caps = videoTrack.getCapabilities();
@@ -160,36 +179,54 @@ btnFlip.onclick = () => {
   initCamera();
 };
 
-// Handler Perekaman Video
+// Handler Perekaman Video High-Bitrate
 btnRecord.onclick = () => {
   if (!isRecording) {
     chunks169 = []; chunks916 = [];
+    
     const s169 = canvas169.captureStream(currentFPS);
     const s916 = canvas916.captureStream(currentFPS);
     const audio = mediaStream.getAudioTracks()[0];
     
-    if (audio) { s169.addTrack(audio); s916.addTrack(audio); }
+    if (audio) { 
+      s169.addTrack(audio); 
+      s916.addTrack(audio); 
+    }
 
-    recorder169 = new MediaRecorder(s169);
-    recorder916 = new MediaRecorder(s916);
+    const mimeType = getBestMimeType();
+    
+    // Opsi perekaman bitrate tinggi (25 Mbps)
+    const recordOptions = {
+      mimeType: mimeType,
+      videoBitsPerSecond: 25000000 
+    };
+
+    recorder169 = new MediaRecorder(s169, recordOptions);
+    recorder916 = new MediaRecorder(s916, recordOptions);
 
     recorder169.ondataavailable = e => chunks169.push(e.data);
     recorder916.ondataavailable = e => chunks916.push(e.data);
 
-    recorder169.start(); recorder916.start();
+    const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+
+    recorder169.onstop = () => download(chunks169, `REFRAME_V_LANDSCAPE_${currentQuality}.${ext}`, mimeType);
+    recorder916.onstop = () => download(chunks916, `REFRAME_V_PORTRAIT_${currentQuality}.${ext}`, mimeType);
+
+    recorder169.start(1000); 
+    recorder916.start(1000);
+    
     isRecording = true;
     btnRecord.classList.add('recording');
   } else {
-    recorder169.stop(); recorder916.stop();
-    recorder169.onstop = () => download(chunks169, `video_landscape_${currentQuality}.webm`);
-    recorder916.onstop = () => download(chunks916, `video_portrait_${currentQuality}.webm`);
+    recorder169.stop(); 
+    recorder916.stop();
     isRecording = false;
     btnRecord.classList.remove('recording');
   }
 };
 
-function download(chunks, name) {
-  const blob = new Blob(chunks, { type: 'video/webm' });
+function download(chunks, name, mimeType) {
+  const blob = new Blob(chunks, { type: mimeType });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = name;
