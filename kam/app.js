@@ -1,8 +1,8 @@
 const rawVideo = document.getElementById('rawVideo');
 const canvas916 = document.getElementById('canvas916');
 const canvas169 = document.getElementById('canvas169');
-const ctx916 = canvas916.getContext('2d');
-const ctx169 = canvas169.getContext('2d');
+const ctx916 = canvas916.getContext('2d', { alpha: false, willReadFrequently: false });
+const ctx169 = canvas169.getContext('2d', { alpha: false, willReadFrequently: false });
 
 const btnSettings = document.getElementById('btnSettings');
 const settingsModal = document.getElementById('settingsModal');
@@ -24,26 +24,29 @@ let isFlashOn = false;
 let recorder169 = null, recorder916 = null;
 let chunks169 = [], chunks916 = [];
 let zoomLevel = 1;
+let isRendering = false;
 
-// Deteksi Codec Terbaik (Prioritas HEVC / MP4)
+// Bitrate Optimal agar GPU HP Tidak Lag / Drop Frame ke 6 FPS
+const targetBitrates = {
+  '720p': 6000000,   // 6 Mbps
+  '1080p': 12000000, // 12 Mbps (Jernih & Stabil 30/60 FPS)
+  '4k': 24000000    // 24 Mbps
+};
+
 function getBestMimeType() {
   const candidateTypes = [
-    'video/mp4;codecs=hevc',
-    'video/mp4;codecs=h265',
     'video/mp4;codecs=avc1',
+    'video/mp4;codecs=hevc',
     'video/mp4',
     'video/webm;codecs=vp9',
     'video/webm'
   ];
   for (const type of candidateTypes) {
-    if (MediaRecorder.isTypeSupported(type)) {
-      return type;
-    }
+    if (MediaRecorder.isTypeSupported(type)) return type;
   }
   return '';
 }
 
-// Math Crop Anti-Gepeng & Anti-Pecah
 function drawCover(ctx, video, targetW, targetH) {
   const vW = video.videoWidth;
   const vH = video.videoHeight;
@@ -66,67 +69,83 @@ function drawCover(ctx, video, targetW, targetH) {
     sy = (vH - sH) / 2;
   }
 
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(video, sx, sy, sW, sH, 0, 0, targetW, targetH);
 }
 
-// Inisialisasi Kamera
+// Loop Render Ter-Sinkronisasi dengan Kamera
+function startRendering() {
+  if (isRendering) return;
+  isRendering = true;
+
+  function renderStep() {
+    if (rawVideo.readyState >= 2) {
+      drawCover(ctx916, rawVideo, canvas916.width, canvas916.height);
+      drawCover(ctx169, rawVideo, canvas169.width, canvas169.height);
+    }
+    
+    // Utamakan API Hardware Kamera jika didukung browser
+    if ('requestVideoFrameCallback' in rawVideo) {
+      rawVideo.requestVideoFrameCallback(renderStep);
+    } else {
+      requestAnimationFrame(renderStep);
+    }
+  }
+
+  renderStep();
+}
+
 async function initCamera() {
   if (mediaStream) {
     mediaStream.getTracks().forEach(t => t.stop());
   }
 
-  // Paksa kamera mengambil input resolusi tinggi agar hasil crop portrait tetap tajam
-  const constraints = {
-    video: {
-      width: { ideal: 3840 },
-      height: { ideal: 2160 },
-      frameRate: { ideal: currentFPS },
-      facingMode: facingMode
-    },
-    audio: true
-  };
-
   try {
-    mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: currentQuality === '4k' ? 3840 : 1920 },
+        height: { ideal: currentQuality === '4k' ? 2160 : 1080 },
+        frameRate: { exact: currentFPS, ideal: currentFPS },
+        facingMode: facingMode
+      },
+      audio: true
+    });
+
     rawVideo.srcObject = mediaStream;
     videoTrack = mediaStream.getVideoTracks()[0];
+
+    // Verifikasi FPS Kamera Asli dari Hardware
+    const settings = videoTrack.getSettings();
+    if (settings.frameRate) {
+      console.log(`Kamera Aktif: ${settings.width}x${settings.height} @ ${settings.frameRate} FPS`);
+    }
 
     rawVideo.onloadedmetadata = () => {
       rawVideo.play();
       setupCanvasDimensions();
-      renderLoop();
+      startRendering();
     };
 
     labelDefaultCam.innerText = facingMode === 'environment' ? 'Back' : 'Front';
 
   } catch (err) {
-    alert("Gagal mengakses kamera: " + err.message);
+    alert("Gagal mengunci FPS kamera: " + err.message);
   }
 }
 
-// Kunci Resolusi Eksak (Bukan Pembagian Bulat Saja)
 function setupCanvasDimensions() {
   if (currentQuality === '4k') {
     canvas169.width = 3840; canvas169.height = 2160;
     canvas916.width = 2160; canvas916.height = 3840;
   } else if (currentQuality === '1080p') {
-    canvas169.width = 1920; canvas169.height = 1080; // 16:9 Landscape
-    canvas916.width = 1080; canvas916.height = 1920; // 9:16 Portrait Eksak 2MP
+    canvas169.width = 1920; canvas169.height = 1080;
+    canvas916.width = 1080; canvas916.height = 1920; // Exact 2MP Portrait
   } else {
     canvas169.width = 1280; canvas169.height = 720;
     canvas916.width = 720; canvas916.height = 1280;
   }
 }
 
-function renderLoop() {
-  drawCover(ctx916, rawVideo, canvas916.width, canvas916.height);
-  drawCover(ctx169, rawVideo, canvas169.width, canvas169.height);
-  requestAnimationFrame(renderLoop);
-}
-
-// Handler Flash / Senter
+// Control Event Handlers
 btnFlash.onclick = async () => {
   if (!videoTrack) return;
   const caps = videoTrack.getCapabilities();
@@ -134,11 +153,10 @@ btnFlash.onclick = async () => {
     isFlashOn = !isFlashOn;
     await videoTrack.applyConstraints({ advanced: [{ torch: isFlashOn }] });
   } else {
-    alert("Flash/Senter tidak didukung pada kamera ini.");
+    alert("Flash tidak didukung.");
   }
 };
 
-// Handler Zoom
 btnZoom.onclick = async () => {
   if (!videoTrack) return;
   const caps = videoTrack.getCapabilities();
@@ -147,11 +165,10 @@ btnZoom.onclick = async () => {
     btnZoom.innerText = `${zoomLevel}x`;
     await videoTrack.applyConstraints({ advanced: [{ zoom: zoomLevel }] });
   } else {
-    alert("Zoom digital tidak didukung hardware/browser ini.");
+    alert("Zoom tidak didukung hardware ini.");
   }
 };
 
-// Handler Settings Modal
 btnSettings.onclick = () => settingsModal.classList.add('active');
 btnCloseSettings.onclick = () => settingsModal.classList.remove('active');
 
@@ -173,17 +190,17 @@ document.querySelectorAll('#fpsControl button').forEach(btn => {
   };
 });
 
-// Handler Flip Kamera
 btnFlip.onclick = () => {
   facingMode = facingMode === 'environment' ? 'user' : 'environment';
   initCamera();
 };
 
-// Handler Perekaman Video High-Bitrate
+// Record Handler dengan FPS Capture Terkunci
 btnRecord.onclick = () => {
   if (!isRecording) {
     chunks169 = []; chunks916 = [];
     
+    // Kunci captureStream pada FPS aktual
     const s169 = canvas169.captureStream(currentFPS);
     const s916 = canvas916.captureStream(currentFPS);
     const audio = mediaStream.getAudioTracks()[0];
@@ -194,23 +211,21 @@ btnRecord.onclick = () => {
     }
 
     const mimeType = getBestMimeType();
-    
-    // Opsi perekaman bitrate tinggi (25 Mbps)
     const recordOptions = {
       mimeType: mimeType,
-      videoBitsPerSecond: 25000000 
+      videoBitsPerSecond: targetBitrates[currentQuality]
     };
 
     recorder169 = new MediaRecorder(s169, recordOptions);
     recorder916 = new MediaRecorder(s916, recordOptions);
 
-    recorder169.ondataavailable = e => chunks169.push(e.data);
-    recorder916.ondataavailable = e => chunks916.push(e.data);
+    recorder169.ondataavailable = e => { if (e.data.size > 0) chunks169.push(e.data); };
+    recorder916.ondataavailable = e => { if (e.data.size > 0) chunks916.push(e.data); };
 
     const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
 
-    recorder169.onstop = () => download(chunks169, `REFRAME_V_LANDSCAPE_${currentQuality}.${ext}`, mimeType);
-    recorder916.onstop = () => download(chunks916, `REFRAME_V_PORTRAIT_${currentQuality}.${ext}`, mimeType);
+    recorder169.onstop = () => download(chunks169, `REFRAME_LANDSCAPE_${currentQuality}.${ext}`, mimeType);
+    recorder916.onstop = () => download(chunks916, `REFRAME_PORTRAIT_${currentQuality}.${ext}`, mimeType);
 
     recorder169.start(1000); 
     recorder916.start(1000);
