@@ -2,7 +2,6 @@ const rawVideo = document.getElementById('rawVideo');
 const canvas916 = document.getElementById('canvas916');
 const canvas169 = document.getElementById('canvas169');
 
-// Akselerasi Hardware GPU & Matikan Alpha untuk Performa Maksimal
 const ctx916 = canvas916.getContext('2d', { alpha: false, desynchronized: true });
 const ctx169 = canvas169.getContext('2d', { alpha: false, desynchronized: true });
 
@@ -19,21 +18,23 @@ let recorder916 = null;
 let chunks169 = [];
 let chunks916 = [];
 let zoomLevel = 1;
+
+let track169 = null;
+let track916 = null;
+let recordTimer = null;
 let animFrameId = null;
 
-// Bitrate yang Seimbang agar Hardware Encoder HP Tidak Overload (Drop FPS)
 const targetBitrates = {
-  '720p': 5000000,   // 5 Mbps
-  '1080p': 10000000, // 10 Mbps (Tajam & Lancar 30 FPS)
-  '4k': 18000000    // 18 Mbps
+  '720p': 4000000,
+  '1080p': 8000000,
+  '4k': 15000000
 };
 
 function getBestMimeType() {
   const candidateTypes = [
     'video/mp4;codecs=avc1',
-    'video/mp4;codecs=hevc',
     'video/mp4',
-    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8',
     'video/webm'
   ];
   for (const type of candidateTypes) {
@@ -42,7 +43,6 @@ function getBestMimeType() {
   return '';
 }
 
-// Math Crop Center Anti-Gepeng
 function drawCover(ctx, video, targetW, targetH) {
   const vW = video.videoWidth;
   const vH = video.videoHeight;
@@ -68,13 +68,27 @@ function drawCover(ctx, video, targetW, targetH) {
   ctx.drawImage(video, sx, sy, sW, sH, 0, 0, targetW, targetH);
 }
 
-// Loop Rendering Ringan Mengikuti Refresh Rate Layar
-function renderLoop() {
-  if (rawVideo.readyState >= 2) {
+// Render biasa saat mode preview (sebelum rekam)
+function previewLoop() {
+  if (!isRecording && rawVideo.readyState >= 2) {
     drawCover(ctx916, rawVideo, canvas916.width, canvas916.height);
     drawCover(ctx169, rawVideo, canvas169.width, canvas169.height);
   }
-  animFrameId = requestAnimationFrame(renderLoop);
+  if (!isRecording) {
+    animFrameId = requestAnimationFrame(previewLoop);
+  }
+}
+
+// Render saat MEREKAM: Dipanggil presisi berdasarkan timer FPS (misal 33ms)
+function recordTick() {
+  if (rawVideo.readyState >= 2) {
+    drawCover(ctx916, rawVideo, canvas916.width, canvas916.height);
+    drawCover(ctx169, rawVideo, canvas169.width, canvas169.height);
+
+    // PAKSA dorong frame ke encoder tanpa toleransi drop frame
+    if (track169 && track169.requestFrame) track169.requestFrame();
+    if (track916 && track916.requestFrame) track916.requestFrame();
+  }
 }
 
 async function initCamera() {
@@ -104,7 +118,7 @@ async function initCamera() {
       rawVideo.play();
       setupCanvasDimensions();
       if (animFrameId) cancelAnimationFrame(animFrameId);
-      renderLoop();
+      previewLoop();
     };
 
     const labelCam = document.getElementById('labelDefaultCam');
@@ -113,7 +127,7 @@ async function initCamera() {
     }
 
   } catch (err) {
-    alert("Gagal mengakses kamera: " + err.message);
+    alert("Gagal mengaktifkan kamera: " + err.message);
   }
 }
 
@@ -123,14 +137,14 @@ function setupCanvasDimensions() {
     canvas916.width = 2160; canvas916.height = 3840;
   } else if (currentQuality === '1080p') {
     canvas169.width = 1920; canvas169.height = 1080;
-    canvas916.width = 1080; canvas916.height = 1920; // Exact 2MP
+    canvas916.width = 1080; canvas916.height = 1920;
   } else {
     canvas169.width = 1280; canvas169.height = 720;
     canvas916.width = 720; canvas916.height = 1280;
   }
 }
 
-// Tombol Flash
+// Tombol Controls
 const btnFlash = document.getElementById('btnFlash');
 if (btnFlash) {
   btnFlash.onclick = async () => {
@@ -145,7 +159,6 @@ if (btnFlash) {
   };
 }
 
-// Tombol Zoom
 const btnZoom = document.getElementById('btnZoom');
 if (btnZoom) {
   btnZoom.onclick = async () => {
@@ -161,7 +174,6 @@ if (btnZoom) {
   };
 }
 
-// Modal Settings
 const settingsModal = document.getElementById('settingsModal');
 const btnSettings = document.getElementById('btnSettings');
 const btnCloseSettings = document.getElementById('btnCloseSettings');
@@ -191,7 +203,6 @@ document.querySelectorAll('#fpsControl button').forEach(btn => {
   };
 });
 
-// Tombol Flip Kamera
 const btnFlip = document.getElementById('btnFlip');
 if (btnFlip) {
   btnFlip.onclick = () => {
@@ -200,7 +211,7 @@ if (btnFlip) {
   };
 }
 
-// Tombol Rekam
+// Perekaman Kunci FPS
 const btnRecord = document.getElementById('btnRecord');
 if (btnRecord) {
   btnRecord.onclick = () => {
@@ -208,9 +219,13 @@ if (btnRecord) {
       chunks169 = [];
       chunks916 = [];
 
-      const stream169 = canvas169.captureStream(currentFPS);
-      const stream916 = canvas916.captureStream(currentFPS);
-      
+      // captureStream(0) = Browser DILARANG auto-drop frame
+      const stream169 = canvas169.captureStream(0);
+      const stream916 = canvas916.captureStream(0);
+
+      track169 = stream169.getVideoTracks()[0];
+      track916 = stream916.getVideoTracks()[0];
+
       const audioTrack = mediaStream ? mediaStream.getAudioTracks()[0] : null;
       if (audioTrack) {
         stream169.addTrack(audioTrack);
@@ -239,17 +254,30 @@ if (btnRecord) {
       recorder169.onstop = () => download(chunks169, `REFRAME_LANDSCAPE_${currentQuality}.${ext}`, mimeType);
       recorder916.onstop = () => download(chunks916, `REFRAME_PORTRAIT_${currentQuality}.${ext}`, mimeType);
 
+      // Matikan preview loop biasa
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      isRecording = true;
+
+      // Jalankan Timer Manual Sesuai FPS (30 FPS = ~33.3ms)
+      const frameInterval = 1000 / currentFPS;
+      recordTimer = setInterval(recordTick, frameInterval);
+
       recorder169.start(1000);
       recorder916.start(1000);
 
-      isRecording = true;
       btnRecord.classList.add('recording');
     } else {
+      // Hentikan Recording Timer
+      if (recordTimer) clearInterval(recordTimer);
+
       if (recorder169 && recorder169.state !== 'inactive') recorder169.stop();
       if (recorder916 && recorder916.state !== 'inactive') recorder916.stop();
 
       isRecording = false;
       btnRecord.classList.remove('recording');
+
+      // Kembalikan ke Preview Loop
+      previewLoop();
     }
   };
 }
@@ -263,5 +291,4 @@ function download(chunks, name, mimeType) {
   a.click();
 }
 
-// Jalankan Kamera Pertama Kali
 initCamera();
