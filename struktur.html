@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struktur Organisasi - Himpunan Mahasiswa Cinemind</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Card Styling */
+        .node {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            width: 185px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            border-color: #3b82f6;
+        }
+
+        .node .role {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #3b82f6;
+            margin-bottom: 3px;
+            letter-spacing: 0.3px;
+        }
+
+        .node .name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+
+        .node .nim {
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        /* Leader Node Style */
+        .node.leader {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: none;
+            color: #fff;
+            width: 230px;
+        }
+
+        .node.leader .role {
+            color: #94a3b8;
+        }
+
+        .node.leader .name {
+            color: #ffffff;
+        }
+
+        .node.leader .nim {
+            color: #cbd5e1;
+        }
+
+        /* Division Header Style */
+        .node.division {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .node.division .role {
+            color: #1d4ed8;
+        }
+
+        /* Connecting Lines/Arrows */
+        .connector {
+            width: 2px;
+            height: 15px;
+            background-color: #cbd5e1;
+        }
+
+        /* Core Management Grid (BPH Level) */
+        .bph-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        /* Divisions Container */
+        .divisions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .division-box {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .staff-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Struktur Kepengurusan</h1>
+        <p>Himpunan Mahasiswa Cinemind</p>
+    </header>
+
+    <div class="container">
+        <!-- Pembina -->
+        <div class="node leader">
+            <div class="role">Pembina</div>
+            <div class="name">Halim Agung, M.Kom., M.M</div>
+        </div>
+        <div class="connector"></div>
+
+        <!-- Wakil Pembina -->
+        <div class="node leader">
+            <div class="role">Wakil Pembina</div>
+            <div class="name">Mohammad Enang, M.M</div>
+        </div>
+        <div class="connector"></div>
+
+        <!-- Ketua Himpunan -->
+        <div class="node leader">
+            <div class="role">Ketua Himpunan</div>
+            <div class="name">Aisyah Liuy Wulandari</div>
+            <div class="nim">1525020016</div>
+        </div>
+        <div class="connector"></div>
+
+        <!-- BPH (Wakil, Sekretaris, Bendahara) -->
+        <div class="bph-grid">
+            <div class="node">
+                <div class="role">Wakil Ketua Himpunan</div>
+                <div class="name">Hafidz Sazili</div>
+                <div class="nim">1525020028</div>
+            </div>
+            <div class="node">
+                <div class="role">Sekretaris</div>
+                <div class="name">Aileen Izza Salim</div>
+                <div class="nim">1525020042</div>
+            </div>
+            <div class="node">
+                <div class="role">Bendahara</div>
+                <div class="name">Abdan Syakuro Dwi Indrako</div>
+                <div class="nim">1525020052</div>
+            </div>
+            <div class="node">
+                <div class="role">Bendahara</div>
+                <div class="name">Zazkya Shelomita Anjani</div>
+                <div class="nim">1525020041</div>
+            </div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- DIVISI-DIVISI DALAM GRID RESPONSIF -->
+        <div class="divisions-container">
+            
+            <!-- Divisi Kajian dan Akademik -->
+            <div class="division-box">
+                <div class="node division">
+                    <div class="role">Divisi</div>
+                    <div class="name">Kajian dan Akademik</div>
+                </div>
+                <div class="staff-list">
+                    <div class="node">
+                        <div class="role">Kepala Divisi</div>
+                        <div class="name">Junika Aji Baskoro</div>
+                        <div class="nim">1525020019</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Staff Sinema & Penyiaran</div>
+                        <div class="name">Isrina Mira Agustin</div>
+                        <div class="nim">1525020021</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Staff Literasi & Karya Tulis</div>
+                        <div class="name">Shela Handayani</div>
+                        <div class="nim">1525020002</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divisi Karya dan Produksi -->
+            <div class="division-box">
+                <div class="node division">
+                    <div class="role">Divisi</div>
+                    <div class="name">Karya dan Produksi</div>
+                </div>
+                <div class="staff-list">
+                    <div class="node">
+                        <div class="role">Kepala Divisi</div>
+                        <div class="name">Muhammad Daffa Islamy</div>
+                        <div class="nim">1525020011</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Manajer Produksi</div>
+                        <div class="name">Ahnaf Rafif Qatrun Nada</div>
+                        <div class="nim">1525020020</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Koordinator Workshop</div>
+                        <div class="name">Putri Ainiyah Fajarinah</div>
+                        <div class="nim">1525020050</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divisi Jaringan dan Kemitraan -->
+            <div class="division-box">
+                <div class="node division">
+                    <div class="role">Divisi</div>
+                    <div class="name">Jaringan & Kemitraan</div>
+                </div>
+                <div class="staff-list">
+                    <div class="node">
+                        <div class="role">Kepala Divisi</div>
+                        <div class="name">Calista Sifa Aulia</div>
+                        <div class="nim">1525020024</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Hubungan Masyarakat</div>
+                        <div class="name">Shavilla Nisa Azzahra</div>
+                        <div class="nim">1525020043</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Kemitraan & Sponsorship</div>
+                        <div class="name">Ayudha Putri Mulyani</div>
+                        <div class="nim">1525020053</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divisi Media dan Informasi -->
+            <div class="division-box">
+                <div class="node division">
+                    <div class="role">Divisi</div>
+                    <div class="name">Media dan Informasi</div>
+                </div>
+                <div class="staff-list">
+                    <div class="node">
+                        <div class="role">Kepala Divisi</div>
+                        <div class="name">Muhammad Hilman Al Ghazy</div>
+                        <div class="nim">1525020030</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Desain Grafis</div>
+                        <div class="name">Faqih Habibi</div>
+                        <div class="nim">1525020027</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Pengelola Konten</div>
+                        <div class="name">Erina Zulfa Novia Ningrum</div>
+                        <div class="nim">1525020058</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Dokumentasi</div>
+                        <div class="name">Shandy Ramadhan</div>
+                        <div class="nim">1525020001</div>
+                    </div>
+                    <div class="node">
+                        <div class="role">Dokumentasi</div>
+                        <div class="name">Balqis Sekarisma Putri</div>
+                        <div class="nim">1525020003</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
