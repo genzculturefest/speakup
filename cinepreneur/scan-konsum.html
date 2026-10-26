@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner Konsumsi - Cinereneur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center p-4">
+
+    <div class="flex flex-col items-center mb-6 mt-4">
+        <h1 class="text-2xl font-black text-orange-500 tracking-widest">SCAN KONSUMSI</h1>
+        <div class="h-1 w-20 bg-orange-500 rounded-full mt-1"></div>
+    </div>
+
+    <div class="w-full max-w-md bg-slate-800 p-4 rounded-3xl border border-slate-700">
+        <div id="reader" class="overflow-hidden rounded-2xl"></div>
+        
+        <div id="result-box" class="mt-4 p-5 rounded-2xl hidden text-center transition-all duration-300 border-2">
+            <h2 id="result-status" class="font-black text-xl mb-1"></h2>
+            <p id="result-name" class="text-sm font-medium opacity-80"></p>
+            <button onclick="resetScanner()" class="mt-4 bg-white/10 hover:bg-white/20 px-6 py-2 rounded-full text-xs font-bold tracking-tighter uppercase transition-all">
+                Klik untuk Scan Baru
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzn1HkwZhn_LR_0fYzcb04VLezk5qtjdUQML4Gq_E_RCOFF0q0T7AXKBtqFIVYaMlv7Aw/exec"; 
+        
+        let html5QrCode = new Html5Qrcode("reader");
+        const config = { fps: 15, qrbox: { width: 250, height: 250 } };
+
+        function onScanSuccess(decodedText) {
+            const idMatch = decodedText.match(/CNR-\d+/);
+            const scannedId = idMatch ? idMatch[0] : decodedText.trim();
+
+            html5QrCode.pause();
+            showLoading();
+
+            fetch(`${SCRIPT_URL}?action=scan_konsumsi&id=${scannedId}`)
+                .then(response => response.json())
+                .then(data => { handleResponse(data); })
+                .catch(err => {
+                    alert("Koneksi Error!");
+                    resetScanner();
+                });
+        }
+
+        function showLoading() {
+            const box = document.getElementById('result-box');
+            box.classList.remove('hidden');
+            box.className = "mt-4 p-5 rounded-2xl text-center border-slate-500 bg-slate-700 animate-pulse";
+            document.getElementById('result-status').innerText = "⏳ MEMVERIFIKASI...";
+            document.getElementById('result-name').innerText = "Mengecek database...";
+        }
+
+        function handleResponse(data) {
+            const box = document.getElementById('result-box');
+            const statusH = document.getElementById('result-status');
+            const nameP = document.getElementById('result-name');
+
+            box.classList.remove('animate-pulse');
+
+            if (data.status === "success") {
+                box.className = "mt-4 p-5 rounded-2xl text-center border-green-500 bg-green-950/50 text-green-400";
+                statusH.innerText = "✅ SILAKAN AMBIL"; nameP.innerText = `Peserta: ${data.nama}`;
+            } else if (data.status === "already_taken") {
+                box.className = "mt-4 p-5 rounded-2xl text-center border-yellow-500 bg-yellow-950/50 text-yellow-400";
+                statusH.innerText = "⚠️ SUDAH DIAMBIL"; nameP.innerText = `${data.nama} sudah menukarkan kupon.`;
+            } else if (data.status === "not_checked_in") {
+                box.className = "mt-4 p-5 rounded-2xl text-center border-red-500 bg-red-950/50 text-red-400";
+                statusH.innerText = "❌ BELUM ABSEN"; nameP.innerText = `${data.nama} wajib scan di pintu masuk dulu!`;
+            } else {
+                box.className = "mt-4 p-5 rounded-2xl text-center border-slate-400 bg-slate-700 text-slate-300";
+                statusH.innerText = "❓ TIDAK TERDAFTAR"; nameP.innerText = "ID QR tidak ditemukan di sistem.";
+            }
+        }
+
+        function resetScanner() {
+            document.getElementById('result-box').classList.add('hidden');
+            html5QrCode.resume();
+        }
+
+        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
+    </script>
+</body>
+</html>

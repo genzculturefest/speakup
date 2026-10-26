@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Pendaftaran - Talkshow Cinereneur</title>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 min-h-screen text-slate-800 flex items-center justify-center p-4 sm:p-6">
+
+  <!-- Main Form Card -->
+  <div class="w-full max-w-xl bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-slate-100 my-8">
+    
+    <!-- Header Hero Section -->
+    <div class="bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 p-8 text-white relative overflow-hidden text-center">
+      <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-sky-400/20 rounded-full blur-2xl"></div>
+      <div class="relative z-10">
+        <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md text-sky-200 text-xs font-semibold rounded-full uppercase tracking-wider mb-2 border border-white/10">Event Official</span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">Talkshow Cinereneur</h1>
+        <p class="text-sky-100 font-medium text-sm sm:text-base flex items-center justify-center gap-2">
+          📅 <span>10 November 2026</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="p-6 sm:p-8 space-y-6">
+      
+      <!-- Card Informasi Pembayaran -->
+      <div class="bg-sky-50/80 border border-sky-100 p-5 rounded-2xl shadow-sm">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>
+          <p class="text-xs font-bold text-sky-900 uppercase tracking-wider">Informasi Pembayaran (HTM)</p>
+        </div>
+        <p class="font-bold text-lg text-slate-800 mb-3">DANA / GOPAY: <span class="text-sky-600">08XXXXXXXXXX</span> <span class="text-xs text-slate-500 font-normal">(a.n Nama Bendahara)</span></p>
+        <div class="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-xs border border-sky-200 text-sm text-sky-950 font-medium">
+          🎟️ <span><b>Tiket Masuk:</b> Rp 25.000</span>
+        </div>
+      </div>
+
+      <!-- Form Pendaftaran -->
+      <form id="regForm" class="space-y-5">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Nama Lengkap</label>
+          <input type="text" id="nama" placeholder="Masukkan nama lengkap Anda" class="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all text-sm text-slate-800 placeholder-slate-400 font-medium" required>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">No. Telp (WhatsApp)</label>
+            <input type="tel" id="telp" placeholder="08xxxxxxxxxx" class="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all text-sm text-slate-800 placeholder-slate-400 font-medium" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Email Aktif</label>
+            <input type="email" id="email" placeholder="nama@email.com" class="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all text-sm text-slate-800 placeholder-slate-400 font-medium" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Asal Instansi / Kampus</label>
+          <input type="text" id="instansi" placeholder="Nama Universitas / Instansi" class="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all text-sm text-slate-800 placeholder-slate-400 font-medium" required>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Kategori Tiket</label>
+          <select id="opsi" class="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all text-sm text-slate-800 font-medium cursor-pointer">
+            <option value="reguler">Reguler (Rp 25.000)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Upload Bukti Pembayaran</label>
+          <div class="relative border-2 border-dashed border-sky-200 hover:border-sky-400 p-6 rounded-2xl text-center bg-sky-50/30 hover:bg-sky-50/60 transition-all cursor-pointer group">
+            <input type="file" id="fotoFile" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewFileName()" required>
+            <div class="flex flex-col items-center justify-center space-y-2">
+              <div class="w-10 h-10 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                🖼️
+              </div>
+              <div id="fileStatus" class="text-xs font-semibold text-slate-600 group-hover:text-sky-600 transition-colors">
+                Klik atau seret foto bukti transfer di sini
+              </div>
+              <p class="text-[10px] text-slate-400">Format: JPG, PNG, atau WEBP</p>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" onclick="handleFormSubmission()" id="btnSubmit" class="w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold py-4 rounded-xl shadow-lg shadow-sky-500/25 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] text-sm uppercase tracking-wider">
+          DAFTAR SEKARANG
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Pop-up Berhasil -->
+  <div id="modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl border border-sky-100 animate__animated animate__zoomIn">
+      <div class="w-16 h-16 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+        ✅
+      </div>
+      <h2 class="text-2xl font-black text-slate-800 mb-2">Berhasil Mendaftar!</h2>
+      <p class="text-xs text-slate-500 mb-6 leading-relaxed" id="modalMsg">Data Anda sedang diverifikasi. Silakan bergabung ke Grup WhatsApp.</p>
+      <a id="waLink" href="LINK_GRUP_WA_ANDA_DISINI" target="_blank" class="block w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-500/20 transition-all text-sm">Gabung Grup WhatsApp</a>
+    </div>
+  </div>
+
+  <script>
+    // GANTI DENGAN URL DEPLOY GOOGLE APPS SCRIPT ANDA
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzn1HkwZhn_LR_0fYzcb04VLezk5qtjdUQML4Gq_E_RCOFF0q0T7AXKBtqFIVYaMlv7Aw/exec";
+
+    function previewFileName() {
+      const fileInput = document.getElementById('fotoFile');
+      const fileStatus = document.getElementById('fileStatus');
+      if (fileInput.files.length > 0) fileStatus.innerText = "Terpilih: " + fileInput.files[0].name;
+    }
+
+    function handleFormSubmission() {
+      const btn = document.getElementById('btnSubmit');
+      const fileInput = document.getElementById('fotoFile').files[0];
+      
+      if (!fileInput) return alert("Upload bukti transfer!");
+
+      btn.disabled = true;
+      btn.innerHTML = "Sedang Mengirim...";
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const payload = {
+          nama: document.getElementById('nama').value,
+          telp: document.getElementById('telp').value,
+          email: document.getElementById('email').value,
+          instansi: document.getElementById('instansi').value,
+          opsi: document.getElementById('opsi').value,
+          bukti: e.target.result
+        };
+
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          cache: "no-cache",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        })
+        .then(() => {
+          document.getElementById('modal').classList.remove('hidden');
+        })
+        .catch(err => {
+          alert("Gagal mengirim: " + err);
+          btn.disabled = false;
+          btn.innerHTML = "DAFTAR SEKARANG";
+        });
+      };
+      reader.readAsDataURL(fileInput);
+    }
+  </script>
+</body>
+</html>
