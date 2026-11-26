@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAFIDZ — Photographer &amp; Visual Creator (@hafidzsazili_project)</title>
+
+  <!-- Google Fonts: Oswald (Display Condensed), Plus Jakarta Sans (Editorial Body), Caveat (Handwritten Signature) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Oswald', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            script: ['Caveat', 'cursive'],
+          },
+          colors: {
+            brand: {
+              gold: '#F2B705',
+              goldhover: '#DDA600',
+              sand: '#F3EFEA',
+              sanddark: '#E7E0D8',
+              charcoal: '#1A1A1A',
+              slate: '#555555',
+              cardbg: '#F8F7F5',
+              line: '#E6E4E0',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Subtle dot-matrix decorative pattern matching editorial reference */
+    .bg-dot-pattern {
+      background-image: radial-gradient(#C8C2B8 1.35px, transparent 1.35px);
+      background-size: 14px 14px;
+    }
+
+    /* Vertical rotated script text on About section right edge */
+    .writing-vertical {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    /* Smooth zoom on portfolio & category cards */
+    .card-zoom {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .group:hover .card-zoom {
+      transform: scale(1.05);
+    }
+
+    /* Hide horizontal scrollbar on carousel & mobile filter strip */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* 1-Row Horizontal Slide Carousel (Explore My Work) */
+    .carousel-track {
+      position: relative;
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      touch-action: manipulation;
+      padding-block: 0.25rem 0.75rem;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .carousel-track {
+        scroll-behavior: smooth;
+      }
+    }
+
+    .carousel-track>.gallery-item {
+      flex: 0 0 86%;
+      scroll-snap-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .carousel-track {
+        gap: 1.75rem;
+      }
+
+      .carousel-track>.gallery-item {
+        flex: 0 0 calc((100% - 1.75rem) / 2);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .carousel-track>.gallery-item {
+        flex: 0 0 calc((100% - 3.5rem) / 3);
+      }
+    }
+
+    /* Continuous looping via CSS order parking (only first & last child) */
+    .carousel-track.is-looping> :first-child {
+      order: clamp(0, var(--current) - (var(--children-count, sibling-count()) - 3), 1);
+    }
+
+    .carousel-track.is-looping> :last-child {
+      order: calc(-1 * clamp(0, 2 - var(--current), 1));
+    }
+
+    /* Carousel controls & markers (WCAG 2.5.8 target size >= 24x24 & 1.4.1 non-color active indicator) */
+    .carousel-nav-btn {
+      touch-action: manipulation;
+    }
+
+    .carousel-nav-btn:focus-visible,
+    .carousel-marker-btn:focus-visible,
+    .carousel-track:focus-visible {
+      outline: 2px solid #1A1A1A;
+      outline-offset: 2px;
+    }
+
+    .carousel-marker-btn {
+      min-width: 24px;
+      min-height: 24px;
+      padding: 6px 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+      touch-action: manipulation;
+    }
+
+    .carousel-marker-dot {
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background-color: #C8C2B8;
+      border: 1px solid #8A8378;
+      transition: width 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .carousel-marker-btn[aria-current="true"] .carousel-marker-dot {
+      width: 24px;
+      background-color: #F2B705;
+      border-color: #1A1A1A;
+      border-width: 1.5px;
+    }
+  </style>
+</head>
+
+<body class="bg-white text-brand-charcoal font-sans antialiased selection:bg-brand-gold selection:text-brand-charcoal">
+
+  <!-- ==================== TOP NAVIGATION BAR ==================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-line">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Brand Logo (JUDE style adapted for HAFIDZ) -->
+        <a href="#home" class="flex flex-col leading-none group">
+          <span class="font-display font-bold text-2xl sm:text-[28px] tracking-wider text-brand-charcoal">HAFIDZ</span>
+          <span
+            class="text-[9px] sm:text-[10px] font-semibold tracking-[0.32em] text-brand-slate uppercase mt-0.5">PHOTOGRAPHER</span>
+        </a>
+
+        <!-- Center Desktop Menu -->
+        <nav class="hidden md:flex items-center gap-8 text-xs font-semibold tracking-[0.12em] uppercase">
+          <a href="#home"
+            class="nav-item text-brand-charcoal border-b-2 border-brand-gold pb-1 transition-colors">HOME</a>
+          <a href="#portfolio"
+            class="nav-item text-brand-slate hover:text-brand-charcoal border-b-2 border-transparent pb-1 transition-colors">PORTFOLIO</a>
+          <a href="#about"
+            class="nav-item text-brand-slate hover:text-brand-charcoal border-b-2 border-transparent pb-1 transition-colors">ABOUT</a>
+
+          <a href="#contact"
+            class="nav-item text-brand-slate hover:text-brand-charcoal border-b-2 border-transparent pb-1 transition-colors">CONTACT</a>
+        </nav>
+
+        <!-- Right Icons (Search/Filter jump, Instagram, Mobile Drawer Toggle) -->
+        <div class="flex items-center gap-4">
+          <a href="#portfolio" aria-label="Cari karya"
+            class="p-2 text-brand-charcoal hover:text-brand-gold transition-colors" title="Jelajahi Galeri">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-3.5-3.5" stroke-linecap="round"></path>
+            </svg>
+          </a>
+          <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+            aria-label="Instagram @hafidzsazili_project"
+            class="p-2 text-brand-charcoal hover:text-brand-gold transition-colors" title="@hafidzsazili_project">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
+            </svg>
+          </a>
+          <button type="button" id="mobile-menu-btn" aria-label="Buka menu navigasi"
+            class="p-2 text-brand-charcoal hover:text-brand-gold transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collapsible Mobile / Quick Menu Drawer -->
+    <div id="mobile-menu" class="hidden bg-white border-t border-brand-line px-4 py-5 space-y-3">
+      <div class="flex flex-col space-y-2.5 text-xs font-semibold tracking-[0.14em] uppercase">
+        <a href="#home" class="mobile-nav-link py-1.5 text-brand-charcoal">HOME</a>
+        <a href="#portfolio" class="mobile-nav-link py-1.5 text-brand-slate hover:text-brand-charcoal">PORTFOLIO</a>
+        <a href="#about" class="mobile-nav-link py-1.5 text-brand-slate hover:text-brand-charcoal">ABOUT ME</a>
+
+        <a href="#contact" class="mobile-nav-link py-1.5 text-brand-slate hover:text-brand-charcoal">CONTACT</a>
+      </div>
+      <div class="pt-3 border-t border-brand-line flex items-center justify-between">
+        <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+          class="text-xs font-medium text-brand-slate hover:text-brand-charcoal transition-colors">
+          @hafidzsazili_project ↗
+        </a>
+        <span class="text-[11px] text-brand-slate">Tangerang, ID</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO BANNER (FULL-BLEED SCENIC) ==================== -->
+  <section id="home"
+    class="relative w-full min-h-[540px] sm:min-h-[620px] lg:min-h-[660px] flex items-center overflow-hidden bg-stone-900">
+    <!-- Background Scenic Landscape Photograph -->
+    <img src="https://lh3.googleusercontent.com/d/1ZBsJNnfkZgSCVqosgWuYNWEN7aCLBJMo?auto=format&fit=crop&w=2000&q=85"
+      alt="Pemandangan alam senja di tepi danau — Hafidz Sazili Photography"
+      onerror="this.src='https://placehold.co/1920x900/292524/F5F5F4?text=HAFIDZ+SAZILI+PHOTOGRAPHY'"
+      class="absolute inset-0 w-full h-full object-cover object-center" />
+
+    <!-- Editorial Gradient Overlays (Left light wash for dark headline + right subtle contrast for white location text) -->
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/75 to-black/30 sm:from-white/92 sm:via-white/65 sm:to-black/25">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent"></div>
+
+    <!-- Main Hero Container -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 sm:py-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+        <!-- Left Headline & Dual CTA -->
+        <div class="lg:col-span-7 max-w-xl">
+          <p class="text-[11px] sm:text-xs font-bold tracking-[0.22em] uppercase text-brand-slate mb-3">
+            HEY, I'M HAFIDZ SAZILI
+          </p>
+          <h1
+            class="font-display font-bold text-5xl sm:text-6xl lg:text-[68px] uppercase leading-[0.98] tracking-tight text-brand-charcoal">
+            CAPTURING REAL MOMENTS
+          </h1>
+
+          <!-- Signature Golden Accent Bar -->
+          <div class="w-11 h-1 bg-brand-gold my-5"></div>
+
+          <p class="text-sm sm:text-base text-brand-charcoal/85 leading-relaxed max-w-md mb-8">
+            Fotografer &amp; kreator visual di balik <strong class="font-semibold">@hafidzsazili_project</strong>.
+            Mengabadikan lanskap senja, teknik <em>panning</em>, <em>light painting</em>, <em>freezing</em>, hingga
+            sinematografi panggung dan film.
+          </p>
+
+          <!-- Dual Action Buttons (Golden Yellow Primary + Crisp White Secondary) -->
+          <div class="flex flex-wrap items-center gap-3.5">
+            <a href="#portfolio"
+              class="inline-flex items-center gap-2.5 bg-brand-gold hover:bg-brand-goldhover text-brand-charcoal font-bold text-xs tracking-[0.14em] uppercase px-6 py-3.5 rounded-sm shadow-sm transition-all">
+              <span>VIEW PORTFOLIO</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a href="#stories"
+              class="inline-flex items-center justify-center bg-white hover:bg-stone-50 text-brand-charcoal border border-brand-charcoal/25 font-bold text-xs tracking-[0.14em] uppercase px-6 py-3.5 rounded-sm shadow-sm transition-all">
+              READ STORIES
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Overlay: Based In + Cursive Signature -->
+        <div
+          class="lg:col-span-5 flex flex-col items-start lg:items-end justify-end text-left lg:text-right pt-6 lg:pt-0 lg:pr-8">
+          <span class="text-[10px] font-bold tracking-[0.22em] uppercase text-white/85">BASED IN</span>
+          <p class="text-xs sm:text-sm font-semibold tracking-[0.14em] uppercase text-white mt-0.5">
+            TANGERANG, INDONESIA
+          </p>
+          <span class="font-script text-4xl sm:text-5xl text-white/95 mt-2 -rotate-3 select-none">
+            Hafidz
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Far-Right Vertical Social Strip (Matching Reference) -->
+    <div
+      class="hidden xl:flex flex-col items-center gap-4 absolute right-6 top-1/2 -translate-y-1/2 z-20 text-white/90">
+      <div class="w-px h-14 bg-white/50"></div>
+      <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+        aria-label="Instagram" class="hover:text-brand-gold transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+          <circle cx="12" cy="12" r="4"></circle>
+        </svg>
+      </a>
+      <a href="https://wa.me/6285718574167" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
+        class="hover:text-brand-gold transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path
+            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+          </path>
+        </svg>
+      </a>
+      <a href="mailto:hafidzsazili07@gmail.com" aria-label="Email" class="hover:text-brand-gold transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <path d="m22 7-10 6L2 7"></path>
+        </svg>
+      </a>
+      <div class="w-px h-14 bg-white/50"></div>
+    </div>
+  </section>
+
+  <!-- ==================== EXPLORE MY WORK (6 CATEGORY CARDS + INTERACTIVE GALLERY) ==================== -->
+  <section id="portfolio" class="py-16 sm:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="flex items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 class="font-display font-bold text-2xl sm:text-3xl tracking-wide uppercase text-brand-charcoal">
+            EXPLORE MY WORK
+          </h2>
+        </div>
+        <button type="button" data-filter-target="all"
+          class="category-card-trigger inline-flex items-center gap-3 text-xs font-bold tracking-[0.14em] uppercase text-brand-charcoal hover:text-brand-slate transition-colors group">
+          <span>VIEW ALL PORTFOLIO</span>
+          <span
+            class="w-7 h-7 rounded-full bg-brand-gold group-hover:bg-brand-goldhover flex items-center justify-center text-brand-charcoal transition-transform group-hover:translate-x-0.5">
+            →
+          </span>
+        </button>
+      </div>
+
+      <!-- 6 Visual Category Showcase Cards (Matching Reference Strip) -->
+
+
+      <!-- Filter Tabs & Curated Gallery Grid -->
+      <div id="gallery-anchor" class="pt-6 border-t border-brand-line">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1" role="group"
+            aria-label="Filter galeri karya">
+            <button type="button" data-category="all"
+              class="filter-btn active px-4 py-2 rounded-sm text-xs font-bold tracking-wider uppercase bg-brand-gold text-brand-charcoal transition-colors whitespace-nowrap">
+              ALL WORKS
+            </button>
+            <button type="button" data-category="Panning & Motion"
+              class="filter-btn px-4 py-2 rounded-sm text-xs font-semibold tracking-wider uppercase bg-brand-cardbg text-brand-slate hover:text-brand-charcoal transition-colors whitespace-nowrap">
+              PANNING &amp; MOTION
+            </button>
+            <button type="button" data-category="Landscape & Nature"
+              class="filter-btn px-4 py-2 rounded-sm text-xs font-semibold tracking-wider uppercase bg-brand-cardbg text-brand-slate hover:text-brand-charcoal transition-colors whitespace-nowrap">
+              LANDSCAPE &amp; NATURE
+            </button>
+            <button type="button" data-category="Light Painting & Freezing"
+              class="filter-btn px-4 py-2 rounded-sm text-xs font-semibold tracking-wider uppercase bg-brand-cardbg text-brand-slate hover:text-brand-charcoal transition-colors whitespace-nowrap">
+              LIGHT PAINTING &amp; FREEZING
+            </button>
+            <button type="button" data-category="Film, Stage & Portrait"
+              class="filter-btn px-4 py-2 rounded-sm text-xs font-semibold tracking-wider uppercase bg-brand-cardbg text-brand-slate hover:text-brand-charcoal transition-colors whitespace-nowrap">
+              FILM, STAGE &amp; PORTRAIT
+            </button>
+          </div>
+
+          <div class="flex items-center gap-3 self-end sm:self-auto">
+            <span id="gallery-count-label" class="text-xs font-semibold tracking-wider uppercase text-brand-slate">9
+              CURATED WORKS</span>
+          </div>
+        </div>
+
+        <!-- 1-Row Carousel Workspace Container -->
+        <div id="work-carousel" role="region" aria-roledescription="carousel" aria-label="Galeri karya Explore My Work">
+          <div class="relative">
+            <!-- Previous / Next Slide Controls (before track in DOM order) -->
+            <div class="pointer-events-none absolute inset-0 z-20 flex items-center justify-between px-1 sm:px-0">
+              <button type="button" id="carousel-prev" data-direction="previous" aria-label="Slide sebelumnya"
+                class="carousel-nav-btn pointer-events-auto sm:-ml-5 w-11 h-11 rounded-full bg-white/95 hover:bg-brand-gold text-brand-charcoal border border-brand-charcoal/25 shadow-md flex items-center justify-center text-base font-bold transition-colors disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-white/95">
+                ←
+              </button>
+              <button type="button" id="carousel-next" data-direction="next" aria-label="Slide berikutnya"
+                class="carousel-nav-btn pointer-events-auto sm:-mr-5 w-11 h-11 rounded-full bg-white/95 hover:bg-brand-gold text-brand-charcoal border border-brand-charcoal/25 shadow-md flex items-center justify-center text-base font-bold transition-colors disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-white/95">
+                →
+              </button>
+            </div>
+
+            <!-- Single-Row Horizontal Scroll-Snap Track -->
+            <div id="curated-gallery-grid" class="carousel-track no-scrollbar" tabindex="0" role="group"
+              aria-label="Daftar slide karya"></div>
+          </div>
+
+          <!-- Visually Hidden Polite Live Region for Screen Readers -->
+          <p id="carousel-status" class="sr-only" role="status" aria-live="polite"></p>
+
+          <!-- Slide Markers & Slide Indicator -->
+          <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <nav id="carousel-markers" class="carousel-markers flex flex-wrap items-center justify-center gap-1"
+              aria-label="Pilih slide"></nav>
+            <span id="carousel-slide-indicator"
+              class="text-[11px] font-bold tracking-[0.16em] uppercase text-brand-slate">
+              SLIDE 01 / 09
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT ME SECTION (WARM SAND #F3EFEA EDITORIAL COLLAGE) ==================== -->
+  <section id="about" class="relative py-20 sm:py-28 bg-brand-sand overflow-hidden">
+    <!-- Decorative Dot Matrix Pattern (Top Left) -->
+    <div class="hidden sm:block absolute top-10 left-8 w-44 h-36 bg-dot-pattern opacity-70 pointer-events-none"></div>
+
+    <!-- Far-Right Vertical Handwritten Tagline -->
+    <div class="hidden xl:block absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none select-none">
+      <span class="writing-vertical font-script text-3xl text-brand-charcoal/55 tracking-wide">
+        Storyteller. Dreamer. Explorer.
+      </span>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <!-- Left Column: Overlapping 3-Photo Editorial Collage + Circular Stamp + Golden Signature -->
+        <div class="lg:col-span-6 relative">
+          <div class="relative mx-auto max-w-md sm:max-w-lg h-[400px] sm:h-[450px]">
+            <!-- Main Top-Left Portrait/Photographer Card -->
+            <div
+              class="absolute top-0 left-4 sm:left-8 w-56 sm:w-64 h-64 sm:h-72 rounded-sm overflow-hidden shadow-lg bg-stone-800 z-10">
+              <img
+                src="https://lh3.googleusercontent.com/d/1BN5971OMw6ljpG9YNGFhsS6d9AL9OzQK?auto=format&fit=crop&w=800&q=80"
+                alt="Hafidz Sazili dengan kamera" class="w-full h-full object-cover" />
+            </div>
+
+            <!-- Circular Rotating Badge ("LOVE WHAT YOU DO • DO WHAT YOU LOVE") -->
+            <div
+              class="absolute top-6 right-4 sm:right-10 w-24 h-24 rounded-full bg-brand-sand border border-brand-charcoal/15 flex items-center justify-center z-20 shadow-xs">
+              <svg viewBox="0 0 100 100" class="w-20 h-20 text-brand-charcoal fill-current">
+                <defs>
+                  <path id="circleTextPath" d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" />
+                </defs>
+                <text font-size="8.2" font-weight="700" letter-spacing="2.1">
+                  <textPath href="#circleTextPath">LOVE WHAT YOU DO • DO WHAT YOU LOVE •</textPath>
+                </text>
+              </svg>
+              <svg class="w-5 h-5 absolute text-brand-charcoal" fill="none" stroke="currentColor" stroke-width="1.8"
+                viewBox="0 0 24 24">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </div>
+
+            <!-- Bottom-Left Scenic Landscape Inset -->
+            <div
+              class="absolute bottom-6 left-0 w-40 sm:w-48 h-36 sm:h-40 rounded-sm overflow-hidden shadow-md bg-stone-700 z-20 border-4 border-brand-sand">
+              <img
+                src="https://lh3.googleusercontent.com/d/1sI7FQmLZZW0U1q0AGXOFdunf48wGw_M0?auto=format&fit=crop&w=600&q=80"
+                alt="Golden sunset landscape" class="w-full h-full object-cover" />
+            </div>
+
+            <!-- Bottom-Right Monochrome B&W Portrait Inset -->
+            <div
+              class="absolute bottom-0 right-2 sm:right-6 w-48 sm:w-56 h-52 sm:h-60 rounded-sm overflow-hidden shadow-xl bg-stone-900 z-30 border-4 border-brand-sand">
+              <img
+                src="https://lh3.googleusercontent.com/d/1Qg6DTy3d6pLVqlhmbk9UjNl24j3Wj2JC?auto=format&fit=crop&w=700&q=80"
+                alt="Portrait monochrome Hafidz" class="w-full h-full object-cover grayscale contrast-125" />
+            </div>
+
+            <!-- Golden Handwritten Signature Overlapping Bottom -->
+            <span
+              class="font-script text-5xl sm:text-6xl text-brand-gold absolute -bottom-5 left-28 sm:left-36 z-40 -rotate-6 drop-shadow-xs select-none">
+              Hafidz
+            </span>
+          </div>
+        </div>
+
+        <!-- Right Column: Narrative Bio, 3 Icon Stats, Outlined Button -->
+        <div class="lg:col-span-6">
+          <p class="text-xs font-bold tracking-[0.22em] uppercase text-brand-gold mb-2">
+            ABOUT ME
+          </p>
+          <h2 class="font-display font-bold text-4xl sm:text-5xl uppercase tracking-tight text-brand-charcoal">
+            HI, I'M HAFIDZ
+          </h2>
+          <div class="w-10 h-0.5 bg-brand-charcoal my-5"></div>
+
+          <p class="text-sm sm:text-base text-brand-slate leading-relaxed mb-4">
+            Saya <strong class="text-brand-charcoal font-semibold">Hafidz Sazili</strong> (<span
+              class="font-medium">@hafidzsazili_project</span> / <span class="font-medium">@_iamzili</span>), fotografer
+            dan kreator visual berbasis di Tangerang yang menempuh studi <strong
+              class="text-brand-charcoal font-semibold">Kajian Film, Televisi, dan Media (KFTM) di Global
+              Institute</strong>.
+          </p>
+          <p class="text-sm sm:text-base text-brand-slate leading-relaxed mb-8">
+            Dalam karya fotografi, saya berfokus pada <strong class="text-brand-charcoal font-semibold">pemandangan
+              senja (landscape)</strong> dan kontrol <em>shutter speed</em>—seperti <strong
+              class="text-brand-charcoal font-semibold">panning</strong>, <strong
+              class="text-brand-charcoal font-semibold">light painting</strong>, dan <strong
+              class="text-brand-charcoal font-semibold">freezing</strong>. Di bidang produksi film dan acara, saya
+            berperan sebagai <strong class="text-brand-charcoal font-semibold">Sutradara &amp; DOP</strong> pada film
+            <em>"1 Dompet 2 Kepala"</em> serta <strong class="text-brand-charcoal font-semibold">Cameraman</strong> di
+            <em>Seminar Nasional Global Institute</em>.
+          </p>
+
+          <!-- 3 Icon Metrics Row (Matching Reference Layout) -->
+          <div class="grid grid-cols-3 gap-4 sm:gap-6 py-4 mb-8 border-y border-brand-sanddark">
+            <div class="flex items-start gap-3">
+              <svg class="w-7 h-7 text-brand-charcoal/75 shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                stroke-width="1.6" viewBox="0 0 24 24">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              <div>
+                <span
+                  class="font-display font-bold text-xl sm:text-2xl text-brand-charcoal block leading-none">X-A5</span>
+                <span class="text-[11px] text-brand-slate mt-1 block">Fujifilm Gear</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <svg class="w-7 h-7 text-brand-charcoal/75 shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                stroke-width="1.6" viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <div>
+                <span
+                  class="font-display font-bold text-2xl sm:text-3xl text-brand-charcoal block leading-none">15+</span>
+                <span class="text-[11px] text-brand-slate mt-1 block">Visual Series</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <svg class="w-7 h-7 text-brand-charcoal/75 shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                stroke-width="1.6" viewBox="0 0 24 24">
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                <line x1="7" y1="2" x2="7" y2="22"></line>
+                <line x1="17" y1="2" x2="17" y2="22"></line>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+              </svg>
+              <div>
+                <span
+                  class="font-display font-bold text-2xl sm:text-3xl text-brand-charcoal block leading-none">DOP</span>
+                <span class="text-[11px] text-brand-slate mt-1 block">Film &amp; Stage</span>
+              </div>
+            </div>
+          </div>
+
+          <a href="#contact"
+            class="inline-block border border-brand-charcoal text-brand-charcoal hover:bg-brand-charcoal hover:text-white font-bold text-xs tracking-[0.16em] uppercase px-7 py-3.5 rounded-sm transition-colors">
+            HUBUNGI SAYA
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- ==================== FOLLOW MY JOURNEY ON INSTAGRAM STRIP ==================== -->
+  <section class="bg-brand-sand border-t border-brand-sanddark py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <!-- Left IG Callout -->
+        <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+          class="flex items-center gap-4 group shrink-0">
+          <div
+            class="w-11 h-11 rounded-md border border-brand-charcoal/20 bg-white flex items-center justify-center text-brand-charcoal group-hover:bg-brand-gold transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-bold text-base tracking-wider uppercase text-brand-charcoal">
+              FOLLOW MY JOURNEY ON INSTAGRAM
+            </p>
+            <p class="text-xs text-brand-slate group-hover:text-brand-charcoal transition-colors">
+              @hafidzsazili_project ↗
+            </p>
+          </div>
+        </a>
+
+        <!-- Right 5-Photo Square Strip -->
+        <div class="grid grid-cols-5 gap-2.5 sm:gap-3.5 w-full lg:w-auto">
+          <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+            class="aspect-square w-full sm:w-28 rounded-xs overflow-hidden bg-stone-800 group">
+            <img
+              src="https://lh3.googleusercontent.com/d/1ZBsJNnfkZgSCVqosgWuYNWEN7aCLBJMo?auto=format&fit=crop&w=400&q=75"
+              alt="Jingga Sunset IG" class="card-zoom w-full h-full object-cover" />
+          </a>
+
+          </a>
+          <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+            class="aspect-square w-full sm:w-28 rounded-xs overflow-hidden bg-stone-800 group">
+            <img
+              src="https://lh3.googleusercontent.com/d/1jo__DRDtR2FexYxLGFGhTZoreB-Pp9oG?auto=format&fit=crop&w=400&q=75"
+              alt="Light Painting IG" class="card-zoom w-full h-full object-cover" />
+          </a>
+          <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+            class="aspect-square w-full sm:w-28 rounded-xs overflow-hidden bg-stone-800 group">
+            <img
+              src="https://lh3.googleusercontent.com/d/1sI7FQmLZZW0U1q0AGXOFdunf48wGw_M0?auto=format&fit=crop&w=400&q=75"
+              alt="Freezing Water IG" class="card-zoom w-full h-full object-cover" />
+          </a>
+          <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+            class="aspect-square w-full sm:w-28 rounded-xs overflow-hidden bg-stone-800 group">
+            <img
+              src="https://lh3.googleusercontent.com/d/1x1pNCcRRMhIWZoV1bg-Ip0kE52ZnRD-i?auto=format&fit=crop&w=400&q=75"
+              alt="Macro Nature IG" class="card-zoom w-full h-full object-cover" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DIRECT CONTACT / BOOKING STRIP (STAY INSPIRED LAYOUT) ==================== -->
+  <section id="contact" class="bg-white border-y border-brand-line py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <!-- Left Icon + Heading -->
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 rounded-full border border-brand-charcoal/20 flex items-center justify-center text-brand-charcoal shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-10 6L2 7"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-xl tracking-wide uppercase text-brand-charcoal">
+              LET'S WORK TOGETHER
+            </h2>
+            <p class="text-xs sm:text-sm text-brand-slate mt-0.5">
+              Terbuka untuk dokumentasi acara, produksi film/DOP, dan sesi fotografi. Hubungi langsung via Email atau
+              WhatsApp.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Action Bar (Email Copy Input + Golden Yellow WhatsApp CTA) -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+          <div
+            class="flex items-center justify-between border border-brand-line bg-brand-cardbg px-4 py-3 rounded-sm min-w-[250px]">
+            <span class="text-xs sm:text-sm font-medium text-brand-charcoal select-all">hafidzsazili07@gmail.com</span>
+            <button type="button" id="copy-email-btn"
+              class="ml-3 text-[11px] font-bold uppercase tracking-wider text-brand-slate hover:text-brand-charcoal">
+              SALIN
+            </button>
+          </div>
+          <a href="https://wa.me/6285718574167?text=Halo%20Hafidz%2C%20saya%20tertarik%20untuk%20berkolaborasi%20atau%20memesan%20jasa%20fotografi."
+            target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-brand-goldhover text-brand-charcoal font-bold text-xs tracking-[0.14em] uppercase px-6 py-3.5 rounded-sm transition-colors whitespace-nowrap">
+            <span>WHATSAPP: 0857-1857-4167</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MULTI-COLUMN EDITORIAL FOOTER ==================== -->
+  <footer class="bg-white py-14 text-xs text-brand-slate">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 pb-10 border-b border-brand-line">
+        <!-- Col 1: Brand -->
+        <div class="lg:col-span-3">
+          <a href="#home" class="inline-flex flex-col leading-none">
+            <span class="font-display font-bold text-2xl tracking-wider text-brand-charcoal">HAFIDZ</span>
+            <span
+              class="text-[9px] font-semibold tracking-[0.32em] text-brand-slate uppercase mt-0.5">PHOTOGRAPHER</span>
+          </a>
+          <p class="mt-4 leading-relaxed text-brand-slate max-w-xs">
+            Capturing life through light &amp; lens. Mahasiswa Kajian Film, Televisi, dan Media — Global Institute.
+          </p>
+        </div>
+
+        <!-- Col 2: Pages -->
+        <div class="lg:col-span-2">
+          <h3 class="font-bold tracking-[0.14em] uppercase text-brand-charcoal mb-3.5">PAGES</h3>
+          <ul class="space-y-2">
+            <li><a href="#home" class="hover:text-brand-charcoal transition-colors">Home</a></li>
+            <li><a href="#portfolio" class="hover:text-brand-charcoal transition-colors">Portfolio</a></li>
+            <li><a href="#about" class="hover:text-brand-charcoal transition-colors">About Me</a></li>
+            <li><a href="#contact" class="hover:text-brand-charcoal transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Portfolio Categories -->
+        <div class="lg:col-span-2">
+          <h3 class="font-bold tracking-[0.14em] uppercase text-brand-charcoal mb-3.5">PORTFOLIO</h3>
+          <ul class="space-y-2">
+            <li><button type="button" data-filter-target="Panning & Motion"
+                class="category-card-trigger hover:text-brand-charcoal transition-colors">Panning &amp; Motion</button>
+            </li>
+            <li><button type="button" data-filter-target="Landscape & Nature"
+                class="category-card-trigger hover:text-brand-charcoal transition-colors">Landscape &amp;
+                Sunset</button></li>
+            <li><button type="button" data-filter-target="Light Painting & Freezing"
+                class="category-card-trigger hover:text-brand-charcoal transition-colors">Light Painting</button></li>
+            <li><button type="button" data-filter-target="Light Painting & Freezing"
+                class="category-card-trigger hover:text-brand-charcoal transition-colors">High-Speed Freezing</button>
+            </li>
+            <li><button type="button" data-filter-target="Film, Stage & Portrait"
+                class="category-card-trigger hover:text-brand-charcoal transition-colors">Film &amp; Stage DOP</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Camera Gear & Studio CMS -->
+        <div class="lg:col-span-2">
+
+          <!-- Col 4: Camera Gear -->
+          <div class="lg:col-span-2">
+            <h3 class="font-bold tracking-[0.14em] uppercase text-brand-charcoal mb-3.5">CAMERA GEAR</h3>
+            <ul class="space-y-2">
+              <li class="font-medium text-brand-charcoal">Fujifilm X-A5</li>
+            </ul>
+          </div>
+
+          <!-- Col 5: Let's Connect -->
+          <div class="lg:col-span-3">
+            <h3 class="font-bold tracking-[0.14em] uppercase text-brand-charcoal mb-3.5">LET'S CONNECT</h3>
+            <div class="flex items-center gap-3 mb-4">
+              <a href="https://instagram.com/hafidzsazili_project" target="_blank" rel="noopener noreferrer"
+                aria-label="Instagram"
+                class="w-8 h-8 rounded-full border border-brand-line hover:border-brand-charcoal flex items-center justify-center text-brand-charcoal transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+                  <circle cx="12" cy="12" r="4"></circle>
+                </svg>
+              </a>
+              <a href="https://wa.me/6285718574167" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
+                class="w-8 h-8 rounded-full border border-brand-line hover:border-brand-charcoal flex items-center justify-center text-brand-charcoal transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path
+                    d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                  </path>
+                </svg>
+              </a>
+              <a href="mailto:hafidzsazili07@gmail.com" aria-label="Email"
+                class="w-8 h-8 rounded-full border border-brand-line hover:border-brand-charcoal flex items-center justify-center text-brand-charcoal transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <path d="m22 7-10 6L2 7"></path>
+                </svg>
+              </a>
+            </div>
+
+            <p class="mt-1">Tangerang, Indonesia</p>
+          </div>
+        </div>
+
+        <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-brand-slate/80">
+          <span>© 2026 Hafidz Sazili All rights reserved.</span>
+          <span>Editorial Photography &amp; Cinematography Portfolio</span>
+        </div>
+      </div>
+  </footer>
+
+  <!-- ==================== LIGHTBOX MODAL (FULL-SCREEN EXHIBITION VIEW) ==================== -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6" role="dialog"
+    aria-modal="true" aria-labelledby="lb-title">
+    <div id="lightbox-backdrop" class="fixed inset-0 bg-black/90 backdrop-blur-xs"></div>
+
+    <div
+      class="relative z-10 w-full max-w-5xl bg-white rounded-sm overflow-hidden shadow-2xl max-h-[92vh] flex flex-col">
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between px-5 py-3.5 border-b border-brand-line bg-brand-sand">
+        <span id="lb-counter" class="text-xs font-bold tracking-widest uppercase text-brand-slate">01 / 10</span>
+        <div class="flex items-center gap-2">
+          <button type="button" id="lb-prev"
+            class="px-3 py-1.5 bg-white border border-brand-line hover:border-brand-charcoal text-xs font-bold uppercase tracking-wider rounded-xs transition-colors">
+            ← PREV
+          </button>
+          <button type="button" id="lb-next"
+            class="px-3 py-1.5 bg-white border border-brand-line hover:border-brand-charcoal text-xs font-bold uppercase tracking-wider rounded-xs transition-colors">
+            NEXT →
+          </button>
+          <button type="button" id="lb-close"
+            class="ml-2 px-3.5 py-1.5 bg-brand-charcoal text-white text-xs font-bold uppercase tracking-wider rounded-xs hover:opacity-90 transition-opacity">
+            TUTUP ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 overflow-y-auto">
+        <div
+          class="lg:col-span-8 bg-stone-950 flex items-center justify-center p-4 sm:p-6 min-h-[280px] sm:min-h-[440px]">
+          <img id="lb-img" src="" alt="" class="max-h-[68vh] w-auto max-w-full object-contain" />
+        </div>
+        <div class="lg:col-span-4 p-6 sm:p-8 flex flex-col justify-between bg-white">
+          <div>
+            <span id="lb-cat"
+              class="inline-block bg-brand-gold text-brand-charcoal font-bold text-[10px] tracking-[0.14em] uppercase px-2.5 py-1 rounded-xs mb-4">
+              CATEGORY
+            </span>
+            <h3 id="lb-title"
+              class="font-display font-bold text-2xl uppercase tracking-tight text-brand-charcoal leading-snug mb-5">
+              Title
+            </h3>
+            <div class="space-y-4 border-t border-brand-line pt-4 text-sm">
+              <div>
+                <span class="text-[10px] font-bold tracking-[0.16em] uppercase text-brand-slate block mb-1">PERAN &amp;
+                  KAMERA</span>
+                <p id="lb-role" class="font-semibold text-brand-charcoal">Role</p>
+              </div>
+              <div>
+                <span class="text-[10px] font-bold tracking-[0.16em] uppercase text-brand-slate block mb-1">TANGGAL /
+                  PROJEK</span>
+                <p id="lb-year" class="text-brand-charcoal">2025</p>
+              </div>
+              <div>
+                <span class="text-[10px] font-bold tracking-[0.16em] uppercase text-brand-slate block mb-1">CATATAN
+                  TEKNIS &amp; CERITA</span>
+                <p id="lb-notes" class="text-brand-slate leading-relaxed">Notes</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mt-6 pt-4 border-t border-brand-line flex items-center justify-between text-[11px] font-semibold text-brand-slate">
+            <span>@hafidzsazili_project</span>
+            <span>ESC / SWIPE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== STUDIO CMS MODAL (UPLOAD & MANAGE PHOTOS) ==================== -->
+  <div id="studio-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6" role="dialog"
+    aria-modal="true">
+    <div id="studio-backdrop" class="fixed inset-0 bg-black/80 backdrop-blur-xs"></div>
+
+    <div
+      class="relative z-10 w-full max-w-4xl bg-white rounded-sm shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between px-6 py-4 bg-brand-sand border-b border-brand-sanddark">
+        <div>
+          <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-brand-slate block">STUDIO WORKSPACE</span>
+          <h3 class="font-display font-bold text-xl uppercase text-brand-charcoal">Kelola Galeri Portofolio</h3>
+        </div>
+        <button type="button" id="close-studio-btn"
+          class="px-3.5 py-1.5 bg-brand-charcoal text-white text-xs font-bold uppercase tracking-wider rounded-xs">
+          SELESAI ✕
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Form Tambah Foto -->
+        <form id="studio-add-form" class="lg:col-span-5 space-y-3.5">
+          <h4 class="font-display font-bold text-base uppercase text-brand-charcoal">Tambah Karya Baru</h4>
+          <div>
+            <label for="st-file" class="block text-xs font-semibold mb-1">Pilih File Foto dari Perangkat</label>
+            <input type="file" id="st-file" accept="image/*"
+              class="w-full text-xs text-brand-slate file:mr-3 file:py-2 file:px-3 file:rounded-xs file:border-0 file:text-xs file:font-bold file:bg-brand-gold file:text-brand-charcoal cursor-pointer" />
+          </div>
+          <div>
+            <label for="st-title" class="block text-xs font-semibold mb-1">Judul Karya *</label>
+            <input type="text" id="st-title" required placeholder="Contoh: Jingga Sunset"
+              class="w-full px-3 py-2 border border-brand-line rounded-xs text-sm focus:outline-none focus:border-brand-charcoal" />
+          </div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label for="st-cat" class="block text-xs font-semibold mb-1">Kategori *</label>
+              <select id="st-cat"
+                class="w-full px-2.5 py-2 border border-brand-line rounded-xs text-xs focus:outline-none focus:border-brand-charcoal">
+                <option value="Panning & Motion">Panning &amp; Motion</option>
+                <option value="Landscape & Nature">Landscape &amp; Nature</option>
+                <option value="Light Painting & Freezing">Light Painting &amp; Freezing</option>
+                <option value="Film, Stage & Portrait">Film, Stage &amp; Portrait</option>
+              </select>
+            </div>
+            <div>
+              <label for="st-year" class="block text-xs font-semibold mb-1">Tanggal / Tahun *</label>
+              <input type="text" id="st-year" required value="2026"
+                class="w-full px-2.5 py-2 border border-brand-line rounded-xs text-xs focus:outline-none focus:border-brand-charcoal" />
+            </div>
+          </div>
+          <div>
+            <label for="st-role" class="block text-xs font-semibold mb-1">Peran &amp; Kamera *</label>
+            <input type="text" id="st-role" required placeholder="Contoh: Photographer • Fujifilm X-A5"
+              class="w-full px-3 py-2 border border-brand-line rounded-xs text-sm focus:outline-none focus:border-brand-charcoal" />
+          </div>
+          <div>
+            <label for="st-notes" class="block text-xs font-semibold mb-1">Catatan Teknis *</label>
+            <textarea id="st-notes" rows="2" required placeholder="Cerita singkat di balik foto ini..."
+              class="w-full px-3 py-2 border border-brand-line rounded-xs text-sm focus:outline-none focus:border-brand-charcoal"></textarea>
+          </div>
+          <button type="submit" id="st-submit"
+            class="w-full py-2.5 bg-brand-gold hover:bg-brand-goldhover text-brand-charcoal font-bold text-xs uppercase tracking-wider rounded-xs transition-colors">
+            + PUBLIKASIKAN KE GALERI
+          </button>
+        </form>
+
+        <!-- Daftar Karya Tayang -->
+        <div class="lg:col-span-7">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-display font-bold text-base uppercase text-brand-charcoal">Daftar Karya Tayang</h4>
+            <span id="studio-total-badge" class="text-xs font-semibold text-brand-slate">10 Karya</span>
+          </div>
+          <div id="studio-items-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toast"
+    class="fixed bottom-5 right-5 z-50 translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-brand-charcoal text-white px-4 py-3 rounded-sm shadow-lg text-xs font-semibold flex items-center gap-2.5">
+    <span class="w-2 h-2 rounded-full bg-brand-gold"></span>
+    <span id="toast-msg">Notifikasi</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script type="module">
+    const STORAGE_KEY = "hafidz_editorial_portfolio_v1";
+
+    const DEFAULT_WORKS = [
+      {
+        id: "work-1",
+        title: "Jingga — Golden Sunset Horizon",
+        category: "Landscape & Nature",
+        year: "31 Okt 2025",
+        role: "Landscape Photographer • Fujifilm X-A5",
+        notes: "Menangkap gradasi langit jingga keemasan dengan pantulan siluet pepohonan di permukaan air tenang menjelang matahari terbenam.",
+        imageUrl: "https://lh3.googleusercontent.com/d/1sI7FQmLZZW0U1q0AGXOFdunf48wGw_M0?auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        id: "work-2",
+        title: "Back to Radar — Street Panning Series",
+        category: "Panning & Motion",
+        year: "16 Nov 2025",
+        role: "Motion Photographer • Fujifilm X-A5",
+        notes: "Teknik slow-shutter panning mengikuti laju pengendara motor di jalur rindang kawasan Radar, menjaga subjek tetap tajam di tengah latar bergerak.",
+        imageUrl: "https://lh3.googleusercontent.com/d/10zeTZmBaaCgotoalo-XzsivS93PsWN8L?auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        id: "work-3",
+        title: "Blue Light Trails — Studio Light Painting",
+        category: "Light Painting",
+        year: "22 Nov 2025",
+        role: "Experimental Photographer • Fujifilm X-A5",
+        notes: "Eksperimen long-exposure dalam ruangan gelap menggunakan sumber cahaya biru untuk melukis jejak garis kinetik di sekeliling subjek.",
+        imageUrl: "https://lh3.googleusercontent.com/d/1jo__DRDtR2FexYxLGFGhTZoreB-Pp9oG?auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        id: "work-4",
+        title: "Hydro Splash — High-Speed Freezing",
+        category: "Freezing",
+        year: "22 Nov 2025",
+        role: "High-Speed Photographer • Fujifilm X-A5",
+        notes: "Penggunaan shutter speed tinggi untuk membekukan pecahan butiran air di dalam mangkuk kaca secara tajam dalam sepersekian detik.",
+        imageUrl: "https://lh3.googleusercontent.com/d/1wmdA3DS8Keh8d0CiJPIpHA92JKF9Yfof?auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        id: "work-5",
+        title: "Film '1 Dompet 2 Kepala' — Visual Framing",
+        category: "Film, Stage & Portrait",
+        year: "2026",
+        role: "Sutradara & Director of Photography (DOP)",
+        notes: "Projek UAS Mata Kuliah Media Planning (Semester 2) • Perancangan tata kamera, blocking aktor, serta pencahayaan naratif film.",
+        imageUrl: "https://lh3.googleusercontent.com/d/1Rbqrx8uFSsg_p3veYMJNmJO9aWkBBtna?auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        id: "work-6",
+        title: "Seminar Nasional — Global Institute",
+        category: "Film, Stage & Portrait",
+        year: "14 Nov 2026",
+        role: "Cameraman & Stage Visual Coverage",
+        notes: "Dokumentasi visual panggung utama, pembicara, dan atmosfer peserta dalam acara Seminar Nasional Global Institute.",
+        imageUrl: "https://lh3.googleusercontent.com/d/1MkEwByYPe_BazccAPiiqQpD_Ph1kxlEE?auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        id: "work-7",
+        title: "Cahaya Terakhir Sebelum Gelap Mengambil Alih",
+        category: "Landscape & Nature",
+        year: "28 Okt 2025",
+        role: "Landscape Photographer • Fujifilm X-A5",
+        notes: "Komposisi wide-angle menangkap transisi langit senja biru keemasan dan refleksi awan di atas permukaan danau.",
+        imageUrl: "https://lh3.googleusercontent.com/d/1ZBsJNnfkZgSCVqosgWuYNWEN7aCLBJMo?auto=format&fit=crop&w=1000&q=80"
+      },
+
+      {
+        id: "work-9",
+        title: "Di Sela Retakan Batu — Botanical Macro",
+        category: "Landscape & Nature",
+        year: "18 Okt 2025",
+        role: "Nature & Macro Photographer • Fujifilm X-A5",
+        notes: "Detail close-up tumbuhan lumut hijau yang tumbuh di celah bebatuan dengan pencahayaan alami lembut.",
+        imageUrl: "https://lh3.googleusercontent.com/d/1x1pNCcRRMhIWZoV1bg-Ip0kE52ZnRD-i?auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        id: "work-10",
+        title: "Studio Portrait Study",
+        category: "Film, Stage & Portrait",
+        year: "18 Okt 2025",
+        role: "Portrait Photographer • Fujifilm X-A5",
+        notes: "Eksplorasi potret ekspresif berlatar studio maupun busana tradisional dengan pencahayaan seimbang.",
+        imageUrl: "https://lh3.googleusercontent.com/d/14qMD2macp1gOHIcSrnYWtZZVbW3_bZLv?auto=format&fit=crop&w=1000&q=80"
+      }
+    ];
+
+    let works = [];
+    let activeFilter = "all";
+    let lightboxIdx = 0;
+    let touchStartX = 0;
+
+    // Carousel runtime state
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const supportsSiblingCount = typeof CSS !== "undefined" && CSS.supports("order: sibling-count()");
+    const supportsScrollEnd = "onscrollend" in window;
+    let carouselLooping = false;
+    let carouselScrollable = false;
+    let activeSlideIndex = 0;
+    let lastSettledIndex = 0;
+    let pendingTargetIndex = null;
+    let requestedScrollLeft = null;
+    let isMarkerTrip = false;
+    let queuedNavDirection = 0;
+    let scrollRafId = 0;
+    let scrollDebounceId = 0;
+    let overflowRestoreRafA = 0;
+    let overflowRestoreRafB = 0;
+
+    function loadWorks() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            works = parsed;
+            return;
+          }
+        }
+      } catch (e) { }
+      works = [...DEFAULT_WORKS];
+    }
+
+    function saveWorks() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(works));
+      } catch (e) {
+        showToast("Penyimpanan browser penuh. Gunakan ukuran foto yang lebih ringan.");
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      const text = document.getElementById("toast-msg");
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.classList.remove("translate-y-20", "opacity-0");
+      clearTimeout(window.__toastT);
+      window.__toastT = setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 2800);
+    }
+
+    function esc(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function getFiltered() {
+      if (activeFilter === "all") return works;
+      return works.filter((w) => w.category === activeFilter);
+    }
+
+    function getSlides(track) {
+      return Array.from(track.querySelectorAll(".gallery-item"));
+    }
+
+    function getVisualSlides(track) {
+      return getSlides(track).sort((a, b) => a.offsetLeft - b.offsetLeft);
+    }
+
+    function getSlideCenterDelta(track, slide) {
+      const trackRect = track.getBoundingClientRect();
+      const slideRect = slide.getBoundingClientRect();
+      return (slideRect.left + slideRect.width / 2) - (trackRect.left + trackRect.width / 2);
+    }
+
+    function getNearestSlide(track) {
+      const slides = getSlides(track);
+      if (!slides.length) return null;
+      const trackRect = track.getBoundingClientRect();
+      const trackCenter = trackRect.left + trackRect.width / 2;
+      let bestSlide = slides[0];
+      let bestDist = Infinity;
+
+      for (const slide of slides) {
+        const rect = slide.getBoundingClientRect();
+        const dist = Math.abs((rect.left + rect.width / 2) - trackCenter);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestSlide = slide;
+        }
+      }
+
+      return {
+        slide: bestSlide,
+        domIndex: Number(bestSlide.dataset.idx)
+      };
+    }
+
+    function updateMarkerUI(domIndex, total) {
+      const markersNav = document.getElementById("carousel-markers");
+      const indicator = document.getElementById("carousel-slide-indicator");
+      activeSlideIndex = domIndex;
+
+      if (markersNav) {
+        markersNav.querySelectorAll(".carousel-marker-btn").forEach((btn, idx) => {
+          if (idx === domIndex) {
+            btn.setAttribute("aria-current", "true");
+          } else {
+            btn.removeAttribute("aria-current");
+          }
+        });
+      }
+
+      if (indicator) {
+        indicator.textContent = total > 0
+          ? `SLIDE ${String(domIndex + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`
+          : "SLIDE 00 / 00";
+      }
+    }
+
+    function updateNavButtonStates(domIndex, total) {
+      const prevBtn = document.getElementById("carousel-prev");
+      const nextBtn = document.getElementById("carousel-next");
+      if (!prevBtn || !nextBtn) return;
+
+      if (!carouselScrollable || total <= 1) {
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        return;
+      }
+
+      if (carouselLooping) {
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+        return;
+      }
+
+      const prevWasFocused = document.activeElement === prevBtn;
+      const nextWasFocused = document.activeElement === nextBtn;
+      const disablePrev = domIndex <= 0;
+      const disableNext = domIndex >= total - 1;
+
+      prevBtn.disabled = disablePrev;
+      nextBtn.disabled = disableNext;
+
+      if (disablePrev && prevWasFocused && !disableNext) {
+        nextBtn.focus();
+      } else if (disableNext && nextWasFocused && !disablePrev) {
+        prevBtn.focus();
+      }
+    }
+
+    function applyParkingWithCompensation(track, nextCurrentValue, settledSlide, useOverflowLock) {
+      const slides = getSlides(track);
+      if (!slides.length || !settledSlide) return;
+
+      const first = slides[0];
+      const last = slides[slides.length - 1];
+      const prevFirstOrder = getComputedStyle(first).order;
+      const prevLastOrder = getComputedStyle(last).order;
+
+      cancelAnimationFrame(overflowRestoreRafA);
+      cancelAnimationFrame(overflowRestoreRafB);
+
+      const beforeLeft = settledSlide.offsetLeft;
+      track.style.scrollSnapType = "none";
+      track.style.scrollBehavior = "auto";
+      if (useOverflowLock) {
+        track.style.overflowX = "hidden";
+      }
+
+      if (nextCurrentValue === "initial") {
+        track.style.setProperty("--current", "initial");
+      } else {
+        track.style.setProperty("--current", String(nextCurrentValue));
+      }
+
+      const newFirstOrder = getComputedStyle(first).order;
+      const newLastOrder = getComputedStyle(last).order;
+      if (prevFirstOrder !== newFirstOrder || prevLastOrder !== newLastOrder) {
+        const afterLeft = settledSlide.offsetLeft;
+        const diff = afterLeft - beforeLeft;
+        if (diff !== 0) {
+          track.scrollLeft += diff;
+        }
+      }
+
+      track.style.scrollSnapType = "";
+      track.style.scrollBehavior = "";
+
+      if (useOverflowLock) {
+        overflowRestoreRafA = requestAnimationFrame(() => {
+          overflowRestoreRafB = requestAnimationFrame(() => {
+            track.style.overflowX = "";
+          });
+        });
+      }
+    }
+
+    function scrollTrackToSlide(track, slide, instant = false) {
+      const delta = getSlideCenterDelta(track, slide);
+      if (Math.abs(delta) < 1) return false;
+      const useAuto = instant || prefersReducedMotion.matches;
+      requestedScrollLeft = track.scrollLeft;
+      track.scrollBy({
+        left: delta,
+        behavior: useAuto ? "auto" : "smooth"
+      });
+      return true;
+    }
+
+    function announceSlideChange(domIndex, total) {
+      const status = document.getElementById("carousel-status");
+      if (!status || total <= 0) return;
+      status.textContent = `Slide ${domIndex + 1} dari ${total}`;
+    }
+
+    function handleCarouselSettle(announce = true) {
+      const track = document.getElementById("curated-gallery-grid");
+      if (!track) return;
+      const slides = getSlides(track);
+      const total = slides.length;
+      if (!total) return;
+
+      const nearest = getNearestSlide(track);
+      if (!nearest) return;
+
+      // Ignore stale settle belonging to a compensating scroll when another scroll was just requested
+      if (
+        pendingTargetIndex !== null &&
+        requestedScrollLeft !== null &&
+        Math.abs(track.scrollLeft - requestedScrollLeft) < 1 &&
+        nearest.domIndex !== pendingTargetIndex
+      ) {
+        return;
+      }
+
+      const settledIndex = nearest.domIndex;
+      const settledSlide = nearest.slide;
+      const wasMarkerTrip = isMarkerTrip;
+      const queuedDir = queuedNavDirection;
+
+      pendingTargetIndex = null;
+      requestedScrollLeft = null;
+      isMarkerTrip = false;
+      queuedNavDirection = 0;
+
+      if (carouselLooping) {
+        applyParkingWithCompensation(track, settledIndex, settledSlide, !wasMarkerTrip && queuedDir === 0);
+      }
+
+      updateMarkerUI(settledIndex, total);
+      updateNavButtonStates(settledIndex, total);
+
+      if (announce && settledIndex !== lastSettledIndex) {
+        announceSlideChange(settledIndex, total);
+      }
+      lastSettledIndex = settledIndex;
+
+      if (queuedDir !== 0) {
+        stepCarousel(queuedDir);
+      }
+    }
+
+    function stepCarousel(dir) {
+      const track = document.getElementById("curated-gallery-grid");
+      if (!track || !carouselScrollable) return;
+      const slides = getSlides(track);
+      const total = slides.length;
+      if (total <= 1) return;
+
+      if (isMarkerTrip) {
+        queuedNavDirection = dir;
+        return;
+      }
+
+      const visualSlides = getVisualSlides(track);
+      const baseDomIndex = pendingTargetIndex !== null
+        ? pendingTargetIndex
+        : (getNearestSlide(track)?.domIndex ?? 0);
+      const currentVisualIdx = visualSlides.findIndex((el) => Number(el.dataset.idx) === baseDomIndex);
+      if (currentVisualIdx === -1) return;
+
+      let nextVisualIdx = currentVisualIdx + dir;
+      if (!carouselLooping) {
+        nextVisualIdx = Math.max(0, Math.min(visualSlides.length - 1, nextVisualIdx));
+        if (nextVisualIdx === currentVisualIdx) return;
+      } else {
+        if (nextVisualIdx < 0 || nextVisualIdx >= visualSlides.length) return;
+      }
+
+      const targetSlide = visualSlides[nextVisualIdx];
+      const targetDomIndex = Number(targetSlide.dataset.idx);
+      pendingTargetIndex = targetDomIndex;
+      updateMarkerUI(targetDomIndex, total);
+
+      const didScroll = scrollTrackToSlide(track, targetSlide);
+      if (!didScroll || prefersReducedMotion.matches) {
+        handleCarouselSettle(true);
+      }
+    }
+
+    function goToSlideByMarker(targetDomIndex) {
+      const track = document.getElementById("curated-gallery-grid");
+      if (!track || !carouselScrollable) return;
+      const slides = getSlides(track);
+      const total = slides.length;
+      const targetSlide = slides[targetDomIndex];
+      if (!targetSlide) return;
+
+      const currentNearest = getNearestSlide(track);
+      const currentDomIndex = currentNearest ? currentNearest.domIndex : 0;
+
+      if (carouselLooping && targetDomIndex !== currentDomIndex) {
+        isMarkerTrip = true;
+        queuedNavDirection = 0;
+        applyParkingWithCompensation(track, "initial", currentNearest?.slide || targetSlide, false);
+      }
+
+      pendingTargetIndex = targetDomIndex;
+      updateMarkerUI(targetDomIndex, total);
+
+      const didScroll = scrollTrackToSlide(track, targetSlide);
+      if (!didScroll || prefersReducedMotion.matches) {
+        handleCarouselSettle(true);
+      }
+    }
+
+    function syncCarouselLayout(resetToFirst = false) {
+      const track = document.getElementById("curated-gallery-grid");
+      const markersNav = document.getElementById("carousel-markers");
+      const status = document.getElementById("carousel-status");
+      if (!track) return;
+
+      const slides = getSlides(track);
+      const total = slides.length;
+
+      pendingTargetIndex = null;
+      requestedScrollLeft = null;
+      isMarkerTrip = false;
+      queuedNavDirection = 0;
+      track.classList.remove("is-looping");
+      track.style.removeProperty("--current");
+      track.style.overflowX = "";
+      track.style.scrollSnapType = "";
+      track.style.scrollBehavior = "";
+
+      if (resetToFirst) {
+        track.scrollLeft = 0;
+        lastSettledIndex = 0;
+        activeSlideIndex = 0;
+        if (status) status.textContent = "";
+      }
+
+      if (!total) {
+        carouselScrollable = false;
+        carouselLooping = false;
+        if (markersNav) markersNav.innerHTML = "";
+        updateMarkerUI(0, 0);
+        updateNavButtonStates(0, 0);
+        return;
+      }
+
+      if (!supportsSiblingCount) {
+        track.style.setProperty("--children-count", String(total));
+      }
+
+      carouselScrollable = track.scrollWidth > track.clientWidth + 4;
+      // Continuous looping requires >= 4 slides (so front and back parking never overlap) and scrollable overflow
+      carouselLooping = carouselScrollable && total >= 4;
+
+      if (markersNav) {
+        if (!carouselScrollable) {
+          markersNav.innerHTML = "";
+        } else {
+          markersNav.innerHTML = slides
+            .map((slide, idx) => {
+              const label = slide.dataset.markerName || `Ke slide ${idx + 1}`;
+              return `
+                <button type="button" class="carousel-marker-btn" data-slide-idx="${idx}" aria-label="${esc(label)}">
+                  <span class="carousel-marker-dot" aria-hidden="true"></span>
+                </button>
+              `;
+            })
+            .join("");
+
+          markersNav.querySelectorAll(".carousel-marker-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              goToSlideByMarker(Number(btn.dataset.slideIdx));
+            });
+          });
+        }
+      }
+
+      const startIdx = resetToFirst ? 0 : Math.min(activeSlideIndex, total - 1);
+      const startSlide = slides[startIdx] || slides[0];
+
+      if (carouselLooping) {
+        track.classList.add("is-looping");
+        applyParkingWithCompensation(track, startIdx, startSlide, false);
+        scrollTrackToSlide(track, startSlide, true);
+      } else if (carouselScrollable) {
+        track.classList.remove("justify-center");
+        if (resetToFirst) {
+          track.scrollLeft = 0;
+        }
+      } else {
+        track.classList.toggle("justify-center", total < 3);
+      }
+
+      const settled = getNearestSlide(track);
+      const syncedIdx = carouselScrollable && settled ? settled.domIndex : 0;
+      lastSettledIndex = syncedIdx;
+      updateMarkerUI(syncedIdx, total);
+      updateNavButtonStates(syncedIdx, total);
+    }
+
+    function renderGallery() {
+      const grid = document.getElementById("curated-gallery-grid");
+      const label = document.getElementById("gallery-count-label");
+      const items = getFiltered();
+
+      if (label) {
+        label.textContent = `${items.length} CURATED WORKS`;
+      }
+
+      if (items.length === 0) {
+        grid.innerHTML = `<div class="w-full py-12 text-center text-sm text-brand-slate">Belum ada karya pada kategori ini.</div>`;
+        syncCarouselLayout(true);
+        return;
+      }
+
+      grid.innerHTML = items
+        .map(
+          (item, i) => `
+          <article data-idx="${i}" role="group" aria-roledescription="slide" aria-label="${i + 1} dari ${items.length}" data-marker-name="Ke slide ${i + 1}: ${esc(item.title)}" class="gallery-item group cursor-pointer bg-brand-cardbg rounded-sm overflow-hidden border border-brand-line/70 hover:shadow-md transition-all flex flex-col">
+            <div class="relative aspect-[4/3] overflow-hidden bg-stone-900">
+              <img
+                src="${esc(item.imageUrl)}"
+                alt="${esc(item.title)}"
+                loading="lazy"
+                onerror="this.src='https://placehold.co/900x675/1A1A1A/F3EFEA?text=HAFIDZ+PORTFOLIO'"
+                class="card-zoom w-full h-full object-cover"
+              />
+              <span class="absolute top-3 left-3 bg-white/95 text-brand-charcoal font-bold text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-xs shadow-xs">
+                ${esc(item.category)}
+              </span>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-base text-brand-charcoal group-hover:underline underline-offset-4 leading-snug">
+                  ${esc(item.title)}
+                </h3>
+                <p class="text-xs text-brand-slate mt-1.5">${esc(item.role)}</p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-brand-line flex items-center justify-between text-[11px] font-semibold text-brand-slate">
+                <span>${esc(item.year)}</span>
+                <span class="text-brand-charcoal group-hover:translate-x-0.5 transition-transform">Lihat Detail →</span>
+              </div>
+            </div>
+          </article>
+        `
+        )
+        .join("");
+
+      grid.querySelectorAll(".gallery-item").forEach((el) => {
+        el.addEventListener("click", () => openLightbox(Number(el.dataset.idx)));
+      });
+
+      syncCarouselLayout(true);
+    }
+
+    function setFilter(category) {
+      activeFilter = category;
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        const isMatch = btn.dataset.category === category;
+        btn.classList.toggle("active", isMatch);
+        btn.classList.toggle("bg-brand-gold", isMatch);
+        btn.classList.toggle("text-brand-charcoal", isMatch);
+        btn.classList.toggle("font-bold", isMatch);
+        btn.classList.toggle("bg-brand-cardbg", !isMatch);
+        btn.classList.toggle("text-brand-slate", !isMatch);
+        btn.classList.toggle("font-semibold", !isMatch);
+      });
+      renderGallery();
+    }
+
+    function openLightbox(idx) {
+      const items = getFiltered();
+      if (!items[idx]) return;
+      lightboxIdx = idx;
+      updateLightbox();
+      const modal = document.getElementById("lightbox-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+
+    function updateLightbox() {
+      const items = getFiltered();
+      const item = items[lightboxIdx];
+      if (!item) return;
+      document.getElementById("lb-img").src = item.imageUrl;
+      document.getElementById("lb-img").alt = item.title;
+      document.getElementById("lb-cat").textContent = item.category;
+      document.getElementById("lb-title").textContent = item.title;
+      document.getElementById("lb-role").textContent = item.role;
+      document.getElementById("lb-year").textContent = item.year;
+      document.getElementById("lb-notes").textContent = item.notes;
+      document.getElementById("lb-counter").textContent = `${String(lightboxIdx + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")}`;
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById("lightbox-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    function stepLightbox(dir) {
+      const items = getFiltered();
+      if (!items.length) return;
+      lightboxIdx = (lightboxIdx + dir + items.length) % items.length;
+      updateLightbox();
+    }
+
+    function renderStudioList() {
+      const list = document.getElementById("studio-items-list");
+      const badge = document.getElementById("studio-total-badge");
+      if (badge) badge.textContent = `${works.length} Karya`;
+
+      list.innerHTML = works
+        .map(
+          (w) => `
+          <div class="flex items-center justify-between gap-3 p-2.5 border border-brand-line rounded-xs bg-brand-cardbg">
+            <div class="flex items-center gap-3 min-w-0">
+              <img src="${esc(w.imageUrl)}" alt="" class="w-12 h-10 object-cover rounded-xs shrink-0" />
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-brand-charcoal truncate">${esc(w.title)}</p>
+                <p class="text-[11px] text-brand-slate truncate">${esc(w.category)} • ${esc(w.year)}</p>
+              </div>
+            </div>
+            <button type="button" data-del-id="${esc(w.id)}" class="st-del-btn px-2.5 py-1 text-[11px] font-bold text-red-600 border border-red-200 hover:bg-red-600 hover:text-white rounded-xs transition-colors shrink-0">
+              HAPUS
+            </button>
+          </div>
+        `
+        )
+        .join("");
+
+      list.querySelectorAll(".st-del-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.delId;
+          works = works.filter((item) => item.id !== id);
+          saveWorks();
+          renderGallery();
+          renderStudioList();
+          showToast("Karya dihapus dari galeri.");
+        });
+      });
+    }
+
+    function openStudioModal() {
+      renderStudioList();
+      const modal = document.getElementById("studio-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeStudioModal() {
+      const modal = document.getElementById("studio-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    function compressImage(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            const max = 1400;
+            let w = img.width;
+            let h = img.height;
+            if (w > max || h > max) {
+              if (w > h) {
+                h = Math.round((h * max) / w);
+                w = max;
+              } else {
+                w = Math.round((w * max) / h);
+                h = max;
+              }
+            }
+            const canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL("image/jpeg", 0.82));
+          };
+          img.onerror = reject;
+          img.src = ev.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function copyEmail() {
+      const email = "hafidzsazili07@gmail.com";
+      const ta = document.createElement("textarea");
+      ta.value = email;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast(`Email disalin: ${email}`);
+      } catch (e) {
+        showToast("Gagal menyalin email.");
+      }
+      document.body.removeChild(ta);
+    }
+
+    // Initialize Events
+    loadWorks();
+    renderGallery();
+
+    // Carousel Controls, Scroll Tracking & Responsive Resize Sync
+    const carouselTrack = document.getElementById("curated-gallery-grid");
+    const carouselPrevBtn = document.getElementById("carousel-prev");
+    const carouselNextBtn = document.getElementById("carousel-next");
+
+    if (carouselPrevBtn) {
+      carouselPrevBtn.addEventListener("click", () => stepCarousel(-1));
+    }
+    if (carouselNextBtn) {
+      carouselNextBtn.addEventListener("click", () => stepCarousel(1));
+    }
+
+    if (carouselTrack) {
+      carouselTrack.addEventListener("scroll", () => {
+        if (pendingTargetIndex === null) {
+          cancelAnimationFrame(scrollRafId);
+          scrollRafId = requestAnimationFrame(() => {
+            const nearest = getNearestSlide(carouselTrack);
+            const total = getSlides(carouselTrack).length;
+            if (nearest && nearest.domIndex !== activeSlideIndex) {
+              updateMarkerUI(nearest.domIndex, total);
+            }
+          });
+        }
+
+        if (!supportsScrollEnd) {
+          clearTimeout(scrollDebounceId);
+          scrollDebounceId = setTimeout(() => {
+            handleCarouselSettle(true);
+          }, 120);
+        }
+      }, { passive: true });
+
+      if (supportsScrollEnd) {
+        carouselTrack.addEventListener("scrollend", () => {
+          handleCarouselSettle(true);
+        });
+      }
+
+      carouselTrack.addEventListener("keydown", (e) => {
+        if (e.target !== carouselTrack) return;
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          stepCarousel(-1);
+        } else if (e.key === "ArrowRight") {
+          e.preventDefault();
+          stepCarousel(1);
+        }
+      });
+
+      let lastTrackWidth = carouselTrack.clientWidth;
+      if (typeof ResizeObserver !== "undefined") {
+        const trackResizeObserver = new ResizeObserver(() => {
+          const nextWidth = carouselTrack.clientWidth;
+          if (Math.abs(nextWidth - lastTrackWidth) > 2) {
+            lastTrackWidth = nextWidth;
+            syncCarouselLayout(false);
+          }
+        });
+        trackResizeObserver.observe(carouselTrack);
+      }
+    }
+
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    mobileBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("hidden");
+    });
+    document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+      link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
+    });
+
+    // Category Showcase Cards & Filter Buttons
+    document.querySelectorAll(".category-card-trigger").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetCat = btn.dataset.filterTarget || "all";
+        setFilter(targetCat);
+        const anchor = document.getElementById("gallery-anchor");
+        if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", () => setFilter(btn.dataset.category));
+    });
+
+    // Lightbox Listeners
+    document.getElementById("lb-close").addEventListener("click", closeLightbox);
+    document.getElementById("lightbox-backdrop").addEventListener("click", closeLightbox);
+    document.getElementById("lb-prev").addEventListener("click", () => stepLightbox(-1));
+    document.getElementById("lb-next").addEventListener("click", () => stepLightbox(1));
+
+    const lbModal = document.getElementById("lightbox-modal");
+    lbModal.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    lbModal.addEventListener("touchend", (e) => {
+      const diff = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(diff) > 50) stepLightbox(diff < 0 ? 1 : -1);
+    }, { passive: true });
+
+    document.addEventListener("keydown", (e) => {
+      if (!lbModal.classList.contains("hidden")) {
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowLeft") stepLightbox(-1);
+        if (e.key === "ArrowRight") stepLightbox(1);
+      }
+    });
+
+    // Copy Email
+    document.getElementById("copy-email-btn").addEventListener("click", copyEmail);
+
+    // Private Studio Access (Hanya via URL #studio atau pintasan keyboard Ctrl+Shift+M, tanpa tombol publik)
+    if (window.location.hash === "#studio") {
+      openStudioModal();
+    }
+    window.addEventListener("hashchange", () => {
+      if (window.location.hash === "#studio") {
+        openStudioModal();
+      }
+    });
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "m") {
+        e.preventDefault();
+        openStudioModal();
+      }
+    });
+
+    document.getElementById("close-studio-btn").addEventListener("click", () => {
+      closeStudioModal();
+      if (window.location.hash === "#studio") {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+    });
+    document.getElementById("studio-backdrop").addEventListener("click", () => {
+      closeStudioModal();
+      if (window.location.hash === "#studio") {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+    });
+
+    // Add New Work Form
+    document.getElementById("studio-add-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById("st-file");
+      const title = document.getElementById("st-title").value.trim();
+      const category = document.getElementById("st-cat").value;
+      const year = document.getElementById("st-year").value.trim();
+      const role = document.getElementById("st-role").value.trim();
+      const notes = document.getElementById("st-notes").value.trim();
+
+      const submitBtn = document.getElementById("st-submit");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "MEMPROSES...";
+
+      try {
+        let imageUrl = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80";
+        if (fileInput.files && fileInput.files[0]) {
+          imageUrl = await compressImage(fileInput.files[0]);
+        }
+
+        works.unshift({
+          id: `work-${Date.now()}`,
+          title,
+          category,
+          year,
+          role,
+          notes,
+          imageUrl
+        });
+
+        saveWorks();
+        renderGallery();
+        renderStudioList();
+        e.target.reset();
+        document.getElementById("st-year").value = "2026";
+        showToast("Karya baru berhasil ditambahkan!");
+      } catch (err) {
+        showToast("Gagal memproses gambar.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "+ PUBLIKASIKAN KE GALERI";
+      }
+    });
+  </script>
+</body>
+
+</html>
